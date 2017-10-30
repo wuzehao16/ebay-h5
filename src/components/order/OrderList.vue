@@ -1,0 +1,273 @@
+<template>
+<div class="container">	
+	<mt-navbar v-model="selected" class="my-nav" :fixed="true">
+	  <mt-tab-item id="all_orders">全部订单</mt-tab-item>
+    <mt-tab-item id="to_pay">待付款</mt-tab-item>
+	  <mt-tab-item id="to_receive">待收货</mt-tab-item>
+	</mt-navbar>
+
+
+	<!-- tab-container -->
+	<mt-tab-container v-model="selected" class="mtc">
+    <!-- 全部订单 -->
+    <mt-tab-container-item id="all_orders">
+  		<mt-loadmore :auto-fill="false" :top-method="getAllList" :bottom-method="getAllList" 
+  			:bottom-all-loaded="allLoaded" ref="loadmore">	  
+        <div v-for="d in all_list" :key="d.orderNo" class='cell-margin'>
+          <mt-cell>
+            <div slot="title" class="order-des">
+              <div><label>状态：</label><span style="color: #ef4f4f;">
+                <template v-if="d.orderStatus == '1'">待支付</template>
+                <template v-if="d.orderStatus == '2'">已取消</template>
+                <template v-if="d.orderStatus == '3'">已支付</template>
+                <template v-if="d.orderStatus == '4'">已发货</template>
+                <template v-if="d.orderStatus == '5'">已完成</template>
+                <template v-if="d.orderStatus == '6'">退款中</template>
+                <template v-if="d.orderStatus == '7'">已退款</template>
+                <template v-if="d.orderStatus == '9'">已删除</template>
+              </span></div>
+              <div><label>总价：</label><span>￥{{d.orderAmount}}</span></div>
+            </div>
+            <div v-if="d.orderStatus == '1'">
+              <mt-button type="danger" size="small">去支付</mt-button>
+            </div>
+          </mt-cell>
+          <template v-for='i in d.productList'>
+            <mt-cell style="padding-bottom: 10px;">
+              <div slot="title" class="goods-list" 
+              :style="{'background': 'url(' +  i.productIcon + ') no-repeat left center'}">
+                <h3>{{ i.productNane }}</h3>
+                <p style="color:gray;">x {{ i.orderDetail.productQuantity }}</p>
+              </div>
+            </mt-cell>            
+          </template>
+        </div>
+        <div class="no-data" v-if="!all_list.length">您没有订单</div>
+  		</mt-loadmore>
+	  </mt-tab-container-item>
+
+    <!-- 待付款 -->
+	  <mt-tab-container-item id="to_pay">
+  		<mt-loadmore :auto-fill="false" :top-method="getToPayList" :bottom-method="getToPayList" 
+  			:bottom-all-loaded="allLoaded_2" ref="loadmore2">
+        <div v-for="d in to_pay_list" :key="d.orderNo" class='cell-margin'>
+          <mt-cell>
+            <div slot="title" class="order-des">
+              <div><label>状态：</label><span style="color: #ef4f4f;">待支付</span></div>
+              <div><label>总价：</label><span>￥{{d.orderAmount}}</span></div>
+            </div>
+            <div>
+              <mt-button type="danger" size="small">去支付</mt-button>
+            </div>
+          </mt-cell>
+          <template v-for='i in d.productList'>
+            <mt-cell style="padding-bottom: 10px;">
+              <div slot="title" class="goods-list" 
+              :style="{'background': 'url(' + i.productIcon + ') no-repeat left center'}">
+                <h3>{{ i.productNane }}</h3>
+                <p style="color:gray;">x {{ i.orderDetail.productQuantity }}</p>
+              </div>
+            </mt-cell>            
+          </template>
+        </div>
+        <div class="no-data" v-if="!to_pay_list.length">您没有待支付的订单</div>
+  		</mt-loadmore>
+    </mt-tab-container-item>
+
+    <!-- 待收货 -->
+    <mt-tab-container-item id="to_receive">
+      <mt-loadmore :auto-fill="false" :top-method="getToReceiveList" :bottom-method="getToReceiveList" 
+        :bottom-all-loaded="allLoaded_3" ref="loadmore3">   
+        <div  v-for="d in to_receive_list" :key="d.orderNo" class='cell-margin'>
+          <mt-cell>
+            <div slot="title" class="order-des">
+              <div><label>状态：</label><span class="order-status">
+                <template v-if="d.orderStatus == '3'">已支付</template>
+                <template v-if="d.orderStatus == '4'">已发货</template>
+              </span></div>
+              <div><label>总价：</label><span>￥{{d.orderAmount}}</span></div>
+            </div>
+          
+          </mt-cell>
+  <!--         <mt-cell title="您的订单已进入第三方卖家库房，等待发货。。。"
+            label="2017-11-11 11:11:11" is-link to="/order/logistics" 
+            class='order-flow'></mt-cell> -->
+          <template v-for='i in  d.productList'>
+            <mt-cell style="padding-bottom: 10px;">
+              <div slot="title" class="goods-list" 
+              :style="{'background': 'url(' + i.productIcon + ') no-repeat left center'}">
+                <h3>{{ i.productNane }}</h3>
+                <p style="color:gray;">x {{ i.orderDetail.productQuantity }}</p>
+              </div>
+            </mt-cell>            
+          </template>
+        </div>
+        <div class="no-data" v-if="!to_receive_list.length">您没有待收货的订单</div>
+      </mt-loadmore>
+	  </mt-tab-container-item>
+	</mt-tab-container>
+  <div class="to-top" @click="scrollTop">
+    <i class="iconfont icon-top"></i>
+  </div>
+
+</div>
+</template>
+
+<script>
+import {reqBuyerOrderList} from '../../api'
+
+export default {
+  data () {
+  	return {
+  		selected: '',
+  		allLoaded: false,
+      allLoaded_2: false,
+  		allLoaded_3: false,
+      all_list: [],
+      all_page: 0,
+      pa: {
+        userWxOpenid: JSON.parse( sessionStorage.getItem('ebay-app') ).userWxOpenid,
+        size: 10
+      },
+      to_pay_list: [],
+      to_pay_page: 0,
+      to_receive_list: [],
+      to_receive_page: 0
+  	}
+  },
+  methods: {
+  	scrollTop (val) {
+      document.getElementById('app').scrollTop = 0
+  	},
+    getAllList(val) {
+      console.log(val)
+      let obj = Object.assign({}, this.pa, {page: this.all_page})
+      reqBuyerOrderList(obj).then((res) => {
+        console.log(res)
+        if (res.data.code == 0) {
+          for (let i of res.data.data.content) {
+            this.all_list.push(i)
+          }
+          this.all_page++
+        }
+        this.$refs.loadmore.onTopLoaded()
+        this.$refs.loadmore.onBottomLoaded()
+      })
+    },
+    getToPayList() {
+      let obj = Object.assign({}, this.pa, {page: this.to_pay_page, orderStatus: '1'})
+      reqBuyerOrderList(obj).then((res) => {
+        if (res.data.code == 0) {
+          for (let i of res.data.data.content) {
+            this.to_pay_list.push(i)
+          }
+          this.to_pay_page++
+        }
+        this.$refs.loadmore2.onTopLoaded()
+        this.$refs.loadmore2.onBottomLoaded()
+      })
+    },
+    getToReceiveList() {
+      let obj = Object.assign({}, this.pa, 
+        {page: this.to_receive_page, orderStatus: '3,4'})
+      reqBuyerOrderList(obj).then((res) => {
+        if (res.data.code == 0) {
+          for (let i of res.data.data.content) {
+            this.to_receive_list.push(i)
+          }
+          this.to_receive_page++
+        }
+        this.$refs.loadmore3.onTopLoaded()
+        this.$refs.loadmore3.onBottomLoaded()
+      })      
+    }
+  },
+  mounted() {
+      this.selected = this.$route.params.active_tab || 'all_orders'
+      this.getAllList()
+      this.getToPayList()
+      this.getToReceiveList()
+  },
+  watch: {
+    selected(val) {
+      document.getElementById("app").scrollTop = 0
+    }
+  }
+}
+</script>
+
+<style lang="scss">
+.no-data {
+    height: 100px;
+    position: absolute;
+    width: 100%;
+    z-index: 1000;
+    background: #cccccc;
+    padding-top: 40px;
+    text-align: center;
+    color: #fff;  
+}
+.order-flow {
+  padding: 10px 0;
+}
+.order-des {
+  margin: 12px 0;
+  div {
+    margin: 4px 0;
+    label {
+      color: gray;
+    }
+  }
+  .order-status {
+    color: #ef4f4f;
+  }
+}
+.cell-margin{
+    margin: 10px 0 10px 0;
+}
+.mint-tab-item-label{
+	font-size: 18px;
+
+}
+.mtc {
+	margin-top: 54px;
+}
+.to-top {
+    position: fixed;
+    width: 32px;
+    height: 24px;
+    bottom: 82px;
+    right: 16px;	
+    color: rgb(255, 255, 255);
+    background: rgba(51, 51, 51, .6);
+    text-align: center;
+    padding-top: 8px;
+    :active {
+      background: #504444;
+    }
+}
+
+.goods-list {
+	padding: 10px 10px 10px 120px;
+    background-size: 110px 100%!important;
+    height: 90px;
+    line-height: 26px;
+	h3, p{
+		margin: 0;
+	}
+	h3 {
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+	    display: -webkit-box;
+	    -webkit-line-clamp: 2;
+	    -webkit-box-orient: vertical;
+	    word-wrap: break-word;	
+	    word-break: break-all;	
+	}
+  p {
+    position: absolute;
+    bottom: 10px;
+  }
+}
+
+</style>
