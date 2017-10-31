@@ -10,12 +10,10 @@
 	</mt-swipe>
 	<mt-tabbar :fixed="true">
 	<template v-if="!isPreview">
-	  <mt-button type="danger">加入购物车</mt-button>
+	  <mt-button type="danger" @click="addToCart">加入购物车</mt-button>
 	  <mt-button type="primary"
 	  	@click="buyIt">立即购买</mt-button>
-
 	</template>
-
 	  <mt-button v-if="isPreview" type="primary" size="large" 
 	  	@click="backList">返回我的发布</mt-button>
 	</mt-tabbar>
@@ -62,7 +60,7 @@
 </template>
 
 <script>
-import {reqProductDetail} from '../../api'
+import {reqProductDetail, reqAddToShoppingCart} from '../../api'
 export default {
   data () {
   	return {
@@ -78,6 +76,21 @@ export default {
   	}
   },
   methods: {
+  	addToCart() {
+  		let userId = JSON.parse( sessionStorage.getItem('ebay-app') ).userWxOpenid
+  		// let userId = '1'
+  		let goodCarForm = {
+  			productId: this.productInfo.id,
+  			productName: this.productInfo.name,
+  			productPrice: this.productInfo.price,
+  			productQuantity: this.amount,
+  			productIcon: this.productInfo.icon  			
+  		}
+  		console.log({userId, goodCarForm})
+  		reqAddToShoppingCart({userId, goodCarForm}).then((res) => {
+
+  		})
+  	},
   	selectSize(o) {
   		this.activeSize = o
   	},

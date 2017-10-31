@@ -46,6 +46,17 @@
 		:style="{'background': 'url(' + require('../../assets/test.png') + ') no-repeat left center'}">
 			<h3>花花公子男士背心 新款纯棉背心男无袖运动休闲打底T</h3>
 			<p style="color:#ef4f4f">￥24.50</p>
+	  	<div class="select-amount">
+	  		<div class="fa fa-minus" 
+	  		@click="amount > 1 ? amount-- : ''" 
+	  		:class="{'disabled' : amount == 1 }">
+	  		</div>
+	  		<div><input type="number" @blur="amount?'':amount = 1"
+	  		 v-model="amount"></div>
+	  		<div class="fa  fa-plus" @click="amount++"></div>
+	  	</div>
+
+
 		</div>
 	</div>
 </mt-cell>
@@ -79,6 +90,7 @@
 export default {
   data () {
   	return {
+  	  amount: 1,
       checked_pro: [],
       a: ['aaa', 'bbb', 'ccc'],
       check_all: [],
@@ -176,7 +188,42 @@ export default {
 </style>
 
 <style lang="scss" scoped>
+.select-amount {
+	display: flex;
+	.fa{
+		padding-top: 6px;
+		color: #666;
+	}
+	div {
+		padding: 0 5px;
+	}
+	div:nth-child(odd) {
+		border: 1px solid #999;
 
+	}
+	.disabled{
+		color: #cbcbcb;
+	}
+	div:nth-child(even) {
+		width: 40px;
+		text-align: center;
+		border-width: 1px 0 1px 0;
+		border-color: #999;
+		border-style: solid;
+		input {
+		    margin: 0;
+		    padding: 0;
+		    height: 100%;
+		    width: 100%;
+		    border: none;
+		    background: transparent;
+		    text-align: center;
+		    &:focus {
+		    	outline-style: none;
+		    }
+		}
+	}
+}
 .goods-list {
 	padding: 10px 0 10px 120px;
     background-size: 100px auto!important;

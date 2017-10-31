@@ -56,13 +56,11 @@ export default {
   computed:{
     scrollTop:function () {
       this.Offset = document.getElementById('app').scrollTop
-      console.log(document.getElementById('app').scrollTop)
     }
   },
   methods: {
     getProductList() {
       reqProductList({page:this.page, size: this.page_size}).then((res) => {
-
         let arr = res.data.data
         if(arr.length) {
           for(let el of arr) {

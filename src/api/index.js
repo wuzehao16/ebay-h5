@@ -8,6 +8,10 @@ export const reqMyWalletCount = params => { return axios.get(`/api/ebay/user/use
 export const reqBuyerOrderList = params => { return axios.get(`/api/ebay/user/user/myOrder`, {params: params}) }
 export const reqBuyerOrderCreate = params => { return axios.post(`/api/buyer/order/create`, params) }
 
+//购物车
+export const reqAddToShoppingCart = params => { return axios.post(`/api/buyer/goodcar/add/${params.userId}`, params.goodCarForm) }
+
+
 export const reqSellerProList = params => { return axios.get(`/api/seller/product/list`, {params: params}) }
 
 export const reqAddressList = params => { return axios.get(`/api/ebay/user/userCnee/list`, {params: params}) }
