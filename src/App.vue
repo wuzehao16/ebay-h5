@@ -35,10 +35,11 @@ a{
 }
 ul{
   padding: 0;
+  margin: 0;
 }
 .mint-navbar .mint-tab-item.is-selected {
-    border-bottom: 3px solid #e93b3d;
-    color: #e93b3d;
+    border-bottom: 3px solid #0099f7;
+    color: #0099f7;
     margin-bottom: -3px
 }
 .mint-loadmore-bottom {
