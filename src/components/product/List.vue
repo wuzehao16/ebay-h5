@@ -5,13 +5,13 @@
 :bottom-method="getProductList" 
 	:bottom-all-loaded="allLoaded" ref="loadmore">
 		<div> 
-    <mt-cell class='set-shadow' v-for="d in pro_list" :key="d.created">
-    	<div slot="title" class="goods-list" >
+    <mt-cell class='set-shadow' v-for="d in pro_list" :key="d.created" >
+    	<div slot="title" class="goods-list" @click="goDetail(d.id)">
         <div class="avatar" :style="{'background': 'url(' + d.productIcon + ') no-repeat center center'}"></div>
-        <div class="right">
+        <div class="right" >
           <div class="title">{{ d.productNane }}</div>
           <div class="price">￥{{ d.productPrice }}</div>
-          <mt-button type="primary" @click="goDetail(d.id)" size="small">立即购买</mt-button>
+          <mt-button type="primary"  size="small">立即购买</mt-button>
         </div>
     	</div>
     </mt-cell>

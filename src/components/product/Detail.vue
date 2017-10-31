@@ -8,7 +8,7 @@
 	  </mt-swipe-item>
 	
 	</mt-swipe>
-	<mt-tabbar :fixed="true">
+	<mt-tabbar :fixed="true" class="addCart">
 	<template v-if="!isPreview">
 	  <mt-button type="danger" @click="addToCart">加入购物车</mt-button>
 	  <mt-button type="primary"
@@ -17,8 +17,7 @@
 	  <mt-button v-if="isPreview" type="primary" size="large" 
 	  	@click="backList">返回我的发布</mt-button>
 	</mt-tabbar>
-	<mt-cell :title="productInfo.name" 
-		label="">
+	<mt-cell :title="productInfo.name" label="" >
 	  <span class="love-it" @click="collected = !collected"><i class="iconfont" :class="{'icon-collect': !collected, 'icon-collect-color': collected}"></i><br/>收藏</span>
 	</mt-cell>
 	<mt-cell :title="'￥' + productInfo.price" style="color:red"></mt-cell>
@@ -42,11 +41,11 @@
 	  	</dd>
   	</dl>
   	<dl>
-	  	<dt>数量</dt>
+	  	<dt class="number-title">数量</dt>
 	  	<dd class="select-amount">
-	  		<div class="f"  @click="amount > 1 ? amount-- : ''" :class="{'disabled' : amount == 1 }">-</div>
+	  		<div class="f decrease"  @click="amount > 1 ? amount-- : ''" :class="{'disabled' : amount == 1 }">-</div>
 	  		<div><input type="number" @blur="amount?'':amount = 1" v-model="amount"></div>
-	  		<div class="f" @click="amount++">+</div>
+	  		<div class="f increase" @click="amount++">+</div>
 	  	</dd>
 
   	</dl>
@@ -148,6 +147,10 @@ $bg-red : #f23030;
 }
 .container {
 	margin-bottom: 42px;
+	.addCart{
+		display: flex;
+    justify-content: flex-end;
+	}
 }
 .love-it {
 	text-align: center;
@@ -156,11 +159,22 @@ $bg-red : #f23030;
 		color: #ffc107;
 	}
 }
+.number-title{
+	padding: 12px 5px 0 12px;
+}
 .select-amount {
+	.decrease{
+		border-top-left-radius: 5px;
+		border-bottom-left-radius: 5px;
+	}
+	.increase{
+				border-top-right-radius: 5px;
+		border-bottom-right-radius: 5px;
+	}
 	.f{
     outline: 0;
-    line-height: 32px;
-    height: 34px;
+    line-height: 26px;
+    height: 26px;
     width: 19px;
     text-align: center;
     font-size: 24px;
@@ -172,7 +186,7 @@ $bg-red : #f23030;
 		padding: 0 5px;
 	}
 	div:nth-child(odd) {
-		border: 1px solid #999;
+		border: 1px solid #cbcbcb;
 
 	}
 	.disabled{
@@ -182,7 +196,7 @@ $bg-red : #f23030;
 		width: 40px;
 		text-align: center;
 		border-width: 1px 0 1px 0;
-		border-color: #999;
+		border-color: #cbcbcb;
 		border-style: solid;
 		input {
 		    margin: 0;
