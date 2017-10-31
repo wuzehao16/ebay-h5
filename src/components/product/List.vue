@@ -11,7 +11,7 @@
         <div class="right">
           <div class="title">{{ d.productNane }}</div>
           <div class="price">￥{{ d.productPrice }}</div>
-          <mt-button type="danger" @click="goDetail(d.id)" size="small">立即购买</mt-button>
+          <mt-button type="primary" @click="goDetail(d.id)" size="small">立即购买</mt-button>
         </div>
     	</div>
     </mt-cell>
@@ -100,7 +100,7 @@ export default {
 </script>
 
 <style lang="scss" >
-
+$ebay-blue :#0099f7;
 $shadow-color: #eaeaea;
 .mint-search {
     position: fixed;
@@ -114,6 +114,7 @@ $shadow-color: #eaeaea;
 }
 .set-shadow .mint-cell-wrapper{
   background-image:none;
+  margin-bottom: -5px;
   .mint-cell-title{
     margin: 10px 0 10px 0;
     box-shadow: 0 2px 16px $shadow-color, 0 0 1px $shadow-color, 0 0 1px $shadow-color;	
@@ -157,7 +158,7 @@ $shadow-color: #eaeaea;
     .title {
         overflow: hidden;
         font-size: 14px;
-        width: 240px;
+        width: 233px;
         text-overflow: ellipsis;
         display: -webkit-box;
         -webkit-line-clamp: 2;
@@ -166,7 +167,7 @@ $shadow-color: #eaeaea;
         word-break: break-all;	
     }
     .price{
-      color:#ef4f4f;
+      color:$ebay-blue;
       margin-top: 20px;
     }
     button {

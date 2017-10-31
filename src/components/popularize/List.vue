@@ -18,7 +18,7 @@
             <div class="right">
               <div class="title">{{ d.productNane }}</div>
               <div class="price">￥{{ d.productPrice }}</div>
-              <mt-button type="danger" @click="goPreview(d.id)" size="small">立即预览</mt-button>
+              <mt-button type="primary" @click="goPreview(d.id)" size="small">立即预览</mt-button>
             </div>
           </div>
 		    </mt-cell>
@@ -35,7 +35,7 @@
             <div class="right">
               <div class="title">{{ d.productNane }}</div>
               <div class="price">￥{{ d.productPrice }}</div>
-              <mt-button type="danger" @click="goPreview(d)" size="small">立即预览</mt-button>
+              <mt-button type="primary" @click="goPreview(d)" size="small">立即预览</mt-button>
             </div>
           </div>
 		    </mt-cell>
@@ -146,7 +146,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+$ebay-blue :#0099f7;
 $shadow-color: #aaa;
 .set-shadow .mint-cell-title{
     margin: 10px 0 10px 0;
@@ -190,7 +190,7 @@ $shadow-color: #aaa;
     .title {
         overflow: hidden;
         font-size: 14px;
-        width: 240px;
+        width: 233px;
         text-overflow: ellipsis;
         display: -webkit-box;
         -webkit-line-clamp: 2;
@@ -199,7 +199,7 @@ $shadow-color: #aaa;
         word-break: break-all;	
     }
     .price{
-      color:#ef4f4f;
+      color:$ebay-blue;
       margin-top: 20px;
     }
     button {
@@ -212,6 +212,6 @@ $shadow-color: #aaa;
 .addProduct{
   height: 50px;
   border-radius: 0;
-  background-color: #ff6600;
+  background-color: #0099f7;
 }
 </style>

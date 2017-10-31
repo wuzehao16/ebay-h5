@@ -46,9 +46,9 @@
   	<dl>
 	  	<dt>数量</dt>
 	  	<dd class="select-amount">
-	  		<div class="fa fa-minus" @click="amount > 1 ? amount-- : ''" :class="{'disabled' : amount == 1 }"></div>
+	  		<div class="f"  @click="amount > 1 ? amount-- : ''" :class="{'disabled' : amount == 1 }">-</div>
 	  		<div><input type="number" @blur="amount?'':amount = 1" v-model="amount"></div>
-	  		<div class="fa  fa-plus" @click="amount++"></div>
+	  		<div class="f" @click="amount++">+</div>
 	  	</dd>
 
   	</dl>
@@ -139,8 +139,15 @@ $bg-red : #f23030;
 	}
 }
 .select-amount {
-	.fa{
-		padding-top: 3px;
+	.f{
+    outline: 0;
+    line-height: 32px;
+    height: 34px;
+    width: 19px;
+    text-align: center;
+    font-size: 24px;
+    border: 1px solid #f5f5f5;
+    background-color: #f5f5f5;
 	}
 	padding: 10px;
 	div {
@@ -197,6 +204,7 @@ dl {
 	dd {
 		display: flex;
 		ul {
+			padding-top: 10px;
 			list-style-type: none;
 			li {
 				float: left;

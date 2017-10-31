@@ -13,13 +13,16 @@ export default {
 }
 </script>
 
-<style>
+<style <style lang="scss">
+
+$ebay-blue :#0099f7;
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   height: 100vh;
   overflow: scroll;
+  background-color: #EEEEEE;
   -webkit-overflow-scrolling: touch;
 }
 .clearfix:after{
