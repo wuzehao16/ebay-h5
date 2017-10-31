@@ -1,19 +1,15 @@
 <template>
+
   <div id="app">
     <!-- <img src="./assets/logo.png"> -->
-    <!-- <top-bar v-show="showFooter" :name="$route.name"></top-bar> -->
-    <top-bar></top-bar>
+
     <router-view/>
   </div>
 </template>
 
 <script>
-import Topbar from '@/components/top_bar/topBar';
 export default {
   name: 'app',
-  components:{
-    'top-bar':Topbar
-  }
 }
 </script>
 
@@ -37,6 +33,14 @@ export default {
 a{
   text-decoration: none;
 }
+ul{
+  padding: 0;
+}
+.mint-navbar .mint-tab-item.is-selected {
+    border-bottom: 3px solid #e93b3d;
+    color: #e93b3d;
+    margin-bottom: -3px
+}
 .mint-loadmore-bottom {
   margin: 0;
     position: fixed;
@@ -46,9 +50,6 @@ a{
 }
 .mint-loadmore {
   overflow: inherit;
-}
-.container{
-  margin-top: 100px;
 }
 .mint-tab-container {
     overflow: inherit;

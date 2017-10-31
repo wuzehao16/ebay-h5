@@ -7,6 +7,7 @@ import Mint from 'mint-ui'
 import 'mint-ui/lib/style.css'
 import 'normalize.css'
 import '@/assets/fonts/iconfont.css'
+import '@/assets/css/font-awesome.min.css'
 Vue.use(Mint)
 
 Vue.config.productionTip = false

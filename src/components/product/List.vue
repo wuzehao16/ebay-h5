@@ -1,16 +1,18 @@
 <template>
 <div class="container">	
-
+<mt-search v-model="value" v-if="scrollTop"></mt-search>
 <mt-loadmore :auto-fill="false" :top-method="getProductList" 
 :bottom-method="getProductList" 
 	:bottom-all-loaded="allLoaded" ref="loadmore">
 		<div> 
     <mt-cell class='set-shadow' v-for="d in pro_list" :key="d.created">
-    	<div slot="title" class="goods-list" 
-    	:style="{'background': 'url(' + d.productIcon + ') no-repeat left center'}">
-			<h3>{{ d.productNane }}</h3>
-			<p style="color:#ef4f4f">￥{{ d.productPrice }}</p>
-			<mt-button type="default" @click="goDetail(d.id)" size="small">立即购买</mt-button>
+    	<div slot="title" class="goods-list" >
+        <div class="avatar" :style="{'background': 'url(' + d.productIcon + ') no-repeat center center'}"></div>
+        <div class="right">
+          <div class="title">{{ d.productNane }}</div>
+          <div class="price">￥{{ d.productPrice }}</div>
+          <mt-button type="danger" @click="goDetail(d.id)" size="small">立即购买</mt-button>
+        </div>
     	</div>
     </mt-cell>
 		</div>
@@ -19,12 +21,13 @@
   <div class="to-top" @click="toTop">
     <i class="iconfont icon-top"></i>
   </div>
-
+    <bottom></bottom>
 </div>
 </template>
 
 <script>
 import {reqProductList} from '../../api'
+import Footer from '@/components/footer/footer';
 export default {
   data () {
   	return {
@@ -40,10 +43,21 @@ export default {
         size: 10,
         openid: 'xxxfff'
       },
+      value:"",
       page: 0,
       page_size: 16,
-      pro_list: []
+      pro_list: [],
+      Offset:0
   	}
+  },
+  components:{
+    'bottom':Footer
+  },
+  computed:{
+    scrollTop:function () {
+      this.Offset = document.getElementById('app').scrollTop
+      console.log(document.getElementById('app').scrollTop)
+    }
   },
   methods: {
     getProductList() {
@@ -76,7 +90,6 @@ export default {
   },
   mounted() {
     this.getProductList()
-    
     this.$nextTick(() => {
       setTimeout(() => {
         this.toTop()
@@ -86,12 +99,25 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" >
 
-$shadow-color: #aaa;
-.set-shadow .mint-cell-title{
+$shadow-color: #eaeaea;
+.mint-search {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    overflow: hidden;
+    z-index: 1;
+}
+.mint-cell{
+  border-bottom:node; 
+}
+.set-shadow .mint-cell-wrapper{
+  background-image:none;
+  .mint-cell-title{
     margin: 10px 0 10px 0;
     box-shadow: 0 2px 16px $shadow-color, 0 0 1px $shadow-color, 0 0 1px $shadow-color;	
+  }
 }
 .mint-tab-item-label{
 	font-size: 18px;
@@ -116,25 +142,38 @@ $shadow-color: #aaa;
 }
 
 .goods-list {
-	padding: 10px 0 10px 120px;
-    background-size: 100px auto!important;
+    padding: 5px ;
     height: 110px;
+    width: 110px;
     line-height: 26px;
-	h3, p{
-		margin: 0;
-	}
-	h3 {
-	    overflow: hidden;
-	    text-overflow: ellipsis;
-	    display: -webkit-box;
-	    -webkit-line-clamp: 2;
-	    -webkit-box-orient: vertical;
-	    word-wrap: break-word;	
-	    word-break: break-all;	
-	}
-  button {
-    position: absolute;
-    bottom: 16px;
+    display: flex;
+  .avatar{
+    flex: 0 0 100px;
+    background-size: 100px auto!important;
+  }
+  .right{
+    flex: 1 0 auto;
+    padding-left: 20px;
+    .title {
+        overflow: hidden;
+        font-size: 14px;
+        width: 240px;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        word-wrap: break-word;	
+        word-break: break-all;	
+    }
+    .price{
+      color:#ef4f4f;
+      margin-top: 20px;
+    }
+    button {
+      position: absolute;
+      bottom: 16px;
+      height: 27px;
+    }
   }
 }
 

@@ -12,8 +12,7 @@
 		label="千颂伊星星色 纯口红 香港直邮">
 	  <span class="love-it" @click="collected = !collected"><i class="iconfont" :class="{'icon-collect': !collected, 'icon-collect-color': collected}"></i><br/>收藏</span>
 	</mt-cell>
-	<mt-cell :title="'￥' + goodsInfo.productPrice"></mt-cell>
-	
+	<mt-cell :title="'￥' + goodsInfo.productPrice" style="color:red"></mt-cell>
   	<dl>
 	  	<dt>尺寸</dt>
 	  	<dd>
@@ -35,9 +34,9 @@
   	<dl>
 	  	<dt>数量</dt>
 	  	<dd class="select-amount">
-	  		<div class="iconfont icon-down" @click="amount > 1 ? amount-- : ''"></div>
+	  		<div class="fa fa-minus" @click="amount > 1 ? amount-- : ''" :class="{'disabled' : amount == 1 }"></div>
 	  		<div><input type="number" v-model="amount"></div>
-	  		<div class="iconfont icon-up" @click="amount++"></div>
+	  		<div class="fa  fa-plus" @click="amount++"></div>
 	  	</dd>
 
   	</dl>
@@ -111,7 +110,7 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-
+$bg-red : #f23030;
 .pre-banner {
 	.mint-swipe-item:nth-child(odd) {
 		background: blue
@@ -128,6 +127,9 @@ export default {
 	}
 }
 .select-amount {
+	.fa{
+		padding-top: 3px;
+	}
 	padding: 10px;
 	div {
 		padding: 0 5px;
@@ -135,6 +137,9 @@ export default {
 	div:nth-child(odd) {
 		border: 1px solid #999;
 
+	}
+	.disabled{
+		color: #cbcbcb;
 	}
 	div:nth-child(even) {
 		width: 40px;
@@ -157,7 +162,8 @@ export default {
 	}
 }
 .height-light {
-	background: #6c6c71!important;
+	background: $bg-red;
+	color:#fff;
 }
 .mint-swipe{
 	height: 200px;
@@ -170,19 +176,21 @@ dl {
 	background: #fff;
 	overflow: hidden;
 	dt {
-		width: 60px;
+		width: 30px;
 		float: left;
 		padding: 10px;
+		font-size: 14px;
+		color:#81838e;
 	}
 	dd {
 		display: flex;
 		ul {
 			list-style-type: none;
-			padding-left: 10px;
 			li {
 				float: left;
 				margin: 0 6px 6px 0;
-				background: #d6cece;
+				background: #f7f8fa;
+				color: #000;
 				border-radius: 4px;
 				padding: 4px;
 			}
