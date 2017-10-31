@@ -78,7 +78,6 @@ export default {
   methods: {
   	addToCart() {
   		let userId = JSON.parse( sessionStorage.getItem('ebay-app') ).userWxOpenid
-  		// let userId = '1'
   		let goodCarForm = {
   			productId: this.productInfo.id,
   			productName: this.productInfo.name,
@@ -86,7 +85,6 @@ export default {
   			productQuantity: this.amount,
   			productIcon: this.productInfo.icon  			
   		}
-  		console.log({userId, goodCarForm})
   		reqAddToShoppingCart({userId, goodCarForm}).then((res) => {
 			if (res.data.code == 0 && res.data.msg == '成功') {
 				Toast('已加入购物车')

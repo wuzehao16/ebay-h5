@@ -1,62 +1,27 @@
 <template>
 <div class="container">
 
-
-<mt-cell>
-	<div class='shop-cart'>
+<mt-cell v-for="c in cart_list" :key="c.createTime">
+	<div slot="title" class='shop-cart'>
 		<div class="check-box">
 			<mt-checklist
 			  v-model="checked_pro"
-			  :options="Array.of(a[0])">
+			  :options="Array.of(c.productId)">
 			</mt-checklist>
 		</div>
 		<div slot="title" class="goods-list" 
-		:style="{'background': 'url(' + require('../../assets/test.png') + ') no-repeat left center'}">
-			<h3>心相印茶语手帕纸 经典系列 4层6条*12包（整箱销售）</h3>
-			<p style="color:#ef4f4f">￥29.50</p>
-		</div>
-	</div>
-</mt-cell>
-
-<mt-cell>
-	<div class='shop-cart'>
-		<div class="check-box">
-			<mt-checklist
-			  v-model="checked_pro"
-			  :options="Array.of(a[1])">
-			</mt-checklist>
-		</div>
-		<div slot="title" class="goods-list" 
-		:style="{'background': 'url(' + require('../../assets/test.png') + ') no-repeat left center'}">
-			<h3>美素佳儿金装幼儿配方奶粉3段（lalala）</h3>
-			<p style="color:#ef4f4f">￥319.50</p>
-		</div>
-	</div>
-</mt-cell>
-
-<mt-cell>
-	<div class='shop-cart'>
-		<div class="check-box">
-			<mt-checklist
-			  v-model="checked_pro"
-			  :options="Array.of(a[2])">
-			</mt-checklist>
-		</div>
-		<div slot="title" class="goods-list" 
-		:style="{'background': 'url(' + require('../../assets/test.png') + ') no-repeat left center'}">
-			<h3>花花公子男士背心 新款纯棉背心男无袖运动休闲打底T</h3>
-			<p style="color:#ef4f4f">￥24.50</p>
+		:style="{'background': 'url(' + c.productIcon + ') no-repeat left center'}">
+			<h3>{{ c.productName }}</h3>
+			<p style="color:#ef4f4f">￥{{c.productPrice}}</p>
 	  	<div class="select-amount">
 	  		<div class="fa fa-minus" 
-	  		@click="amount > 1 ? amount-- : ''" 
-	  		:class="{'disabled' : amount == 1 }">
+	  		@click="c.productQuantity > 1 ? c.productQuantity-- : ''" 
+	  		:class="{'disabled' : c.productQuantity == 1 }">
 	  		</div>
-	  		<div><input type="number" @blur="amount?'':amount = 1"
-	  		 v-model="amount"></div>
-	  		<div class="fa  fa-plus" @click="amount++"></div>
+	  		<div><input type="number" @blur="c.productQuantity?'':c.productQuantity = 1"
+	  		 v-model.number="c.productQuantity"></div>
+	  		<div class="fa  fa-plus" @click="increase(c)"></div>
 	  	</div>
-
-
 		</div>
 	</div>
 </mt-cell>
@@ -71,12 +36,11 @@
 				</mt-checklist>
 			</div>
 		</div>
-
 	</div>
 	<div>
 		<span style="font-size:14px;">总计：￥332.34&nbsp;&nbsp;</span>
-		<mt-button type="primary" style="font-size:14px;"
-			 :disabled="checked_pro.length == 0">去结算<br/>（{{ checked_pro.length }}件）</mt-button>
+		<mt-button type="primary" @click="goSettle"
+		style="font-size:14px;" :disabled="checked_pro.length == 0">去结算<br/>（{{ proAmount() }}件）</mt-button>
 	</div>
 
 </mt-cell>
@@ -86,23 +50,51 @@
 </template>
 
 <script>
-
+import {reqShoppingCartList} from '../../api'
 export default {
   data () {
   	return {
-  	  amount: 1,
       checked_pro: [],
-      a: ['aaa', 'bbb', 'ccc'],
+      all_orders: [],
       check_all: [],
       check_all_value: ['全选'],
       bb: true,
       cc: true,
       bbTimeout: '',
-      ccTimeout: ''
+      ccTimeout: '',
+
+      cart_list: []
   	}
   },
   methods: {
-
+  	increase(c) {
+  		c.productQuantity++
+  		if (!this.checked_pro.includes(c.productId)) {
+  			this.checked_pro.push(c.productId)
+  		}
+  	},
+  	proAmount() {
+		let sum = 0
+  		for (let i of this.cart_list) {
+  			if (this.checked_pro.includes(i.productId)) {
+  				sum += i.productQuantity
+  			}
+  		}
+  		return sum
+  	},
+  	goSettle() {
+  		let items = []
+  		for (let i of this.cart_list) {
+  			console.log(i)
+  			if (this.checked_pro.includes(i.productId)) {
+  				items.push(i)
+  			}
+  		}
+  		sessionStorage.setItem('order_info', JSON.stringify({items}))
+  		this.$router.push({
+  			name: 'SettleOrder'
+  		})  		
+  	}
   },
   watch: {
   	check_all(val) {
@@ -110,7 +102,7 @@ export default {
   		if (this.cc) {
   			this.bb = false
 	  		if (this.check_all.length == 1) {
-	  			this.checked_pro = this.a
+	  			this.checked_pro = this.all_orders
 	  		} else {
 	  			this.checked_pro = []
 	  		} 
@@ -124,7 +116,7 @@ export default {
 		clearTimeout(this.ccTimeout)
   		if( this.bb ){
   			this.cc = false
-	  		if (this.checked_pro.length == this.a.length) {
+	  		if (this.checked_pro.length == this.all_orders.length) {
 	  			this.check_all = this.check_all_value
 	  		} else {
 				this.check_all = []
@@ -137,7 +129,13 @@ export default {
   	}
   },
   mounted() {
-
+  	let userId = JSON.parse( sessionStorage.getItem('ebay-app') ).userWxOpenid
+	reqShoppingCartList({userId}).then((res) => {
+		this.cart_list = res.data.data
+		for (let i of res.data.data ) {
+			this.all_orders.push(i.productId)
+		}
+	})
   }
 }
 </script>

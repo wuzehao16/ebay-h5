@@ -28,7 +28,7 @@
 	<div class="red-color">￥{{ carriage }}</div>
 </mt-cell>
 <mt-cell>
-	<div>实付金额：<span class="red-color">￥{{ goods_all_price + carriage }}</span></div>
+	<div>实付金额：<span class="red-color">￥{{ total_money }}</span></div>
 </mt-cell>
 <div class='to-wechat'>
 <mt-button size="large" @click="submitOrder">确认订单</mt-button>
@@ -102,7 +102,10 @@ export default {
 	  		}
   		}
   		return all_price
-  	}
+  	},
+    total_money() {
+      return (Number.parseFloat(this.goods_all_price) + this.carriage ).toFixed(2)
+    }
   },
   mounted () {
   	this.order_info = JSON.parse(sessionStorage.getItem('order_info'))
@@ -111,7 +114,6 @@ export default {
   	}
 
   	let a = this.$route.params.receiver_info
-  	console.log(a)
   	if (a) {
   		this.receiver_info.name = a.cneeName
   		this.receiver_info.phone = a.cneePhone
