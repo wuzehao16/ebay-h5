@@ -15,12 +15,13 @@
       </li>
       <li>
         <router-link class="col " :to="{name: 'PopularizeList'} ">
+          <i class="fa fa-share-alt"></i>
           <span class="nd-p">我要推广</span>
         </router-link>
       </li>
       <li>
         <router-link class="col" :to="{name: 'PopularizeList'}" >
-          <i class="fa fa-user-o"></i>
+          <i class="fa fa-user"></i>
         <span class="nd-p"> 会员中心</span>
         </router-link>
       </li>
@@ -80,13 +81,14 @@ export default {
   width: 100%;
   position: relative;
   background-color: #fff;
+  display: flex;
 }
 .tab3 li{
+  font-size: 18px;
     list-style-type: none;
     text-align: center;
-    width: 25%;
-    float: left;
-    height: 100%;
+    flex: 1;
+    margin-top: 10px;
     a{
       position: relative;
       color: #000;
@@ -97,7 +99,7 @@ export default {
       }
     }
     a.router-link-active{
-      color: #f23030;
+      color: #0099f7;
     }
 }
 </style>
