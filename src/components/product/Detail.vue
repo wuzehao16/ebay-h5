@@ -61,6 +61,7 @@
 
 <script>
 import {reqProductDetail, reqAddToShoppingCart} from '../../api'
+import {Toast} from 'mint-ui'
 export default {
   data () {
   	return {
@@ -88,7 +89,11 @@ export default {
   		}
   		console.log({userId, goodCarForm})
   		reqAddToShoppingCart({userId, goodCarForm}).then((res) => {
-
+			if (res.data.code == 0 && res.data.msg == '成功') {
+				Toast('已加入购物车')
+			} else {
+				Toast(res.data.msg)
+			}
   		})
   	},
   	selectSize(o) {
