@@ -29,7 +29,7 @@
               <div><label>总价：</label><span>￥{{d.orderAmount}}</span></div>
             </div>
             <div v-if="d.orderStatus == '1'">
-              <mt-button type="danger" size="small">去支付</mt-button>
+              <mt-button type="primary" size="small">去支付</mt-button>
             </div>
           </mt-cell>
           <template v-for='i in d.productList'>
@@ -58,7 +58,7 @@
               <div><label>总价：</label><span>￥{{d.orderAmount}}</span></div>
             </div>
             <div>
-              <mt-button type="danger" size="small">去支付</mt-button>
+              <mt-button type="primary" size="small">去支付</mt-button>
             </div>
           </mt-cell>
           <template v-for='i in d.productList'>
@@ -216,8 +216,12 @@ export default {
 .order-flow {
   padding: 10px 0;
 }
+.mint-cell:first-child .mint-cell-wrapper {
+    border-bottom: 1px solid #EEEEEE;
+}
 .order-des {
   margin: 12px 0;
+  font-size: 14px;
   div {
     margin: 4px 0;
     label {
@@ -269,7 +273,7 @@ export default {
     .title {
         overflow: hidden;
         font-size: 14px;
-        width: 240px;
+        width: 233px;
         text-overflow: ellipsis;
         display: -webkit-box;
         -webkit-line-clamp: 2;

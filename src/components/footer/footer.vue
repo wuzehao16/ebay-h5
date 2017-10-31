@@ -20,7 +20,7 @@
         </router-link>
       </li>
       <li>
-        <router-link class="col" :to="{name: 'PopularizeList'}" >
+        <router-link class="col" :to="{name: 'UserCenter'}" >
           <i class="fa fa-user"></i>
         <span class="nd-p"> 会员中心</span>
         </router-link>
