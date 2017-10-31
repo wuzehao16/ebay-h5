@@ -34,10 +34,11 @@
           </mt-cell>
           <template v-for='i in d.productList'>
             <mt-cell style="padding-bottom: 10px;">
-              <div slot="title" class="goods-list" 
-              :style="{'background': 'url(' +  i.productIcon + ') no-repeat left center'}">
-                <h3>{{ i.productNane }}</h3>
-                <p style="color:gray;">x {{ i.orderDetail.productQuantity }}</p>
+              <div slot="title" class="goods-list" >
+                <div class="avatar" :style="{'background': 'url(' + i.productIcon + ') no-repeat center center'}"></div>
+                <div class="right">
+                  <div class="title">{{ i.orderDetail.productQuantity }}</div>
+                </div>
               </div>
             </mt-cell>            
           </template>
@@ -62,10 +63,11 @@
           </mt-cell>
           <template v-for='i in d.productList'>
             <mt-cell style="padding-bottom: 10px;">
-              <div slot="title" class="goods-list" 
-              :style="{'background': 'url(' + i.productIcon + ') no-repeat left center'}">
-                <h3>{{ i.productNane }}</h3>
-                <p style="color:gray;">x {{ i.orderDetail.productQuantity }}</p>
+              <div slot="title" class="goods-list" >
+                <div class="avatar" :style="{'background': 'url(' + i.productIcon + ') no-repeat center center'}"></div>
+                <div class="right">
+                  <div class="title">{{ i.orderDetail.productQuantity }}</div>
+                </div>
               </div>
             </mt-cell>            
           </template>
@@ -94,10 +96,11 @@
             class='order-flow'></mt-cell> -->
           <template v-for='i in  d.productList'>
             <mt-cell style="padding-bottom: 10px;">
-              <div slot="title" class="goods-list" 
-              :style="{'background': 'url(' + i.productIcon + ') no-repeat left center'}">
-                <h3>{{ i.productNane }}</h3>
-                <p style="color:gray;">x {{ i.orderDetail.productQuantity }}</p>
+              <div slot="title" class="goods-list" >
+                <div class="avatar" :style="{'background': 'url(' + i.productIcon + ') no-repeat center center'}"></div>
+                <div class="right">
+                  <div class="title">{{ i.orderDetail.productQuantity }}</div>
+                </div>
               </div>
             </mt-cell>            
           </template>
@@ -248,25 +251,38 @@ export default {
 }
 
 .goods-list {
-	padding: 10px 10px 10px 120px;
-    background-size: 110px 100%!important;
-    height: 90px;
+    padding: 5px ;
+    height: 110px;
+    width: 110px;
     line-height: 26px;
-	h3, p{
-		margin: 0;
-	}
-	h3 {
-	    overflow: hidden;
-	    text-overflow: ellipsis;
-	    display: -webkit-box;
-	    -webkit-line-clamp: 2;
-	    -webkit-box-orient: vertical;
-	    word-wrap: break-word;	
-	    word-break: break-all;	
-	}
-  p {
-    position: absolute;
-    bottom: 10px;
+    display: flex;
+  .avatar{
+    flex: 0 0 100px;
+    background-size: 100px auto!important;
+  }
+  .right{
+    flex: 1 0 auto;
+    padding-left: 20px;
+    .title {
+        overflow: hidden;
+        font-size: 14px;
+        width: 240px;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        word-wrap: break-word;	
+        word-break: break-all;	
+    }
+    .price{
+      color:#ef4f4f;
+      margin-top: 20px;
+    }
+    button {
+      position: absolute;
+      bottom: 16px;
+      height: 27px;
+    }
   }
 }
 

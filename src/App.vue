@@ -1,13 +1,15 @@
 <template>
+
   <div id="app">
     <!-- <img src="./assets/logo.png"> -->
+
     <router-view/>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'app'
+  name: 'app',
 }
 </script>
 
@@ -27,6 +29,17 @@ export default {
   display:block;
   visibility:hidden;
   clear:both;
+}
+a{
+  text-decoration: none;
+}
+ul{
+  padding: 0;
+}
+.mint-navbar .mint-tab-item.is-selected {
+    border-bottom: 3px solid #e93b3d;
+    color: #e93b3d;
+    margin-bottom: -3px
 }
 .mint-loadmore-bottom {
   margin: 0;

@@ -13,12 +13,14 @@
 			:bottom-all-loaded="allLoaded" ref="loadmore">
       <div> 
 		    <mt-cell class='set-shadow' v-for="d in publishedGoods" :key="d.created">
-		    	<div slot="title" class="goods-list" 
-		    	:style="{'background': 'url(' + d.productPic + ') no-repeat left center'}">
-	    			<h3>{{ d.productNane }}</h3>
-	    			<p style="color:#ef4f4f">￥{{ d.productPrice }}</p>
-	    			<mt-button type="default" @click="goPreview(d.id)" size="small">立即预览</mt-button>
-		    	</div>
+          <div slot="title" class="goods-list" >
+            <div class="avatar" :style="{'background': 'url(' + d.productIcon + ') no-repeat center center'}"></div>
+            <div class="right">
+              <div class="title">{{ d.productNane }}</div>
+              <div class="price">￥{{ d.productPrice }}</div>
+              <mt-button type="danger" @click="goPreview(d.id)" size="small">立即预览</mt-button>
+            </div>
+          </div>
 		    </mt-cell>
       </div>
 		</mt-loadmore>
@@ -28,12 +30,14 @@
 		<mt-loadmore :auto-fill="false" :top-method="getWaitedList" :bottom-method="getWaitedList" 
 			:bottom-all-loaded="allLoaded_2" ref="loadmore2">	  
 		    <mt-cell class='set-shadow' v-for="(d, index) in waitedGoods" :key="d.created">
-		    	<div slot="title" class="goods-list" 
-		    	:style="{'background': 'url(' + d.productPic + ') no-repeat left center'}">
-	    			<h3>{{ d.productNane }}</h3>
-	    			<p style="color:#ef4f4f">￥{{ d.productPrice }}</p>
-	    			<mt-button type="default" @click="goPreview(d)" size="small">立即预览</mt-button>
-		    	</div>
+          <div slot="title" class="goods-list" >
+            <div class="avatar" :style="{'background': 'url(' + d.productIcon + ') no-repeat center center'}"></div>
+            <div class="right">
+              <div class="title">{{ d.productNane }}</div>
+              <div class="price">￥{{ d.productPrice }}</div>
+              <mt-button type="danger" @click="goPreview(d)" size="small">立即预览</mt-button>
+            </div>
+          </div>
 		    </mt-cell>
 		</mt-loadmore>
 
@@ -45,7 +49,7 @@
   </div>
 
 	<mt-tabbar :fixed="true">
-	  <mt-button type="primary" size="large" @click="addNew">新增商品</mt-button>
+	  <mt-button type="primary" size="large" @click="addNew" class="addProduct">新增商品</mt-button>
 	</mt-tabbar>
 
 </div>
@@ -141,7 +145,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
 $shadow-color: #aaa;
 .set-shadow .mint-cell-title{
@@ -171,26 +175,43 @@ $shadow-color: #aaa;
 }
 
 .goods-list {
-	padding: 10px 0 10px 120px;
-    background-size: 100px auto!important;
+    padding: 5px ;
     height: 110px;
+    width: 110px;
     line-height: 26px;
-	h3, p{
-		margin: 0;
-	}
-	h3 {
-	    overflow: hidden;
-	    text-overflow: ellipsis;
-	    display: -webkit-box;
-	    -webkit-line-clamp: 2;
-	    -webkit-box-orient: vertical;
-	    word-wrap: break-word;	
-	    word-break: break-all;	
-	}
-  button {
-    position: absolute;
-    bottom: 16px;
+    display: flex;
+  .avatar{
+    flex: 0 0 100px;
+    background-size: 100px auto!important;
+  }
+  .right{
+    flex: 1 0 auto;
+    padding-left: 20px;
+    .title {
+        overflow: hidden;
+        font-size: 14px;
+        width: 240px;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        word-wrap: break-word;	
+        word-break: break-all;	
+    }
+    .price{
+      color:#ef4f4f;
+      margin-top: 20px;
+    }
+    button {
+      position: absolute;
+      bottom: 16px;
+      height: 27px;
+    }
   }
 }
-
+.addProduct{
+  height: 50px;
+  border-radius: 0;
+  background-color: #ff6600;
+}
 </style>

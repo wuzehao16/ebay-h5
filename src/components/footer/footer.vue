@@ -1,0 +1,103 @@
+<template>
+  <div  class="footer">
+    <ul class="tab3">
+      <li>
+        <router-link class="col" :to="{name: 'Hello'}">
+          <i class="fa fa-home"></i>
+        <span class="nd-p">首页</span>
+        </router-link>
+      </li>
+      <li>
+        <router-link class="col" :to="{name: 'OrderList'}" >
+          <i class="fa fa-cart-plus"></i>
+        <span class="nd-p"> 购物车</span>
+        </router-link>
+      </li>
+      <li>
+        <router-link class="col " :to="{name: 'PopularizeList'} ">
+          <span class="nd-p">我要推广</span>
+        </router-link>
+      </li>
+      <li>
+        <router-link class="col" :to="{name: 'PopularizeList'}" >
+          <i class="fa fa-user-o"></i>
+        <span class="nd-p"> 会员中心</span>
+        </router-link>
+      </li>
+    </ul>
+      
+    
+      
+     
+</div>
+
+
+</template>
+
+<script>
+
+export default {
+  props: ['name'],
+  data () {
+    return {
+      showAddsdMenu: false,
+      showMenuWrap: false
+    }
+  },
+  watch: {
+    showAddsdMenu (val) {
+      if (val) {
+        this.showMenuWrap = true
+      } else {
+        setTimeout(() => {
+          this.showMenuWrap = false
+        }, 400)
+      }
+    }
+  },
+  methods: {
+    toAddSd () {
+      this.$router.push('')
+    },
+    i () {
+      this.showAddsdMenu = false
+    }
+  }
+}
+</script>
+<style scoped lang="scss">
+
+.footer{
+  position: fixed;
+  bottom: 0;
+  height: 50px;
+  width:100%;
+  background-color: #fff;
+    box-shadow: 0 0 10PX 0 rgba(155,143,143,0.6);
+  -webkit-box-shadow: 0 0 10PX 0 rgba(155,143,143,0.6);
+}
+.tab3{
+  width: 100%;
+  position: relative;
+  background-color: #fff;
+}
+.tab3 li{
+    list-style-type: none;
+    text-align: center;
+    width: 25%;
+    float: left;
+    height: 100%;
+    a{
+      position: relative;
+      color: #000;
+      .nd-p{
+        font-size: 12px;
+        display: block;
+        margin-bottom: 2px;
+      }
+    }
+    a.router-link-active{
+      color: #f23030;
+    }
+}
+</style>
