@@ -17,7 +17,7 @@
 		    	:style="{'background': 'url(' + d.productPic + ') no-repeat left center'}">
 	    			<h3>{{ d.productNane }}</h3>
 	    			<p style="color:#ef4f4f">￥{{ d.productPrice }}</p>
-	    			<mt-button type="default" @click="goPreview(d)" size="small">立即预览</mt-button>
+	    			<mt-button type="default" @click="goPreview(d.id)" size="small">立即预览</mt-button>
 		    	</div>
 		    </mt-cell>
       </div>
@@ -81,7 +81,6 @@ export default {
       let obj = Object.assign({}, this.reqListObj, {auditStatus: '1', 
           page: this.publishedPage})
       reqSellerProList(obj).then((res) => {
-        console.log(res)
         let arr = res.data.data
         if(arr.length) {
           for(let el of arr) {
@@ -115,11 +114,11 @@ export default {
   		this.$router.push("/popularize/add")
   	},
     goPreview(val) {
-      console.log(val)
       this.$router.push({
-        name: 'PreviewGoods',
+        name: 'PorductDetail',
         params: {
-          goodsInfo: val
+          id: val,
+          isPreview: true
         }
       })
     }

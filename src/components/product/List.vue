@@ -1,6 +1,5 @@
 <template>
 <div class="container">	
-
 <mt-loadmore :auto-fill="false" :top-method="getProductList" 
 :bottom-method="getProductList" 
 	:bottom-all-loaded="allLoaded" ref="loadmore">

@@ -16,6 +16,7 @@ import LogisticsInfo from '@/components/order/logisticsinfo'
 import PorductList from '@/components/product/list'
 import Register from '@/components/user/register'
 import PorductDetail from '@/components/product/detail'
+import Shoppingcart from '@/components/order/Shoppingcart'
 
 Vue.use(Router)
 
@@ -101,6 +102,11 @@ let router = new Router({
       path: '/user/register',
       name: 'Register',
       component: Register
+    },
+    {
+      path: '/order/shoppingcart',
+      name: 'Shoppingcart',
+      component: Shoppingcart
     }
 
   ]
