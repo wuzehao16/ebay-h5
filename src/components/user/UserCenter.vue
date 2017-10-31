@@ -47,6 +47,9 @@
 	<mt-cell title="我要提现" is-link to="/user/withdraw">
 		<i slot="icon" class="iconfont icon-withdraw" style="color:#ff9800;"></i>
 	</mt-cell>
+	<mt-cell title="我要推广" is-link to="/popularize/list">
+		<i slot="icon" class="iconfont icon-withdraw" style="color:#ff9800;"></i>
+	</mt-cell>	
 </template>
 	<mt-cell title="我要下单" is-link to="/product/list">
 		<i slot="icon" class="iconfont icon-order" style="color:#ff9800;"></i>

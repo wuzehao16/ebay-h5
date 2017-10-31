@@ -18,7 +18,7 @@
             <div class="right">
               <div class="title">{{ d.productNane }}</div>
               <div class="price">￥{{ d.productPrice }}</div>
-              <mt-button type="danger" @click="goPreview(d)" size="small">立即预览</mt-button>
+              <mt-button type="danger" @click="goPreview(d.id)" size="small">立即预览</mt-button>
             </div>
           </div>
 		    </mt-cell>
@@ -85,7 +85,6 @@ export default {
       let obj = Object.assign({}, this.reqListObj, {auditStatus: '1', 
           page: this.publishedPage})
       reqSellerProList(obj).then((res) => {
-        console.log(res)
         let arr = res.data.data
         if(arr.length) {
           for(let el of arr) {
@@ -119,11 +118,11 @@ export default {
   		this.$router.push("/popularize/add")
   	},
     goPreview(val) {
-      console.log(val)
       this.$router.push({
-        name: 'PreviewGoods',
+        name: 'PorductDetail',
         params: {
-          goodsInfo: val
+          id: val,
+          isPreview: true
         }
       })
     }

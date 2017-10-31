@@ -6,11 +6,18 @@
 	  		'background-size': 'cover',
 	  		'height': '100%', 'width': '100%'}"></div>
 	  </mt-swipe-item>
-	 <!--  <mt-swipe-item>2</mt-swipe-item>
-	  <mt-swipe-item>3ff</mt-swipe-item> -->
+	
 	</mt-swipe>
 	<mt-tabbar :fixed="true">
-	  <mt-button type="primary" size="large" @click="buyIt">立即购买</mt-button>
+	<template v-if="!isPreview">
+	  <mt-button type="danger">加入购物车</mt-button>
+	  <mt-button type="primary"
+	  	@click="buyIt">立即购买</mt-button>
+
+	</template>
+
+	  <mt-button v-if="isPreview" type="primary" size="large" 
+	  	@click="backList">返回我的发布</mt-button>
 	</mt-tabbar>
 	<mt-cell :title="productInfo.name" 
 		label="">
@@ -40,7 +47,7 @@
 	  	<dt>数量</dt>
 	  	<dd class="select-amount">
 	  		<div class="fa fa-minus" @click="amount > 1 ? amount-- : ''" :class="{'disabled' : amount == 1 }"></div>
-	  		<div><input type="number" v-model="amount"></div>
+	  		<div><input type="number" @blur="amount?'':amount = 1" v-model="amount"></div>
 	  		<div class="fa  fa-plus" @click="amount++"></div>
 	  	</dd>
 
@@ -66,7 +73,8 @@ export default {
   		activeColor: '',
   		amount: 1,
   		collected: false,
-  		items: []
+  		items: [],
+  		isPreview: false
   	}
   },
   methods: {
@@ -91,6 +99,9 @@ export default {
   		this.$router.push({
   			name: 'SettleOrder'
   		})
+  	},
+  	backList() {
+  		this.$router.push('/popularize/list')
   	}
   },
   mounted() {
@@ -101,6 +112,9 @@ export default {
 	  	})
   	} else {
   		this.$router.push('/product/list')
+  	}
+  	if (this.$route.params.isPreview) {
+  		this.isPreview = this.$route.params.isPreview
   	}
 
   }
