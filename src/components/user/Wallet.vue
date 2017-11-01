@@ -3,23 +3,24 @@
 
 <mt-cell :title='year  + "年" +  month  + "月"' 
 	:label="'支出￥' + month_disburse + '  收入￥' + month_income" 
-	style="background:#e4e2e2;">
+	class="time-title">
 	<div @click="openPicker">
-		<i class="iconfont icon-calendar"></i>
+		<i class="iconfont icon-calendar" style="font-size: 26px;"></i>
 	</div>
 </mt-cell>
 <mt-loadmore :auto-fill="false" :bottom-method="getList" 
 	:bottom-all-loaded="allLoaded" ref="loadmore" class="wallet-more">
 	<div>
 		<mt-cell v-for="item in w_list" :key="item.created" class="order-container">
-			<div slot="title">
+			<div slot="title" class="title-box">
+				<div class="img-box" :style="{'background': 'url(' + (item.product?item.product.productIcon:null) + ') no-repeat center center,url(' + require('../../assets/wallet.jpg') + ')'}">			
+				</div>
+				<div>
 				<h3>{{ item.product?item.product.productNane:'用户提现' }}</h3>
 				<p>{{ formatTime(item.created) }}</p>
-				<div class="img-box">
-					<img :src="item.product?item.product.productIcon:null" 
-						:onerror="defaultLogo">					
+					
 				</div>
-
+				
 			</div>
 			<span v-if="item.tradeType == '0'">+ {{ item.tradeInAmount }}</span>
 			<span v-else>- {{ item.tradeOutAmount }}</span>
@@ -61,8 +62,7 @@ export default {
 	  		size: 10
   		},
   		chosenDate: new Date(),
-  		no_data_tip: false,
-  		defaultLogo: 'this.src="' + require('../../assets/wallet.jpg') + '"' 
+  		no_data_tip: false
   	}
   },
   methods: {
@@ -119,6 +119,12 @@ export default {
 </script>
 
 <style lang="scss">
+.time-title {
+	background: #f5f5f5;
+	.mint-cell-title {
+		padding: 12px 0;
+	}
+}
 .wallet-more {
 	.mint-loadmore-bottom {
 		display: none;
@@ -140,14 +146,18 @@ export default {
 	}
 }
 .order-container {
-    padding: 10px 0 10px 80px;
     .mint-cell-wrapper {
-    	align-items: baseline;
+    	align-items: flex-start;
+    }
+    .title-box {
+    	display: flex;
+    	padding: 12px 0;
     }
     .mint-cell-value {
     	span {
-    		font-size: 18px;
+    		font-size: 20px;
     		color: black;
+    		padding-top: 10px;
     	}
     }
 	h3{
@@ -167,19 +177,12 @@ export default {
 		font-size: 14px;
 	}
 	.img-box {
-	    width: 60px;
-	    height: 60px;
-	    position: absolute;
-	    left: 10px;
-	    top: 10px;
+		background-size: cover!important;
+	    width: 50px;
+	    height: 50px;
 	    overflow: hidden;
-	    border-radius: 50%;		
-	}
-	img {
-	    width: 60px;
-	    transform: translateY(-50%);
-	    position: relative;
-	    top: 50%;
+	    border-radius: 50%;	
+	    margin: 0 10px;	
 	}
 }
 

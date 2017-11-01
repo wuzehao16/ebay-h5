@@ -1,21 +1,27 @@
 <template>
 <div class="container">
 
-<mt-cell :title='year  + "年" +  month  + "月"' style="background:#e4e2e2;">
+<mt-cell :title='year  + "年" +  month  + "月"' class="time-title">
 	<div @click="openPicker">
-		<i class="iconfont icon-calendar"></i>
+		<i class="iconfont icon-calendar" style="font-size: 26px;"></i>
 	</div>
 </mt-cell>
 <mt-loadmore :auto-fill="false" :bottom-method="getList" 
-	:bottom-all-loaded="allLoaded" ref="loadmore">
+	:bottom-all-loaded="allLoaded" ref="loadmore" class="client-more">
 	<div>
 		<mt-cell value="7月28日 18:22" v-for="item in items" :key="item">
 			<div slot="title" class="client-container">
 				<p>啷里个啷啷中国中啷啷中国中啷啷中国中中中{{ item }}</p>
-				<img :src=" require('../../assets/test.png') ">
+				<!-- <img :src=" require('../../assets/test.png') "> -->
+
+				<div class="img-box" :style="{'background': 'url(' + 'xxfffdd' + ') no-repeat center center,url(' + require('../../assets/test.png') + ')'}">			
+				</div>				
+
 			</div>
 		</mt-cell> 
 	</div>
+    <div class="no-data" v-if="no_data_tip">您该月没有客户</div>
+
 </mt-loadmore>
 
 
@@ -50,7 +56,9 @@ export default {
 	  		page: 0,
 	  		size: 10
   		},
-  		w_list: []	
+  		w_list: [],
+  		chosenDate: new Date(),
+  		no_data_tip: false
   	}
   },
   methods: {
@@ -60,17 +68,19 @@ export default {
   	handleConfirm (val) {
 		this.s_params.page = 0
 		this.w_list = []
+		this.chosenDate = val		
 		this.getList(val)
   	},
   	formatTime(val) {
   		return util.formatDate.format(new Date(val), 'MM月dd日 hh:mm:ss')
   	},
-  	getList(val) {
-  		let date = val || new Date()
+  	getList() {
+  		let date = this.chosenDate || new Date()
 		let a = util.formatDate.format(date,'yyyy-MM').split('-')
   		let b = new Date(a[0], a[1], 0)
   		this.s_params.startDate = util.formatDate.format(date,'yyyy-MM') + '-01'
   		this.s_params.endDate = util.formatDate.format(b,'yyyy-MM-dd')
+  		this.no_data_tip = false
 		Indicator.open({
 		  text: '加载中...',
 		  spinnerType: 'fading-circle'
@@ -83,6 +93,7 @@ export default {
 				}
 				this.s_params.page++
 			}
+			this.w_list.length == 0 ? this.no_data_tip = true : ''
 			this.year = a[0]
   			this.month = a[1]
 			Indicator.close()
@@ -94,13 +105,34 @@ export default {
 </script>
 
 <style lang="scss">
+.client-more {
+	.mint-loadmore-bottom {
+		display: none;
+	}
+}
+.no-data {
+    height: 100px;
+    position: absolute;
+    width: 100%;
+    z-index: 1000;
+    background: #eeeeee;
+    padding-top: 40px;
+    text-align: center;
+    color: #999;  
+}
+.time-title {
+	background: #f5f5f5;
+	.mint-cell-title {
+		padding: 14px 0;
+	}
+}
 .picker-items {
 	.picker-slot:nth-child(3) {
 		display: none;
 	}
 }
 .client-container {
-    padding: 10px 0 10px 80px;
+    padding: 10px 0 10px 66px;
     height: 60px;
 
     display: flex;
@@ -115,12 +147,13 @@ export default {
 	    word-wrap: break-word;	
 	    word-break: break-all;	
 	}
-	img {
-	    width: 60px;
-	    height: 60px;
+	.img-box {
+		background-size: cover!important;
+	    width: 50px;
+	    height: 50px;
 	    position: absolute;
 	    left: 10px;
-	    top: 10px;
+	    top: 16px;
 	    border-radius: 50%;		
 	}
 }

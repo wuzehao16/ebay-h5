@@ -113,6 +113,7 @@ let router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
+
   document.getElementById('app').scrollTop = 0
 
   let user = JSON.parse( sessionStorage.getItem('ebay-app') )
@@ -123,7 +124,9 @@ router.beforeEach((to, from, next) => {
     }
     sessionStorage.setItem('ebay-app', JSON.stringify(obj))
   }
-  next()
+  setTimeout(() => {
+    next()
+  }, 500)
 })
 
 export default router
