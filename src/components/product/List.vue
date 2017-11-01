@@ -1,9 +1,9 @@
 <template>
 <div class="container">	
-<mt-search v-model="value" v-if="scrollTop"></mt-search>
+<mt-search v-model="value" ></mt-search>
 <mt-loadmore :auto-fill="false" :top-method="getProductList" 
 :bottom-method="getProductList" 
-	:bottom-all-loaded="allLoaded" ref="loadmore">
+	:bottom-all-loaded="allLoaded" ref="loadmore" class="main-wrapper" style="margin-top:52px;">
 		<div> 
     <mt-cell class='set-shadow' v-for="d in pro_list" :key="d.created" >
     	<div slot="title" class="goodss-list" @click="goDetail(d.id)">
@@ -100,12 +100,26 @@ export default {
 <style lang="scss" >
 $ebay-blue :#0099f7;
 $shadow-color: #eaeaea;
+.mint-searchbar{
+  background-color: $ebay-blue;
+  .mint-searchbar-inner{
+    border-radius: 25px;
+  }
+  .mint-searchbar-cancel{
+    color: #fff;
+  }
+}
 .mint-search {
+  height: 53px;
+    z-index: 11;
     position: fixed;
     width: 100%;
     top: 0;
-    overflow: hidden;
-    z-index: 1;
+    // overflow: hidden;
+    // z-index: 1;
+}
+.main-wrapper{
+  background-color: #EEEEEE;
 }
 .mint-cell{
   border-bottom:node; 
@@ -119,8 +133,12 @@ $shadow-color: #eaeaea;
   }
 }
 .mint-tab-item-label{
-	font-size: 18px;
+	font-size: 16px;
 
+}
+.mint-navbar .mint-tab-item.is-selected {
+    border-bottom: 2px solid #0099f7;
+    margin-bottom: -2px;
 }
 .mtc {
 	margin: 54px 0 42px 0;
@@ -153,9 +171,10 @@ $shadow-color: #eaeaea;
   .right{
     flex: 1 0 auto;
     padding-left: 20px;
+    padding-top: 6px;
     .title {
         overflow: hidden;
-        font-size: 14px;
+        font-size: 16px;
         line-height: 20px;
         width: 220px;
         text-overflow: ellipsis;
@@ -166,6 +185,7 @@ $shadow-color: #eaeaea;
         word-break: break-all;	
     }
     .price{
+      font-size: 14px;
       color:$ebay-blue;
     }
     button {
