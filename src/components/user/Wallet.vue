@@ -183,6 +183,7 @@ export default {
 	    overflow: hidden;
 	    border-radius: 50%;	
 	    margin: 0 10px;	
+        flex-shrink: 0
 	}
 }
 
