@@ -26,8 +26,7 @@
 		</mt-loadmore>
 	  </mt-tab-container-item>
 	  <mt-tab-container-item id="wait_audit">
-
-		<mt-loadmore :auto-fill="false" :top-method="getWaitedList" :bottom-method="getWaitedList" 
+		<mt-loadmore :auto-fill="false" :top-method="getWaitedList"  :bottom-method="getWaitedList" 
 			:bottom-all-loaded="allLoaded_2" ref="loadmore2">	  
 		    <mt-cell class='set-shadow' v-for="(d, index) in waitedGoods" :key="d.created">
           <div slot="title" class="goods-list" >
@@ -38,6 +37,7 @@
               <mt-button type="primary" @click="goPreview(d)" size="small">立即预览</mt-button>
             </div>
           </div>
+          <div class="no-data" v-if="!waitedGoods ||waitedGoods.length <1">您没有待收货的订单</div>
 		    </mt-cell>
 		</mt-loadmore>
 
@@ -97,6 +97,7 @@ export default {
       })
     },
     getWaitedList() {
+      console.log(1)
       let obj = Object.assign({}, this.reqListObj, {auditStatus: '0',
          page: this.WaitedAuditPage})
       reqSellerProList(obj).then((res) => {
@@ -107,6 +108,7 @@ export default {
           }
           this.WaitedAuditPage++
         }
+        console.log(res)
         this.$refs.loadmore2.onTopLoaded()
         this.$refs.loadmore2.onBottomLoaded()
       })      
@@ -154,7 +156,16 @@ $shadow-color: #aaa;
 }
 .mint-tab-item-label{
 	font-size: 18px;
-
+}
+.no-data {
+    height: 100px;
+    position: absolute;
+    width: 100%;
+    z-index: 1000;
+    background: #EEEEEE;
+    padding-top: 40px;
+    text-align: center;
+    color: #000;  
 }
 .mtc {
 	margin: 54px 0 42px 0;

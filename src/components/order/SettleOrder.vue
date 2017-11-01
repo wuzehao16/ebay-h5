@@ -7,7 +7,7 @@
 			<span>{{ receiver_info.address.replace(/@/g, "") }}</span>
 		</template>
 		<template v-if="!receiver_info.name">
-			<div class="choose">选择地址</div>
+			<div class="choose">请选择地址</div>
 		</template>
 	</div>
 </mt-cell>
@@ -60,11 +60,13 @@ export default {
   },
   methods: {
   	chooseAddress() {
-  		console.log(this.order_info)
+  		console.log(this.order_info,this.receiver_info)
   		this.$router.push({
   			name: 'AddressList',
   			params: {
-  				order_info: this.order_info
+					order_info: this.order_info,
+					seleceted:this.receiver_info,
+					radio_value:1
   			}
   		})
   	},
@@ -131,6 +133,9 @@ export default {
     background-color: #fff !important;
 		background: url("../../assets/stripe.png") bottom center repeat-x;
 		background-size: 50px 6px;
+		.mint-cell-wrapper{
+			background-image: none;
+		}
 }
 .receiver {
 		.choose{

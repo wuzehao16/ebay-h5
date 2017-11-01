@@ -5,15 +5,15 @@
 <mt-field label="手机号" v-model="addForm.cneePhone" placeholder="请输入收货人手机号码" type="tel"></mt-field>
 
 <mt-field label="省" placeholder="请选择省份" class="input-address" 
-  v-model="addressProvince">
+  v-model="addressProvince" >
   <div @click="popupVisible = true"></div>
 </mt-field>
 <mt-field label="市" placeholder="请选择市" class="input-address" 
-  v-model="addressCity">
+  v-model="addressCity" >
   <div @click="touchCity"></div>
 </mt-field>
 <mt-field label="区/县" placeholder="请选择区/县" class="input-address" 
-  v-model="addressXian">
+  v-model="addressXian" >
   <div @click="touchXian"></div>
 </mt-field>
 <mt-field label="乡镇/街道" placeholder="请选择乡镇/街道" class="input-address" 
@@ -21,21 +21,14 @@
   <div @click="touchStreet"></div>
 </mt-field>
 <mt-field label="详细地址" v-model="addressDetail" placeholder="请输入详细地址" 
-  rows="3" type="textarea"></mt-field>
+  rows="3" type="textarea" class="address-details"></mt-field>
 
-<mt-cell title="详细地址需填写楼栋层或房间号信息" style="color: gray;"></mt-cell>
+<div class="address-info">详细地址需填写楼栋层或房间号信息</div>
 
 <div style="margin: 10px;">
   <mt-button type="primary" size="large" style="margin-bottom: 8px;" @click="addressSubmit">确认</mt-button>
   <mt-button type="default" size="large" @click="deleteSubmit" v-if="isEdit">删除地址</mt-button>
 </div>
-
-
-
-
-
-
-
 <!-- 省 -->
 <mt-popup class="popup-width"
   v-model="popupVisible"
@@ -73,7 +66,21 @@
 </template>
 
 <style lang="scss">
+.address-details{
+  .mint-cell-title{
+    margin-top: -50px;
+  }
+}
+.address-info{
+   color: gray;
+   padding-left:10px;
+   padding-top: 5px;
+   font-size: 14px;
+}
 .input-address {
+  .mint-cell-title{
+    color:#999;
+  }
   .mint-field-other {
     position: absolute;
     height: 100%;

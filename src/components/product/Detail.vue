@@ -148,6 +148,9 @@ $bg-red : #f23030;
 	.addCart{
 		display: flex;
     justify-content: flex-end;
+		button{
+			border-radius: 0;
+		}
 	}
 }
 .love-it {
