@@ -126,7 +126,7 @@ router.beforeEach((to, from, next) => {
   }
   setTimeout(() => {
     next()
-  }, 500)
+  }, 100)
 })
 
 export default router

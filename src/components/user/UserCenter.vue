@@ -12,13 +12,13 @@
 	</div>
 </div>
 
-<mt-cell is-link title="我的订单" to="/order/list">
+<mt-cell is-link title="我的订单" to="/order/list" style="z-index: 100">
 	<i slot="icon" class="iconfont icon-order" style="color: red;"></i>
 	<span style="font-size: 12px;">查看更多订单</span>
 </mt-cell>
 <mt-cell class="no-bg">
 	<div slot="title" >
-		<ul class="order-type clearfix">
+		<ul class="order-type  clearfix">
 			<li @click="goOrderList('all_orders')">
 				<i class="iconfont icon-all"></i><br/><span>全部</span></li>
 			<li @click="goOrderList('to_pay')">
@@ -29,7 +29,7 @@
 	</div>
 </mt-cell>
 <template v-if="user.userCtype == '1'">
-	<mt-cell is-link title="我的钱包" to="/user/wallet">
+	<mt-cell is-link title="我的钱包" to="/user/wallet" style="z-index: 100;">
 		<i slot="icon" class="iconfont icon-wallet" style="color: #ff9800;"></i>
 	</mt-cell>
 	<mt-cell class="no-bg">
@@ -48,13 +48,12 @@
 		<i slot="icon" class="iconfont icon-withdraw" style="color:#ff9800;"></i>
 	</mt-cell>
 	<mt-cell title="我要推广" is-link to="/popularize/list">
-		<i slot="icon" class="iconfont icon-withdraw" style="color:#ff9800;"></i>
+		<i slot="icon" class="iconfont icon-popularize" style="color:#4caf50;font-size: 10px;margin-left: -3px;"></i>
 	</mt-cell>	
 </template>
-	<mt-cell title="我要下单" is-link  to="/product/list">
-		<i slot="icon" class="iconfont icon-order" style="color:#ff9800;"></i>
+	<mt-cell title="我要下单" is-link to="/product/list">
+		<i slot="icon" class="iconfont icon-go-buy" style="color:#2196f3;"></i>
 	</mt-cell>
-
 </div>
 </template>
 
@@ -86,6 +85,10 @@ export default {
   	})
   	reqMyCusCount(user).then((res) => {
   		console.log(res.data.data)
+  		if (res.data.data) {
+  			this.count = res.data.data
+  		}
+
   	})
 
   }
@@ -93,6 +96,7 @@ export default {
 </script>
 <style lang="scss">
 .no-bg {
+	z-index: 101;
 	margin-top: -10px;
 	margin-bottom: 10px;
 	.mint-cell-wrapper {
@@ -124,6 +128,9 @@ export default {
     	text-align: center;
     	line-height: 20px;
     	font-size: 14px;
+	    &:active{
+    		background: lightgrey;
+    	}
     }
     i {
     	font-size: 24px;
