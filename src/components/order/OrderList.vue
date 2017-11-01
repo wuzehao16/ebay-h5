@@ -29,7 +29,7 @@
               <div><label>总价：</label><span>￥{{d.orderAmount}}</span></div>
             </div>
             <div v-if="d.orderStatus == '1'">
-              <mt-button type="primary" size="small">去支付</mt-button>
+              <mt-button type="primary" size="small" class="pay-b">去支付</mt-button>
             </div>
           </mt-cell>
           <template v-for='i in d.productList'>
@@ -58,7 +58,7 @@
               <div><label>总价：</label><span>￥{{d.orderAmount}}</span></div>
             </div>
             <div>
-              <mt-button type="primary" size="small">去支付</mt-button>
+              <mt-button type="primary" size="small" class="pay-b">去支付</mt-button>
             </div>
           </mt-cell>
           <template v-for='i in d.productList'>
@@ -216,14 +216,15 @@ export default {
 .order-flow {
   padding: 10px 0;
 }
-.mint-cell:first-child .mint-cell-wrapper {
-    border-bottom: 1px solid #EEEEEE;
+.pay-b{
+  height: 28px;
+    width: 80px;
 }
 .order-des {
   margin: 12px 0;
   font-size: 14px;
   div {
-    margin: 4px 0;
+    margin: 8px 0;
     label {
       color: gray;
     }
@@ -259,13 +260,13 @@ export default {
 
 .goods-list {
     padding: 5px ;
-    height: 110px;
+    height: 86px;
     width: 110px;
     line-height: 26px;
     display: flex;
   .avatar{
-    flex: 0 0 100px;
-    background-size: 100px auto!important;
+    flex: 0 0 70px;
+    background-size: 70px auto!important;
   }
   .right{
     flex: 1 0 auto;
@@ -289,6 +290,7 @@ export default {
       position: absolute;
       bottom: 16px;
       height: 27px;
+      width: 100px;
     }
   }
 }

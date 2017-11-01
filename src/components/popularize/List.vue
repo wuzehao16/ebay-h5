@@ -170,6 +170,14 @@ $shadow-color: #aaa;
 .mtc {
 	margin: 54px 0 42px 0;
 }
+.set-shadow .mint-cell-wrapper{
+  background-image:none;
+  margin-bottom: -5px;
+  .mint-cell-title{
+    margin: 10px 0 10px 0;
+    box-shadow: 0 2px 16px $shadow-color, 0 0 1px $shadow-color, 0 0 1px $shadow-color;	
+  }
+}
 .to-top {
     position: fixed;
     width: 32px;
@@ -198,9 +206,11 @@ $shadow-color: #aaa;
   .right{
     flex: 1 0 auto;
     padding-left: 20px;
+    padding-top: 8px;
     .title {
         overflow: hidden;
-        font-size: 14px;
+        font-size: 16px;
+        line-height: 20px;
         width: 233px;
         text-overflow: ellipsis;
         display: -webkit-box;
@@ -211,7 +221,7 @@ $shadow-color: #aaa;
     }
     .price{
       color:$ebay-blue;
-      margin-top: 20px;
+      font-size: 14px;
     }
     button {
       position: absolute;
