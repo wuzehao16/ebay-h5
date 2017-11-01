@@ -155,7 +155,7 @@ $shadow-color: #aaa;
     box-shadow: 0 2px 16px $shadow-color, 0 0 1px $shadow-color, 0 0 1px $shadow-color;	
 }
 .mint-tab-item-label{
-	font-size: 18px;
+	font-size: 16px;
 }
 .no-data {
     height: 100px;
@@ -206,12 +206,12 @@ $shadow-color: #aaa;
   .right{
     flex: 1 0 auto;
     padding-left: 20px;
-    padding-top: 8px;
+    padding-top: 6px;
     .title {
         overflow: hidden;
         font-size: 16px;
         line-height: 20px;
-        width: 233px;
+        width: 220px;
         text-overflow: ellipsis;
         display: -webkit-box;
         -webkit-line-clamp: 2;

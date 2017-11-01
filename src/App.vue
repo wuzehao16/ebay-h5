@@ -1,6 +1,7 @@
 <template>
 
   <div id="app">
+    <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
     <!-- <img src="./assets/logo.png"> -->
 
     <router-view/>
@@ -41,7 +42,7 @@ ul{
   margin: 0;
 }
 .mint-tab-item-label{
-  font-size: 18px;
+  font-size: 16px;
 }
 .mint-navbar .mint-tab-item.is-selected {
     border-bottom: 3px solid #0099f7;

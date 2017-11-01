@@ -10,6 +10,10 @@
 	</mt-swipe>
 	<mt-tabbar :fixed="true" class="addCart">
 	<template v-if="!isPreview">
+		<div class="cart">
+			<i class="fa fa-cart-plus" @click="toCart"></i>
+			<span class="num">1</span>
+		</div>
 	  <mt-button type="danger" @click="addToCart">加入购物车</mt-button>
 	  <mt-button type="primary"
 	  	@click="buyIt">立即购买</mt-button>
@@ -117,7 +121,10 @@ export default {
   	},
   	backList() {
   		this.$router.push('/popularize/list')
-  	}
+		},
+		toCart(){
+			this.$router.push('/order/shoppingcart')
+		}
   },
   mounted() {
   	if (this.$route.params.id) {
@@ -147,9 +154,34 @@ $bg-red : #f23030;
 	margin-bottom: 42px;
 	.addCart{
 		display: flex;
-    justify-content: flex-end;
+		div{
+			flex:0 0 50px;
+			color: #999;
+			font-size: 30px;
+			line-height: 48px;
+			position: relative;
+			.num{
+				border-radius: 25px;
+				height: 15px;
+				width: 15px;
+				position: absolute;
+				right: 4px;
+				top: 4px;
+				line-height: 15px;
+				font-size: 12px;
+				color: #fff;
+				background-color: red;
+			}
+		}
 		button{
 			border-radius: 0;
+			height: 48px;
+			flex: 1 0 auto;
+			
+		}
+		button:nth-child(2){
+			background-color: #ffb03f;
+			margin-right: -2px;
 		}
 	}
 }

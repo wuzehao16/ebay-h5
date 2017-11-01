@@ -37,7 +37,8 @@
               <div slot="title" class="goods-list" >
                 <div class="avatar" :style="{'background': 'url(' + i.productIcon + ') no-repeat center center'}"></div>
                 <div class="right">
-                  <div class="title">{{ i.orderDetail.productQuantity }}</div>
+                  <div class="title">{{ i.productNane }}</div>
+                  <div class="num">x{{i.orderDetail.productQuantity}}</div>
                 </div>
               </div>
             </mt-cell>            
@@ -66,7 +67,8 @@
               <div slot="title" class="goods-list" >
                 <div class="avatar" :style="{'background': 'url(' + i.productIcon + ') no-repeat center center'}"></div>
                 <div class="right">
-                  <div class="title">{{ i.orderDetail.productQuantity }}</div>
+                  <div class="title">{{ i.productNane }}</div>
+                  <div class="num">x{{i.orderDetail.productQuantity}}</div>
                 </div>
               </div>
             </mt-cell>            
@@ -236,8 +238,12 @@ export default {
 .cell-margin{
     margin: 10px 0 10px 0;
 }
+.mint-navbar .mint-tab-item.is-selected {
+    border-bottom: 2px solid #0099f7;
+    margin-bottom: -2px;
+}
 .mint-tab-item-label{
-	font-size: 18px;
+	font-size: 16px;
 
 }
 .mtc {
@@ -271,10 +277,12 @@ export default {
   .right{
     flex: 1 0 auto;
     padding-left: 20px;
+    padding-top: 6px;
     .title {
         overflow: hidden;
-        font-size: 14px;
-        width: 233px;
+        font-size: 16px;
+        line-height: 20px;
+        width: 220px;
         text-overflow: ellipsis;
         display: -webkit-box;
         -webkit-line-clamp: 2;
@@ -282,9 +290,12 @@ export default {
         word-wrap: break-word;	
         word-break: break-all;	
     }
+    .num{
+      margin-top: 5px;
+      color:#999;
+    }
     .price{
       color:#ef4f4f;
-      margin-top: 20px;
     }
     button {
       position: absolute;
