@@ -49,7 +49,7 @@
   </div>
 
 	<mt-tabbar :fixed="true">
-	  <mt-button type="primary" size="large" @click="addNew" class="addProduct">新增商品</mt-button>
+	  <mt-button type="primary" size="large" @click="addNew" class="addProduct">新增商品<i class="iconfont icon-add"></i></mt-button>
 	</mt-tabbar>
 
 </div>

@@ -21,10 +21,10 @@
 	  <mt-button v-if="isPreview" type="primary" size="large" 
 	  	@click="backList">返回我的发布</mt-button>
 	</mt-tabbar>
-	<mt-cell :title="productInfo.name" label="" >
+	<mt-cell :title="productInfo.name" label="" style="padding-top:10px"">
 	  <span class="love-it" @click="collected = !collected"><i class="iconfont" :class="{'icon-collect': !collected, 'icon-collect-color': collected}"></i><br/>收藏</span>
 	</mt-cell>
-	<mt-cell :title="'￥' + productInfo.price" style="color:red"></mt-cell>
+	<div class="price">￥{{productInfo.price}}</div>
 	
   	<dl>
 	  	<dt>尺寸</dt>
@@ -184,6 +184,12 @@ $bg-red : #f23030;
 			margin-right: -2px;
 		}
 	}
+	.price{
+		font-size: 23px;
+		background-color: #fff;
+		color:red;
+		padding-bottom: 10px;	
+  }
 }
 .love-it {
 	text-align: center;
