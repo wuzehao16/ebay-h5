@@ -49,7 +49,6 @@ ul{
   margin: 0;
     position: fixed;
     bottom: -50px;
-    background: #ccc;
     width: 100%;  
 }
 .mint-loadmore {
