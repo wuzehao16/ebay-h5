@@ -9,7 +9,7 @@
 		<div>
 			<input type="radio" v-model="radio_value" :value="item.cneeAddress"
 				 class="mint-radio-input" @change="getSelected(item)" >  
-			<span class="mint-radio-core" @click="getSelected(item)"></span>
+			<span class="mint-radio-core"></span>
 		</div>
 		<span>{{item.cneeName}}</span>
 		<span>{{item.cneePhone}}</span>
@@ -20,7 +20,7 @@
 	</div>
 </mt-cell>
 
-	<mt-tabbar :fixed="true">
+	<mt-tabbar :fixed="true" class="add-address">
 	  <!-- <mt-button type="default" size="large" @click="makeSure">确认选择
 	  </mt-button> -->
 	  <mt-button type="primary" size="large" @click="addNew">新增地址
@@ -35,12 +35,12 @@
   margin-bottom: 44px;
 }
 .address-cell {
-  padding: 10px 0;
+  padding: 5px 0 0 0;
 }
 .address-cell:nth-child(2){
 	.mint-cell-title{
 		.add-list{
-			padding-top: 10px;
+			padding: 10px 0;
 		}
 	}
 }
@@ -49,7 +49,7 @@
 		display: inline;
 		position: relative;
 		float: left;
-		top: 16px;
+		top: 8px;
 		input {
 			display: inline;
 			position: absolute;
@@ -65,17 +65,22 @@
 		}
 	}
 	span{
-			font-size: 14px;
-			padding-left: 5px;
+			font-size: 16px;
+			padding-left: 10px;
 	}
 	span:nth-child(4){
-		    display: block;
+		font-size: 14px;
+		display: block;
     color: #999;
-    padding-left: 25px;
+    padding-left: 30px;
     padding-top: 5px;
 	}
 }
-
+.add-address{
+	button{
+		height: 46px;
+	}
+}
 </style>
 
 
@@ -93,14 +98,18 @@ export default {
   },
   methods: {
     getSelected(val) {
-      this.seleceted = val;
-      this.$router.push({
-        name: "SettleOrder",
-        params: {
-          receiver_info: this.seleceted
-        }
-      });
-      console.log(val);
+			this.seleceted = val;
+			let that = this;
+			this.radio_value = val.cneeAddress;
+			console.log(val,this.radio_value)
+			setTimeout(function() {
+				that.$router.push({
+					name: "SettleOrder",
+					params: {
+						receiver_info: that.seleceted
+					}
+				});
+			}, 600);
     },
     addNew() {
       this.$router.push("/order/address");

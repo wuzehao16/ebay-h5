@@ -6,7 +6,7 @@
 	:bottom-all-loaded="allLoaded" ref="loadmore">
 		<div> 
     <mt-cell class='set-shadow' v-for="d in pro_list" :key="d.created" >
-    	<div slot="title" class="goods-list" @click="goDetail(d.id)">
+    	<div slot="title" class="goodss-list" @click="goDetail(d.id)">
         <div class="avatar" :style="{'background': 'url(' + d.productIcon + ') no-repeat center center'}"></div>
         <div class="right" >
           <div class="title">{{ d.productNane }}</div>
@@ -140,7 +140,7 @@ $shadow-color: #eaeaea;
     }
 }
 
-.goods-list {
+.goodss-list {
     padding: 5px ;
     height: 110px;
     width: 110px;
@@ -156,7 +156,8 @@ $shadow-color: #eaeaea;
     .title {
         overflow: hidden;
         font-size: 14px;
-        width: 233px;
+        line-height: 20px;
+        width: 220px;
         text-overflow: ellipsis;
         display: -webkit-box;
         -webkit-line-clamp: 2;
@@ -166,7 +167,6 @@ $shadow-color: #eaeaea;
     }
     .price{
       color:$ebay-blue;
-      margin-top: 20px;
     }
     button {
       position: absolute;

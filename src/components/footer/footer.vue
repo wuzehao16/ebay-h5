@@ -91,11 +91,11 @@ export default {
     margin-top: 10px;
     a{
       position: relative;
-      color: #000;
+      color: #999;
       .nd-p{
         font-size: 12px;
         display: block;
-        margin-bottom: 2px;
+        margin-top: -4px;
       }
     }
     a.router-link-active{

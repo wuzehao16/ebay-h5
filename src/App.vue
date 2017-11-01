@@ -40,6 +40,9 @@ ul{
   padding: 0;
   margin: 0;
 }
+.mint-tab-item-label{
+  font-size: 18px;
+}
 .mint-navbar .mint-tab-item.is-selected {
     border-bottom: 3px solid #0099f7;
     color: #0099f7;

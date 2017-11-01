@@ -7,7 +7,7 @@
 			<span>{{ receiver_info.address.replace(/@/g, "") }}</span>
 		</template>
 		<template v-if="!receiver_info.name">
-			<div class="choose">请选择地址</div>
+			<div class="choose">请选择地址<i class="iconfont icon-add"></i></div>
 		</template>
 	</div>
 </mt-cell>
@@ -17,7 +17,7 @@
 		<h3>{{ order.productName }}L</h3>
 		<!-- <p>{{ order_info.des }}</p> -->
 		<div><span class="price">￥{{ order.productPrice }}</span>
-		<span class="amount">X&nbsp;{{ order.productQuantity }}</span></div>
+		<span class="amount">x{{ order.productQuantity }}</span></div>
 	</div>
 </mt-cell>
 
@@ -132,7 +132,7 @@ export default {
 		margin-bottom: 10px;
     background-color: #fff !important;
 		background: url("../../assets/stripe.png") bottom center repeat-x;
-		background-size: 50px 6px;
+		background-size: 50px 4px;
 		.mint-cell-wrapper{
 			background-image: none;
 		}
@@ -144,6 +144,7 @@ export default {
 		}
 	p {
 		margin: 15px 0 5px 10px;
+		font-size: 16px
 	}
 	span {
 		margin-left: 10px;
@@ -167,9 +168,9 @@ $red-color: #ef4f4f;
     height: 100%;	
 }
 .order-container {
-    padding: 10px 0 10px 120px;
-    background-size: 100px auto!important;
-    height: 110px;
+    padding: 10px 0 10px 80px;
+    background-size: 70px auto!important;
+    height: 80px;
     line-height: 34px;
 	h3, p {
 		margin: 0;
@@ -193,6 +194,7 @@ $red-color: #ef4f4f;
 	}
 	.amount {
 		float: right;
+		font-size: 14px;
 		color: gray;
 	}
 }
