@@ -208,10 +208,10 @@ export default {
     position: absolute;
     width: 100%;
     z-index: 1000;
-    background: #cccccc;
+    background: #EEEEEE;
     padding-top: 40px;
     text-align: center;
-    color: #fff;  
+    color: #000;  
 }
 .order-flow {
   padding: 10px 0;

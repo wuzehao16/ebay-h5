@@ -1,17 +1,17 @@
 <template>
 <div class="container">	
-<mt-cell :class="{'no-address': !receiver_info.name}">
+<mt-cell class="address" >
 	<div slot="title" @click="chooseAddress" class="receiver">
 		<template v-if="receiver_info.name">
 			<p>{{ receiver_info.name }} {{ receiver_info.phone }}</p>
 			<span>{{ receiver_info.address.replace(/@/g, "") }}</span>
 		</template>
 		<template v-if="!receiver_info.name">
-			<div>选择地址</div>
+			<div class="choose">请选择地址</div>
 		</template>
 	</div>
 </mt-cell>
-<mt-cell v-for="order in order_info.items">
+<mt-cell v-for="order in order_info.items" style="margin-bottom: 10px;">
 	<div slot="title" class="order-container" :style="{'background': 
 		'url(' + order.productIcon + ') left center no-repeat'}">
 		<h3>{{ order.productName }}L</h3>
@@ -60,11 +60,13 @@ export default {
   },
   methods: {
   	chooseAddress() {
-  		console.log(this.order_info)
+  		console.log(this.order_info,this.receiver_info)
   		this.$router.push({
   			name: 'AddressList',
   			params: {
-  				order_info: this.order_info
+					order_info: this.order_info,
+					seleceted:this.receiver_info,
+					radio_value:1
   			}
   		})
   	},
@@ -125,16 +127,26 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.no-address{
-    background: #c3c0c0;
-    color: #fff;
-    text-align: center;	
+.address{
+		height: 80px;
+		margin-bottom: 10px;
+    background-color: #fff !important;
+		background: url("../../assets/stripe.png") bottom center repeat-x;
+		background-size: 50px 6px;
+		.mint-cell-wrapper{
+			background-image: none;
+		}
 }
 .receiver {
+		.choose{
+			margin-top: 20px;
+			text-align: center;
+		}
 	p {
-		margin: 0;
+		margin: 15px 0 5px 10px;
 	}
 	span {
+		margin-left: 10px;
 		font-size: 14px;
 		color: gray;
 	}
@@ -151,7 +163,7 @@ $red-color: #ef4f4f;
 	color: $red-color;
 }
 .container{
-    background: #fff;
+    background: #EEEEEE;
     height: 100%;	
 }
 .order-container {
