@@ -1,6 +1,6 @@
 <template>
 <div class="container">	
-<mt-search v-model="value"></mt-search>
+<mt-search v-model="filters.productName"></mt-search>
 <mt-loadmore 
   :auto-fill="false"
   :top-method="getProductList" 
@@ -41,16 +41,19 @@
 <script>
 import {reqProductList} from '../../api'
 import {Indicator} from 'mint-ui'
-import Footer from '@/components/footer/footer';
+import Footer from '@/components/footer/footer'
+import _ from 'lodash'
 export default {
   data () {
   	return {
   		allLoaded: false,
-      value:"",
-      page: 0,
-      page_size: 16,
+      filters: {
+        page: 0,
+        size: 10,
+        auditStatus: '1',
+        productName: ''
+      },
       pro_list: [],
-      Offset:0,
       tip_flag: false,
       tip_text: ''
   	}
@@ -68,16 +71,20 @@ export default {
     },
     getProductList() {
       this.showSpinner()
-      reqProductList({page:this.page, size: this.page_size}).then((res) => {
+      reqProductList(this.filters).then((res) => {
         let arr = res.data.data.content
         if(arr.length) {
           for(let el of arr) {
             this.pro_list.push(el)
           }
-          this.page++
+          this.filters.page++
         }
         if (this.pro_list.length == 0) {
-          this.tip_text = '尚无产品'
+          if (this.filters.productName == '') {
+            this.tip_text = '还没有商品哦~敬请期待'
+          } else {
+            this.tip_text = '未搜索到符合查询条件的商品'
+          }
           this.tip_flag = true
         }
         this.$refs.loadmore.onTopLoaded()
@@ -100,10 +107,20 @@ export default {
           id: val
         }
       })
-    }
+    },
+    searchByName: _.debounce(function(){
+        this.pro_list = []
+        this.filters.page = 0
+        this.getProductList()
+    }, 500)
   },
   mounted() {
     this.getProductList()
+  },
+  watch: {
+    'filters.productName' (val) {
+        this.searchByName()
+    }
   }
 }
 </script>

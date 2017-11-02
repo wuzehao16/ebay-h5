@@ -90,7 +90,7 @@ export default {
         auditStatus: '0',//待审核
         userWxOpenid: JSON.parse( sessionStorage.getItem('ebay-app') ).userWxOpenid,
         productNane: '',
-        productPic: 'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1193322613,697363706&fm=27&gp=0.jpg',
+        productPic: 'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1193322613,697363706&fm=27&gp=0.jpg',//以@连接
         productPrice: '',//post时要求number类型
         productIcon: 'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1193322613,697363706&fm=27&gp=0.jpg',
         items: []
@@ -129,8 +129,6 @@ export default {
       }
       this.pro_info.productPrice = Number.parseFloat(this.pro_info.productPrice)
       this.isEdit ? this.pro_info.productId = this.productId : ''
-
-console.log(this.pro_info.productPrice)
       Indicator.open({
         spinnerType: 'fading-circle'
       })

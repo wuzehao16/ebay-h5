@@ -94,6 +94,9 @@ export default {
   			let productId = val  + ''//string
 			reqCartDelete({productId, userId: this.userId}).then((res) => {
 				console.log(res)
+				if (res.data.msg = '成功') {
+					this.getList()
+				}
 			})
 		  
 		}).catch((err) => {
@@ -136,7 +139,8 @@ export default {
 			for (let i of res.data.data ) {
 				this.all_pro.push(i.productId)
 			}
-			if (this.all_pro.length == 0) {
+
+			if (this.cart_list.length == 0) {
 				this.tip_flag = true
 			}
 		})  		
@@ -269,7 +273,7 @@ export default {
 		padding: 0 5px;
 	}
 	div:nth-child(odd) {
-		border: 1px solid #999;
+		border: 1px solid #cbcbcb;
 
 	}
 	.disabled{
@@ -279,7 +283,7 @@ export default {
 		width: 40px;
 		text-align: center;
 		border-width: 1px 0 1px 0;
-		border-color: #999;
+		border-color: #cbcbcb;
 		border-style: solid;
 		input {
 		    margin: 0;
