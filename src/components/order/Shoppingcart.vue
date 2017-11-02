@@ -5,7 +5,7 @@
 	content: '删除',
 	style: {background:'red', color: '#fff', display: 'flex', 'align-items': 'center'}, 
 	handler: () => deletePro(c.productId)
-	}]">
+	}]" style="margin-top:8px;">
 	<div slot="title" class='shop-cart'>
 		<div class="check-box">
 			<mt-checklist
@@ -16,7 +16,7 @@
 		<div slot="title" class="goods-list" 
 		:style="{'background': 'url(' + c.productIcon + ') no-repeat left center'}">
 			<h3>{{ c.productName }}</h3>
-			<p style="color:#ef4f4f">￥{{c.productPrice}}</p>
+			<p style="color:#ef4f4f;display:inline-block;position:absolute;top:90px;left:110px;">￥{{c.productPrice}}</p>
 	  	<div class="select-amount">
 	  		<div class="f decrease" 
 	  		@click="c.productQuantity > 1 ? c.productQuantity-- : ''" 
@@ -36,7 +36,7 @@
 	<span>您购物车中没有商品</span>
 </div>
 
-<mt-cell class="cal-box" style="bottom: 51px;" v-if='!tip_flag'>
+<mt-cell class="cal-box" style="bottom: 50px;" v-if='!tip_flag'>
 	<div slot="title">
 		<div class="el-wrap">
 			<div class="check-box show-label">
@@ -53,7 +53,7 @@
 			<span>不含运费，已优惠￥0.00</span>
 		</div>
 		<mt-button type="primary" @click="goSettle"
-		style="font-size:14px; " :disabled="checked_pro.length == 0">
+		style="font-size:14px;height:46px " :disabled="checked_pro.length == 0">
 		去结算（{{ proTotal().sumAmount > 99? '99+' :proTotal().sumAmount }}件）</mt-button>
 	</div>
 
@@ -184,7 +184,16 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" >
+.mint-checkbox-core{
+	margin-left: 8px;
+		width: 15px;
+		height: 15px;
+}
+.mint-checkbox-core::after {
+	top: 2px;
+	left: 4px;
+}
 .no-collect {
 	top: 30%;
 	i {
@@ -198,9 +207,6 @@ export default {
     width: 100%;
     font-size: 14px;
     .el-wrap{
-			.mint-checkbox-core{
-				margin-left: 8px;
-			}
     	height: 50px;
 			width: 45px;
     	>div:nth-child(1) {
@@ -245,7 +251,12 @@ export default {
 </style>
 
 <style lang="scss" scoped>
+.mint-cell-swipe:last-of-type{
+	margin-bottom:100px;
+}
 .select-amount {
+	margin-left:90px;
+	margin-top:28px;
 	display: flex;
 	.decrease{
 		border-top-left-radius: 5px;
@@ -300,8 +311,9 @@ export default {
 	}
 }
 .goods-list {
-	padding: 10px 0 10px 120px;
-    background-size: 100px auto!important;
+	position: relative;
+	padding: 10px 0 10px 110px;
+    background-size: 90px auto!important;
     height: 110px;
     line-height: 26px;
 	h3, p{
@@ -330,7 +342,7 @@ export default {
 			font-size:14px;
 		}
 		span:nth-child(1){
-			padding-left:60px;
+			padding-left:45px;
 		}
 		span:nth-child(2){
 			font-size:12px;
