@@ -35,7 +35,7 @@
             <div class="right">
               <div class="title">{{ d.productNane }}</div>
               <div class="price">￥{{ d.productPrice }}</div>
-              <mt-button type="primary" @click="goPreview(d)" size="small">立即预览</mt-button>
+              <mt-button type="primary" @click="goPreview(d.id)" size="small">立即预览</mt-button>
             </div>
           </div>
 		    </mt-cell>

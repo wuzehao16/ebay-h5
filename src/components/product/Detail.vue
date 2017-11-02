@@ -24,7 +24,7 @@
 	  <mt-button v-if="isPreview" type="primary" size="large" 
 	  	@click="backList">返回我的发布</mt-button>
 	</mt-tabbar>
-	<mt-cell :title="productInfo.name" label="" style="padding-top:10px"">
+	<mt-cell :title="productInfo.name" label="" style="padding-top:10px">
 	  <span class="love-it" @click="collected = !collected"><i class="iconfont" :class="{'icon-collect': !collected, 'icon-collect-color': collected}"></i><br/>收藏</span>
 	</mt-cell>
 	<div class="price">￥{{productInfo.price}}</div>
