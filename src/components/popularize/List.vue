@@ -171,7 +171,7 @@ $ebay-blue :#0099f7;
 $shadow-color: #aaa;
 .set-shadow .mint-cell-title{
     margin: 10px 0 10px 0;
-    box-shadow: 0 2px 16px $shadow-color, 0 0 1px $shadow-color, 0 0 1px $shadow-color;	
+    box-shadow: 0px 2px 3px rgba(34, 25, 25, 0.2), 0 0 1px $shadow-color, 0 0 1px $shadow-color;
 }
 .mint-tab-item-label{
 	font-size: 16px;
@@ -184,7 +184,7 @@ $shadow-color: #aaa;
   margin-bottom: -5px;
   .mint-cell-title{
     margin: 10px 0 10px 0;
-    box-shadow: 0 2px 16px $shadow-color, 0 0 1px $shadow-color, 0 0 1px $shadow-color;	
+    box-shadow: 0px 2px 3px rgba(34, 25, 25, 0.2), 0 0 1px $shadow-color, 0 0 1px $shadow-color;
   }
 }
 .to-top {

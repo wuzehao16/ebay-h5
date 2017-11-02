@@ -1,6 +1,6 @@
 <template>
 <div class="container">	
-<mt-search v-model="value" ></mt-search>
+<mt-search v-model="value"></mt-search>
 <mt-loadmore 
   :auto-fill="false"
   :top-method="getProductList" 
@@ -8,7 +8,7 @@
 	:bottom-all-loaded="allLoaded" 
   ref="loadmore" 
   class="main-wrapper" 
-  style="margin:52px 0;">
+  style="margin:42px 0;">
   <div class="no-data" v-if='tip_flag'>{{ tip_text }}</div>
 
   <div> 
@@ -110,11 +110,16 @@ export default {
 
 <style lang="scss" >
 $ebay-blue :#0099f7;
-$shadow-color: #eaeaea;
+$shadow-color: #ececec;
 .mint-searchbar{
   background-color: $ebay-blue;
+  height: 42px;
   .mint-searchbar-inner{
     border-radius: 25px;
+    i{
+      font-size: 16px;
+      margin-left: 8px;
+    }
   }
   .mint-searchbar-cancel{
     color: #fff;
@@ -140,7 +145,7 @@ $shadow-color: #eaeaea;
   margin-bottom: -5px;
   .mint-cell-title{
     margin: 10px 0 10px 0;
-    box-shadow: 0 2px 16px $shadow-color, 0 0 1px $shadow-color, 0 0 1px $shadow-color;	
+    box-shadow: 0px 2px 3px rgba(34, 25, 25, 0.2), 0 0 1px $shadow-color, 0 0 1px $shadow-color;	
   }
 }
 .mint-tab-item-label{

@@ -14,13 +14,14 @@
 			<h3>{{ c.productName }}</h3>
 			<p style="color:#ef4f4f">￥{{c.productPrice}}</p>
 	  	<div class="select-amount">
-	  		<div class="fa fa-minus" 
+	  		<div class="f decrease" 
 	  		@click="c.productQuantity > 1 ? c.productQuantity-- : ''" 
-	  		:class="{'disabled' : c.productQuantity == 1 }">
+	  		:class="{'disabled' : c.productQuantity == 1 }">-
 	  		</div>
 	  		<div><input type="number" @blur="c.productQuantity?'':c.productQuantity = 1"
 	  		 v-model.number="c.productQuantity"></div>
-	  		<div class="fa  fa-plus" @click="increase(c)"></div>
+	  		<div class="f increase" @click="increase(c)">+</div>
+				
 	  	</div>
 		</div>
 	</div>
@@ -42,11 +43,14 @@
 			</div>
 		</div>
 	</div>
-	<div>
-		<span style="font-size:14px;">总计：￥{{ proTotal().sumPrice }}&nbsp;&nbsp;</span>
+	<div class="bt-total">
+		<div>
+			<span>总计：<em class="price">￥{{ proTotal().sumPrice }}</em>&nbsp;&nbsp;</span>
+			<span>不含运费，已优惠￥0.00</span>
+		</div>
 		<mt-button type="primary" @click="goSettle"
-		style="font-size:14px;" :disabled="checked_pro.length == 0">
-		去结算<br/>（{{ proTotal().sumAmount }}件）</mt-button>
+		style="font-size:14px; " :disabled="checked_pro.length == 0">
+		去结算（{{ proTotal().sumAmount > 99? '99+' :proTotal().sumAmount }}件）</mt-button>
 	</div>
 
 </mt-cell>
@@ -165,7 +169,11 @@ export default {
     width: 100%;
     font-size: 14px;
     .el-wrap{
+			.mint-checkbox-core{
+				margin-left: 8px;
+			}
     	height: 50px;
+			width: 45px;
     	>div:nth-child(1) {
     		float: left;
     	}
@@ -191,8 +199,12 @@ export default {
 
 }
 .check-box {
+	.mint-cell{
+		background: none;
+	}
 	.mint-cell-wrapper {
 		padding: 0;
+		background: none;
 	}
 	.mint-checklist-label {
 		padding-left: 0;
@@ -206,6 +218,24 @@ export default {
 <style lang="scss" scoped>
 .select-amount {
 	display: flex;
+	.decrease{
+		border-top-left-radius: 5px;
+		border-bottom-left-radius: 5px;
+	}
+	.increase{
+				border-top-right-radius: 5px;
+		border-bottom-right-radius: 5px;
+	}
+	.f{
+    outline: 0;
+    line-height: 26px;
+    height: 26px;
+    width: 19px;
+    text-align: center;
+    font-size: 24px;
+    border: 1px solid #f5f5f5;
+    background-color: #f5f5f5;
+	}
 	.fa{
 		padding-top: 6px;
 		color: #666;
@@ -261,5 +291,27 @@ export default {
     position: absolute;
     bottom: 16px;
   }
+}
+.bt-total{
+	display: flex;
+	div{
+		margin-top:6px;
+		span{
+			display: block;
+			font-size:14px;
+		}
+		span:nth-child(1){
+			padding-left:60px;
+		}
+		span:nth-child(2){
+			font-size:12px;
+			padding-top:4px;
+			padding-left:15px;
+		}
+	}
+	.price{
+		font-style:normal;
+		color:red;
+	}
 }
 </style>
