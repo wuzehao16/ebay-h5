@@ -1,7 +1,6 @@
 <template>
 
   <div id="app">
-    <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
     <!-- <img src="./assets/logo.png"> -->
 
     <router-view/>
@@ -34,8 +33,16 @@ $ebay-blue :#0099f7;
   visibility:hidden;
   clear:both;
 }
-a{
-  text-decoration: none;
+a {
+    margin:0;
+    padding:0;
+    border:0;
+    font-size:100%;
+    vertical-align:baseline;
+    text-decoration: none;
+    background:transparent;
+    outline:none;
+    -webkit-tap-highlight-color:rgba(0,0,0,0);
 }
 ul{
   padding: 0;

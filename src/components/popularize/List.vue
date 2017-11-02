@@ -9,18 +9,17 @@
 	<mt-tab-container v-model="selected" class="mtc">
     <div class="no-data" v-if='tip_flag'>{{ tip_text }}</div>
 	  <mt-tab-container-item id="published">
-  		<mt-loadmore :auto-fill="false" :top-method="getPublishedList" 
-        :bottom-method="getPublishedList" 
-  			:bottom-all-loaded="allLoaded" ref="loadmore">
-        <div> 
-  		    <mt-cell class='set-shadow' v-for="d in publishedGoods" :key="d.created">
-            <div slot="title" class="goods-list" >
-              <div class="avatar" :style="{'background': 'url(' + d.productIcon + ') no-repeat center center'}"></div>
-              <div class="right">
-                <div class="title">{{ d.productNane }}</div>
-                <div class="price">￥{{ d.productPrice }}</div>
-                <mt-button type="primary" @click="goPreview(d.id)" size="small">立即预览</mt-button>
-              </div>
+		<mt-loadmore :auto-fill="false" :top-method="getPublishedList" 
+      :bottom-method="getPublishedList" 
+			:bottom-all-loaded="allLoaded" ref="loadmore">
+      <div> 
+		    <mt-cell class='set-shadow' v-for="d in publishedGoods" :key="d.created">
+          <div slot="title" class="goods-list" >
+            <div class="avatar" :style="{'background': 'url(' + d.productIcon + ') no-repeat center center'}"></div>
+            <div class="right">
+              <div class="title">{{ d.productNane }}</div>
+              <div class="price">￥{{ d.productPrice }}</div>
+              <mt-button type="primary" @click="goPreview(d.id)" size="small">立即推广</mt-button>
             </div>
   		    </mt-cell>
         </div>
@@ -49,7 +48,7 @@
   </div>
 
 	<mt-tabbar :fixed="true">
-	  <mt-button type="primary" size="large" @click="addNew" class="addProduct">新增商品<i class="iconfont icon-add"></i></mt-button>
+	  <mt-button type="primary" size="large" @click="addNew" class="addProduct">新增商品<i class="iconfont icon-add" style="font-size:18px;padding-left:5px;"></i></mt-button>
 	</mt-tabbar>
 
 </div>
