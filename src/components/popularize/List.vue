@@ -7,23 +7,24 @@
 
 	<!-- tab-container -->
 	<mt-tab-container v-model="selected" class="mtc">
+    <div class="no-data" v-if='tip_flag'>{{ tip_text }}</div>
 	  <mt-tab-container-item id="published">
-		<mt-loadmore :auto-fill="false" :top-method="getPublishedList" 
-      :bottom-method="getPublishedList" 
-			:bottom-all-loaded="allLoaded" ref="loadmore">
-      <div> 
-		    <mt-cell class='set-shadow' v-for="d in publishedGoods" :key="d.created">
-          <div slot="title" class="goods-list" >
-            <div class="avatar" :style="{'background': 'url(' + d.productIcon + ') no-repeat center center'}"></div>
-            <div class="right">
-              <div class="title">{{ d.productNane }}</div>
-              <div class="price">￥{{ d.productPrice }}</div>
-              <mt-button type="primary" @click="goPreview(d.id)" size="small">立即预览</mt-button>
+  		<mt-loadmore :auto-fill="false" :top-method="getPublishedList" 
+        :bottom-method="getPublishedList" 
+  			:bottom-all-loaded="allLoaded" ref="loadmore">
+        <div> 
+  		    <mt-cell class='set-shadow' v-for="d in publishedGoods" :key="d.created">
+            <div slot="title" class="goods-list" >
+              <div class="avatar" :style="{'background': 'url(' + d.productIcon + ') no-repeat center center'}"></div>
+              <div class="right">
+                <div class="title">{{ d.productNane }}</div>
+                <div class="price">￥{{ d.productPrice }}</div>
+                <mt-button type="primary" @click="goPreview(d.id)" size="small">立即预览</mt-button>
+              </div>
             </div>
-          </div>
-		    </mt-cell>
-      </div>
-		</mt-loadmore>
+  		    </mt-cell>
+        </div>
+  		</mt-loadmore>
 	  </mt-tab-container-item>
 	  <mt-tab-container-item id="wait_audit">
 		<mt-loadmore :auto-fill="false" :top-method="getWaitedList"  :bottom-method="getWaitedList" 
@@ -37,7 +38,6 @@
               <mt-button type="primary" @click="goPreview(d)" size="small">立即预览</mt-button>
             </div>
           </div>
-          <div class="no-data" v-if="!waitedGoods ||waitedGoods.length <1">您没有待收货的订单</div>
 		    </mt-cell>
 		</mt-loadmore>
 
@@ -57,16 +57,12 @@
 
 <script>
 import {reqSellerProList} from '../../api'
+import { Indicator } from 'mint-ui'
+
 export default {
   data () {
   	return {
   		selected: 'published',
-  		goods: {
-  			name: 'hahaha YSL DDDDD CHANNEL CHANNELCHANNELCHANNELCHANNELCHANNEL',
-  			price: '￥9999.99',
-  			left: '已售70%',
-  			img: require('../../assets/test.png')
-  		},
   		allLoaded: false,
   		allLoaded_2: false,
       reqListObj: {
@@ -77,40 +73,62 @@ export default {
       WaitedAuditPage: 0,
 
       publishedGoods: [],
-      waitedGoods: []
+      waitedGoods: [],
+      tip_flag: false,
+      tip_text: ''
   	}
   },
   methods: {
+    showSpinner() {
+      Indicator.open({
+        text: '加载中...',
+        spinnerType: 'fading-circle'
+      })      
+    },
     getPublishedList() {
+      this.showSpinner()
       let obj = Object.assign({}, this.reqListObj, {auditStatus: '1', 
           page: this.publishedPage})
       reqSellerProList(obj).then((res) => {
-        let arr = res.data.data
+        let arr = res.data.data.content
         if(arr.length) {
           for(let el of arr) {
             this.publishedGoods.push(el)
           }
           this.publishedPage++
         }
+        if (this.publishedGoods.length == 0) {
+          this.tip_text = '您没有已发布的商品'
+          this.tip_flag = true
+        }
         this.$refs.loadmore.onTopLoaded()
-        this.$refs.loadmore.onBottomLoaded()
+        if (this.$refs.loadmore.bottomStatus == 'loading') {
+          this.$refs.loadmore.onBottomLoaded()
+        }
+        Indicator.close()
       })
     },
     getWaitedList() {
-      console.log(1)
+      this.showSpinner()
       let obj = Object.assign({}, this.reqListObj, {auditStatus: '0',
          page: this.WaitedAuditPage})
       reqSellerProList(obj).then((res) => {
-        let arr = res.data.productInfoPage.content
+        let arr = res.data.data.content
         if(arr.length) {
           for(let el of arr) {
             this.waitedGoods.push(el)
           }
           this.WaitedAuditPage++
         }
-        console.log(res)
+        if (this.waitedGoods.length == 0) {
+          this.tip_text = '您没有待审核的商品'
+          this.tip_flag = true
+        }        
         this.$refs.loadmore2.onTopLoaded()
-        this.$refs.loadmore2.onBottomLoaded()
+        if (this.$refs.loadmore2.bottomStatus == 'loading') {
+          this.$refs.loadmore2.onBottomLoaded()
+        }
+        Indicator.close()
       })      
     },
   	toTop (val) {
@@ -127,21 +145,22 @@ export default {
           isPreview: true
         }
       })
-    }
+    },
+    init() {
+      this.tip_flag = false
+      if (this.selected == 'wait_audit' && this.waitedGoods.length == 0) {
+        this.getWaitedList()
+      } else if (this.selected == 'published' && this.publishedGoods.length == 0) {
+        this.getPublishedList()
+      }     
+    }    
   },
   mounted() {
-    this.getPublishedList()
-    // this.getWaitedList()
-    
-    this.$nextTick(() => {
-      setTimeout(() => {
-        this.toTop()
-      }, 300)
-    })
+      this.init()
   },
   watch: {
-    selected() {
-      this.toTop()
+    selected(val) {
+      this.init()
     }
   }
 }
@@ -156,16 +175,6 @@ $shadow-color: #aaa;
 }
 .mint-tab-item-label{
 	font-size: 16px;
-}
-.no-data {
-    height: 100px;
-    position: absolute;
-    width: 100%;
-    z-index: 1000;
-    background: #EEEEEE;
-    padding-top: 40px;
-    text-align: center;
-    color: #000;  
 }
 .mtc {
 	margin: 54px 0 42px 0;

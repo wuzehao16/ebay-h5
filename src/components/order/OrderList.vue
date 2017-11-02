@@ -155,11 +155,9 @@ export default {
       })      
     },
     getAllList(val) {
-      console.log(val)
       this.showSpinner()
       let obj = Object.assign({}, this.pa, {page: this.all_page})
       reqBuyerOrderList(obj).then((res) => {
-        console.log(res)
         if (res.data.code == 0) {
           for (let i of res.data.data.content) {
             this.all_list.push(i)
@@ -171,7 +169,9 @@ export default {
           this.tip_flag = true
         } 
         this.$refs.loadmore.onTopLoaded()
-        this.$refs.loadmore.onBottomLoaded()
+        if (this.$refs.loadmore.bottomStatus == 'loading') {
+          this.$refs.loadmore.onBottomLoaded()
+        }
         Indicator.close()
       })
     },
@@ -190,7 +190,9 @@ export default {
           this.tip_flag = true
         } 
         this.$refs.loadmore2.onTopLoaded()
-        this.$refs.loadmore2.onBottomLoaded()
+        if (this.$refs.loadmore2.bottomStatus == 'loading') {
+          this.$refs.loadmore2.onBottomLoaded()
+        }        
         Indicator.close()
       })
     },
@@ -210,7 +212,9 @@ export default {
           this.tip_flag = true
         }         
         this.$refs.loadmore3.onTopLoaded()
-        this.$refs.loadmore3.onBottomLoaded()
+        if (this.$refs.loadmore3.bottomStatus == 'loading') {
+          this.$refs.loadmore3.onBottomLoaded()
+        }           
         Indicator.close()
       })
     },
@@ -231,9 +235,8 @@ export default {
   },
   watch: {
     selected(val) {
-      document.getElementById("app").scrollTop = 0
+      // document.getElementById("app").scrollTop = 0
       this.init()
-
     }
   }
 }
@@ -274,6 +277,7 @@ export default {
 }
 .mtc {
 	margin-top: 54px;
+  margin-bottom: 52px;
 }
 .to-top {
     position: fixed;

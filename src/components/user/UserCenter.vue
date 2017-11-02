@@ -36,7 +36,7 @@
 		<div slot="title" >
 			<ul class="order-type clearfix">
 				<li><p>￥{{ user.userBalance }}</p><span>账户余额</span></li>
-				<li><p>￥10000{{ user.yIncome }}</p><span>昨日收益</span></li>
+				<li><p>￥{{ user.yIncome }}</p><span>昨日收益</span></li>
 				<li><p>￥{{ user.hIncome }}</p><span>历史收益</span></li>
 			</ul>
 		</div>
