@@ -18,7 +18,7 @@
             <div class="right">
               <div class="title">{{ d.productNane }}</div>
               <div class="price">￥{{ d.productPrice }}</div>
-              <mt-button type="primary" @click="goPreview(d.id)" size="small">立即预览</mt-button>
+              <mt-button type="primary" @click="goPreview(d.id)" size="small">立即推广</mt-button>
             </div>
           </div>
 		    </mt-cell>
@@ -49,7 +49,7 @@
   </div>
 
 	<mt-tabbar :fixed="true">
-	  <mt-button type="primary" size="large" @click="addNew" class="addProduct">新增商品<i class="iconfont icon-add"></i></mt-button>
+	  <mt-button type="primary" size="large" @click="addNew" class="addProduct">新增商品<i class="iconfont icon-add" style="font-size:18px;padding-left:5px;"></i></mt-button>
 	</mt-tabbar>
 
 </div>

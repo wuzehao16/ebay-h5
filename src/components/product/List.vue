@@ -1,19 +1,30 @@
 <template>
 <div class="container">	
 <mt-search v-model="value" ></mt-search>
-<mt-loadmore :auto-fill="false" :top-method="getProductList" 
-:bottom-method="getProductList" 
-	:bottom-all-loaded="allLoaded" ref="loadmore" class="main-wrapper" style="margin-top:52px;">
-		<div> 
-    <mt-cell class='set-shadow' v-for="d in pro_list" :key="d.created" >
-    	<div slot="title" class="goodss-list" @click="goDetail(d.id)">
+<mt-loadmore 
+  :auto-fill="false"
+  :top-method="getProductList" 
+  :bottom-method="getProductList" 
+	:bottom-all-loaded="allLoaded" 
+  ref="loadmore" 
+  class="main-wrapper" 
+  style="margin-top:52px;">
+  <div> 
+    <mt-cell 
+      class='set-shadow' 
+      v-for="d in pro_list" 
+      :key="d.created" >
+      <div 
+      slot="title" 
+      class="goodss-list" 
+      @click="goDetail(d.id)">
         <div class="avatar" :style="{'background': 'url(' + d.productIcon + ') no-repeat center center'}"></div>
         <div class="right" >
           <div class="title">{{ d.productNane }}</div>
           <div class="price">￥{{ d.productPrice }}</div>
           <mt-button type="primary"  size="small">立即购买</mt-button>
         </div>
-    	</div>
+      </div>
     </mt-cell>
 		</div>
 </mt-loadmore>
