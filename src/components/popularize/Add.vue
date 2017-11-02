@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import {reqSellerProductSave} from '../../api'
+import {reqSellerProductSave, reqProductDetail} from '../../api'
 import { Toast, Indicator } from 'mint-ui'
 export default {
   data () {
@@ -82,9 +82,12 @@ export default {
       show_tip: false,
       else_key: [],
       else_value: [],
-      No: 1,
+      No: 3,
+      isEdit: false,
+      productId: '',
 
       pro_info: {
+        auditStatus: '0',//待审核
         userWxOpenid: JSON.parse( sessionStorage.getItem('ebay-app') ).userWxOpenid,
         productNane: '',
         productPic: 'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1193322613,697363706&fm=27&gp=0.jpg',
@@ -124,8 +127,10 @@ export default {
           attrValue: this.else_value[i]
         })
       }
-      this.pro_info.productPrice = Number.parseInt(this.pro_info.productPrice)
+      this.pro_info.productPrice = Number.parseFloat(this.pro_info.productPrice)
+      this.isEdit ? this.pro_info.productId = this.productId : ''
 
+console.log(this.pro_info.productPrice)
       Indicator.open({
         spinnerType: 'fading-circle'
       })
@@ -215,6 +220,40 @@ export default {
   },
   mounted () {
     this.pro_info_bak = Object.assign({}, this.pro_info)
+
+    this.productId = this.$route.params.productId
+    if (this.productId) {
+      //测试用，设productId = 77
+      this.productId = 77
+      reqProductDetail({productId: this.productId}).then((res) => {
+          let p = res.data.data
+          this.isEdit = true
+          this.flag = true
+          this.No = p.productAttr.length
+          this.pro_info = {
+            auditStatus: '0',//待审核
+            userWxOpenid: JSON.parse( sessionStorage.getItem('ebay-app') ).userWxOpenid,
+            productNane: p.name,
+            productPic: p.pic.join('@'),
+            productPrice: p.price,
+            productIcon: p.icon,
+            items: []
+          }
+          for (let i in p.productAttr) {
+            let j = Number.parseInt(i) + 1
+            this.else_key[j] = p.productAttr[i].attrName
+            this.else_value[j] = p.productAttr[i].attrValue
+          }
+          
+
+      })
+    }
+
+
+
+
+
+
   }
 }
 </script>

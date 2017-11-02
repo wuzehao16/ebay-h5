@@ -87,7 +87,7 @@ export default {
   		console.log(3434343)
   		MessageBox.confirm('确定删除此商品吗?').then(action => {
   			console.log('kdkdk')
-  			let productId = val + '' //string
+  			let productId = val  + ''//string
 			reqCartDelete({productId, userId: this.userId}).then((res) => {
 				console.log(res)
 			})

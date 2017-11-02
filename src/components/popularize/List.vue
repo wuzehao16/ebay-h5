@@ -35,7 +35,11 @@
             <div class="right">
               <div class="title">{{ d.productNane }}</div>
               <div class="price">￥{{ d.productPrice }}</div>
+              <div class="button-box">
               <mt-button type="primary" @click="goPreview(d.id)" size="small">立即预览</mt-button>
+              <mt-button type="primary" @click="goEdit(d.id)" size="small">编辑</mt-button>
+                
+              </div>
             </div>
           </div>
 		    </mt-cell>
@@ -79,6 +83,16 @@ export default {
   	}
   },
   methods: {
+    goEdit(id) {
+      console.log(id)
+      this.$router.push({
+        name: 'AddGoods',
+        params: {
+          productId: id
+        }
+      })
+
+    },
     showSpinner() {
       Indicator.open({
         text: '加载中...',
@@ -232,10 +246,12 @@ $shadow-color: #aaa;
       color:$ebay-blue;
       font-size: 14px;
     }
-    button {
+    .button-box {
       position: absolute;
       bottom: 16px;
-      height: 27px;
+      button {
+        height: 27px;
+      }
     }
   }
 }
