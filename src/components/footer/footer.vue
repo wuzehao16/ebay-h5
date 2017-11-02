@@ -2,13 +2,13 @@
   <div  class="footer">
     <ul class="tab3">
       <li>
-        <router-link class="col" :to="{name: 'Hello'}">
+        <router-link class="col" :to="{name: 'PorductList'}">
           <i class="fa fa-home"></i>
         <span class="nd-p">首页</span>
         </router-link>
       </li>
       <li>
-        <router-link class="col" :to="{name: 'OrderList'}" >
+        <router-link class="col" :to="{name: 'Shoppingcart'}" >
           <i class="fa fa-cart-plus"></i>
         <span class="nd-p"> 购物车</span>
         </router-link>

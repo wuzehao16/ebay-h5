@@ -8,7 +8,9 @@
 	:bottom-all-loaded="allLoaded" 
   ref="loadmore" 
   class="main-wrapper" 
-  style="margin-top:52px;">
+  style="margin:52px 0;">
+  <div class="no-data" v-if='tip_flag'>{{ tip_text }}</div>
+
   <div> 
     <mt-cell 
       class='set-shadow' 
@@ -26,7 +28,7 @@
         </div>
       </div>
     </mt-cell>
-		</div>
+	</div>
 </mt-loadmore>
 
   <div class="to-top" @click="toTop">
@@ -38,51 +40,54 @@
 
 <script>
 import {reqProductList} from '../../api'
+import {Indicator} from 'mint-ui'
 import Footer from '@/components/footer/footer';
 export default {
   data () {
   	return {
-  		goods: {
-  			name: 'hahaha YSL DDDDD CHANNEL CHANNELCHANNELCHANNELCHANNELCHANNEL',
-  			price: '￥9999.99',
-  			left: '已售70%',
-  			img: require('../../assets/test.png')
-  		},
   		allLoaded: false,
-  		allLoaded_2: false,
-      reqListObj: {
-        size: 10,
-        openid: 'xxxfff'
-      },
       value:"",
       page: 0,
       page_size: 16,
       pro_list: [],
-      Offset:0
+      Offset:0,
+      tip_flag: false,
+      tip_text: ''
   	}
   },
   components:{
     'bottom':Footer
   },
-  computed:{
-    scrollTop:function () {
-      this.Offset = document.getElementById('app').scrollTop
-    }
-  },
   methods: {
+    showSpinner() {
+      this.tip_flag = false
+      Indicator.open({
+        text: '加载中...',
+        spinnerType: 'fading-circle'
+      })      
+    },
     getProductList() {
+      this.showSpinner()
       reqProductList({page:this.page, size: this.page_size}).then((res) => {
-        let arr = res.data.data
+        let arr = res.data.data.content
         if(arr.length) {
           for(let el of arr) {
             this.pro_list.push(el)
           }
           this.page++
         }
+        if (this.pro_list.length == 0) {
+          this.tip_text = '尚无产品'
+          this.tip_flag = true
+        }
         this.$refs.loadmore.onTopLoaded()
-        this.$refs.loadmore.onBottomLoaded()
+        if (this.$refs.loadmore.bottomStatus == 'loading') {
+          this.$refs.loadmore.onBottomLoaded()
+        }
+        Indicator.close()
       }).catch((err) => {
         console.log(err)
+        Indicator.close()
       })
     },
   	toTop (val) {
@@ -99,11 +104,6 @@ export default {
   },
   mounted() {
     this.getProductList()
-    this.$nextTick(() => {
-      setTimeout(() => {
-        this.toTop()
-      }, 300)
-    })
   }
 }
 </script>

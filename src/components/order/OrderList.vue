@@ -235,7 +235,6 @@ export default {
   },
   watch: {
     selected(val) {
-      // document.getElementById("app").scrollTop = 0
       this.init()
     }
   }
