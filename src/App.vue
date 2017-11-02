@@ -48,28 +48,39 @@ ul{
   padding: 0;
   margin: 0;
 }
+.mint-indicator-mask {
+  z-index: 1000;
+}
 .mint-tab-item-label{
   font-size: 16px;
 }
 .mint-navbar .mint-tab-item.is-selected {
-    border-bottom: 3px solid #0099f7;
-    color: #0099f7;
-    margin-bottom: -3px
+  border-bottom: 3px solid #0099f7;
+  color: #0099f7;
+  margin-bottom: -3px
 }
 .mint-loadmore-bottom {
-  margin: 0;
-    position: fixed;
-    bottom: -50px;
-    width: 100%;  
+  display: none;
 }
 .mint-loadmore {
   overflow: inherit;
 }
 .mint-tab-container {
-    overflow: inherit;
+  overflow: inherit;
 }
 h3 {
   font-weight: normal;
   font-size: 16px;
 }
+.no-data{
+  height: 100px;
+  position: absolute;
+  width: 100%;
+  z-index: 1000;
+  background: #eeeeee;
+  padding-top: 40px;
+  text-align: center;
+  color: #999;
+}  
+
 </style>

@@ -9,7 +9,7 @@
 	</div>
 </mt-cell>
 <mt-loadmore :auto-fill="false" :bottom-method="getList" 
-	:bottom-all-loaded="allLoaded" ref="loadmore" class="wallet-more">
+	:bottom-all-loaded="allLoaded" ref="loadmore">
 	<div>
 		<mt-cell v-for="item in w_list" :key="item.created" class="order-container">
 			<div slot="title" class="title-box">
@@ -123,11 +123,6 @@ export default {
 	background: #f5f5f5;
 	.mint-cell-title {
 		padding: 12px 0;
-	}
-}
-.wallet-more {
-	.mint-loadmore-bottom {
-		display: none;
 	}
 }
 .no-data {

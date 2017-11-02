@@ -5,10 +5,9 @@
     <mt-tab-item id="to_pay">待付款</mt-tab-item>
 	  <mt-tab-item id="to_receive">待收货</mt-tab-item>
 	</mt-navbar>
-
-
 	<!-- tab-container -->
 	<mt-tab-container v-model="selected" class="mtc">
+   <div class="no-data" v-if='tip_flag'>{{ tip_text }}</div>
     <!-- 全部订单 -->
     <mt-tab-container-item id="all_orders">
   		<mt-loadmore :auto-fill="false" :top-method="getAllList" :bottom-method="getAllList" 
@@ -44,7 +43,7 @@
             </mt-cell>            
           </template>
         </div>
-        <div class="no-data" v-if="!all_list.length">您没有订单</div>
+        <!-- <div class="no-data" v-if="!all_list.length">您没有订单</div> -->
   		</mt-loadmore>
 	  </mt-tab-container-item>
 
@@ -74,7 +73,7 @@
             </mt-cell>            
           </template>
         </div>
-        <div class="no-data" v-if="!to_pay_list.length">您没有待支付的订单</div>
+        <!-- <div class="no-data" v-if="!to_pay_list.length">您没有待支付的订单</div> -->
   		</mt-loadmore>
     </mt-tab-container-item>
 
@@ -93,9 +92,7 @@
             </div>
           
           </mt-cell>
-  <!--         <mt-cell title="您的订单已进入第三方卖家库房，等待发货。。。"
-            label="2017-11-11 11:11:11" is-link to="/order/logistics" 
-            class='order-flow'></mt-cell> -->
+
           <template v-for='i in  d.productList'>
             <mt-cell style="padding-bottom: 10px;">
               <div slot="title" class="goods-list" >
@@ -107,7 +104,7 @@
             </mt-cell>            
           </template>
         </div>
-        <div class="no-data" v-if="!to_receive_list.length">您没有待收货的订单</div>
+        <!-- <div class="no-data" v-if="!to_receive_list.length">您没有待收货的订单</div> -->
       </mt-loadmore>
 	  </mt-tab-container-item>
 	</mt-tab-container>
@@ -120,6 +117,7 @@
 
 <script>
 import {reqBuyerOrderList} from '../../api'
+import { Indicator } from 'mint-ui'
 import Footer from '@/components/footer/footer';
 export default {
   components:{
@@ -140,15 +138,25 @@ export default {
       to_pay_list: [],
       to_pay_page: 0,
       to_receive_list: [],
-      to_receive_page: 0
+      to_receive_page: 0,
+
+      tip_flag: false,
+      tip_text: ''
   	}
   },
   methods: {
   	scrollTop (val) {
       document.getElementById('app').scrollTop = 0
   	},
+    showSpinner() {
+      Indicator.open({
+        text: '加载中...',
+        spinnerType: 'fading-circle'
+      })      
+    },
     getAllList(val) {
       console.log(val)
+      this.showSpinner()
       let obj = Object.assign({}, this.pa, {page: this.all_page})
       reqBuyerOrderList(obj).then((res) => {
         console.log(res)
@@ -158,11 +166,17 @@ export default {
           }
           this.all_page++
         }
+        if (this.all_list.length == 0) {
+          this.tip_text = '您还没有订单'
+          this.tip_flag = true
+        } 
         this.$refs.loadmore.onTopLoaded()
         this.$refs.loadmore.onBottomLoaded()
+        Indicator.close()
       })
     },
     getToPayList() {
+      this.showSpinner()      
       let obj = Object.assign({}, this.pa, {page: this.to_pay_page, orderStatus: '1'})
       reqBuyerOrderList(obj).then((res) => {
         if (res.data.code == 0) {
@@ -171,11 +185,17 @@ export default {
           }
           this.to_pay_page++
         }
+        if (this.to_pay_list.length == 0) {
+          this.tip_text = '您没有待支付的订单'
+          this.tip_flag = true
+        } 
         this.$refs.loadmore2.onTopLoaded()
         this.$refs.loadmore2.onBottomLoaded()
+        Indicator.close()
       })
     },
     getToReceiveList() {
+      this.showSpinner()
       let obj = Object.assign({}, this.pa, 
         {page: this.to_receive_page, orderStatus: '3,4'})
       reqBuyerOrderList(obj).then((res) => {
@@ -185,36 +205,42 @@ export default {
           }
           this.to_receive_page++
         }
+        if (this.to_receive_list.length == 0) {
+          this.tip_text = '您没有待收货的订单'
+          this.tip_flag = true
+        }         
         this.$refs.loadmore3.onTopLoaded()
         this.$refs.loadmore3.onBottomLoaded()
-      })      
+        Indicator.close()
+      })
+    },
+    init() {
+      this.tip_flag = false
+      if (this.selected == 'all_orders' && this.all_list.length == 0) {
+        this.getAllList()
+      } else if (this.selected == 'to_pay' && this.to_pay_list.length == 0) {
+        this.getToPayList()
+      } else if (this.selected == 'to_receive' && this.to_receive_list.length == 0) {
+        this.getToReceiveList()
+      }      
     }
   },
   mounted() {
       this.selected = this.$route.params.active_tab || 'all_orders'
-      this.getAllList()
-      this.getToPayList()
-      this.getToReceiveList()
+      this.init()
   },
   watch: {
     selected(val) {
       document.getElementById("app").scrollTop = 0
+      this.init()
+
     }
   }
 }
+
 </script>
 
 <style lang="scss">
-.no-data {
-    height: 100px;
-    position: absolute;
-    width: 100%;
-    z-index: 1000;
-    background: #EEEEEE;
-    padding-top: 40px;
-    text-align: center;
-    color: #000;  
-}
 .order-flow {
   padding: 10px 0;
 }
