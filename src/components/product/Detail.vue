@@ -15,7 +15,7 @@
 		<div class="cart">
 			<i class="fa fa-cart-plus" @click="toCart"></i>
 			<!-- <mt-badge type="danger" size="small" class="num">10</mt-badge> -->
-			<span class="num">1</span>
+			<span class="num">{{ pro_in_cart < 100 ? pro_in_cart : '99+' }}</span>
 		</div>
 	  <mt-button type="danger" @click="addToCart">加入购物车</mt-button>
 	  <mt-button type="primary"
@@ -96,6 +96,7 @@ export default {
   		reqAddToShoppingCart({userId, goodCarForm}).then((res) => {
 			if (res.data.code == 0 && res.data.msg == '成功') {
 				Toast('已加入购物车')
+				this.pro_in_cart++
 			} else {
 				Toast(res.data.msg)
 			}
@@ -150,9 +151,7 @@ export default {
 		for (let i of added_list ) {
 			this.pro_in_cart += i.productQuantity
 		}
-	})  	
-
-
+	})
   }
 }
 </script>

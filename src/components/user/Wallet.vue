@@ -101,7 +101,9 @@ export default {
   			this.month = a[1]
 			Indicator.close()
 			this.w_list.length == 0 ? this.no_data_tip = true : ''
-			this.$refs.loadmore.onBottomLoaded()
+			if (this.$refs.loadmore.bottomStatus == 'loading') {
+				this.$refs.loadmore.onBottomLoaded()
+			}
 	 	})
 	 	reqMyWalletCount(this.s_params).then((res) => {
 	 		this.month_income = res.data.data.sIncome
