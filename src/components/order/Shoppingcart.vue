@@ -26,6 +26,11 @@
 	</div>
 </mt-cell>
 
+<div class="no-data no-collect" v-if='tip_flag'>
+	<i class="fa fa-cart-plus"></i><br/>
+	<span>您购物车中没有商品</span>
+</div>
+
 <mt-cell class="cal-box">
 	<div slot="title">
 		<div class="el-wrap">
@@ -38,9 +43,10 @@
 		</div>
 	</div>
 	<div>
-		<span style="font-size:14px;">总计：￥332.34&nbsp;&nbsp;</span>
+		<span style="font-size:14px;">总计：￥{{ proTotal().sumPrice }}&nbsp;&nbsp;</span>
 		<mt-button type="primary" @click="goSettle"
-		style="font-size:14px;" :disabled="checked_pro.length == 0">去结算<br/>（{{ proAmount() }}件）</mt-button>
+		style="font-size:14px;" :disabled="checked_pro.length == 0">
+		去结算<br/>（{{ proTotal().sumAmount }}件）</mt-button>
 	</div>
 
 </mt-cell>
@@ -62,7 +68,7 @@ export default {
       cc: true,
       bbTimeout: '',
       ccTimeout: '',
-
+      tip_flag: false,
       cart_list: []
   	}
   },
@@ -73,14 +79,16 @@ export default {
   			this.checked_pro.push(c.productId)
   		}
   	},
-  	proAmount() {
-		let sum = 0
+  	proTotal() {
+		let sumAmount = 0, sumPrice = 0
   		for (let i of this.cart_list) {
   			if (this.checked_pro.includes(i.productId)) {
-  				sum += i.productQuantity
+  				sumAmount += i.productQuantity
+  				sumPrice += i.productPrice * i.productQuantity
   			}
   		}
-  		return sum
+  		sumPrice = sumPrice.toFixed(2)
+  		return {sumAmount, sumPrice}
   	},
   	goSettle() {
   		let items = []
@@ -135,12 +143,22 @@ export default {
 		for (let i of res.data.data ) {
 			this.all_orders.push(i.productId)
 		}
+		if (this.all_orders.length == 0) {
+			this.tip_flag = true
+		}
 	})
   }
 }
 </script>
 
 <style lang="scss">
+.no-collect {
+	top: 30%;
+	i {
+		font-size: 40px;
+		margin-bottom: 10px;
+	}
+}
 .cal-box {
 	position: fixed;
 	bottom: 0;

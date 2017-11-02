@@ -26,7 +26,6 @@ let router = new Router({
    	  path: '/',
       name: 'Hello',
       redirect: '/product/list',
-      component: HelloWorld
     },
     {
       path: '/popularize/preview',
