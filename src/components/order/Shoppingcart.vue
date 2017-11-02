@@ -1,7 +1,11 @@
 <template>
 <div class="container">
 
-<mt-cell v-for="c in cart_list" :key="c.createTime">
+<mt-cell-swipe v-for="c in cart_list" :key="c.createTime" :right="[{
+	content: '删除',
+	style: {background:'red', color: '#fff', display: 'flex', 'align-items': 'center'}, 
+	handler: () => deletePro(c.productId)
+	}]">
 	<div slot="title" class='shop-cart'>
 		<div class="check-box">
 			<mt-checklist
@@ -25,14 +29,14 @@
 	  	</div>
 		</div>
 	</div>
-</mt-cell>
+</mt-cell-swipe>
 
 <div class="no-data no-collect" v-if='tip_flag'>
 	<i class="fa fa-cart-plus"></i><br/>
 	<span>您购物车中没有商品</span>
 </div>
 
-<mt-cell class="cal-box">
+<mt-cell class="cal-box" style="bottom: 51px;" v-if='!tip_flag'>
 	<div slot="title">
 		<div class="el-wrap">
 			<div class="check-box show-label">
@@ -55,13 +59,18 @@
 
 </mt-cell>
 
-
+<bottom></bottom>
 </div>	
 </template>
 
 <script>
-import {reqShoppingCartList} from '../../api'
+import {reqShoppingCartList, reqCartDelete} from '../../api'
+import { MessageBox } from 'mint-ui'
+import Footer from '@/components/footer/footer';
 export default {
+  components:{
+    'bottom':Footer
+  },
   data () {
   	return {
       checked_pro: [],
@@ -73,10 +82,24 @@ export default {
       bbTimeout: '',
       ccTimeout: '',
       tip_flag: false,
-      cart_list: []
+      cart_list: [],
+      userId: JSON.parse( sessionStorage.getItem('ebay-app') ).userWxOpenid
   	}
   },
   methods: {
+  	deletePro(val) {
+  		console.log(3434343)
+  		MessageBox.confirm('确定删除此商品吗?').then(action => {
+  			console.log('kdkdk')
+  			let productId = val + '' //string
+			reqCartDelete({productId, userId: this.userId}).then((res) => {
+				console.log(res)
+			})
+		  
+		}).catch((err) => {
+			console.log(err)
+		})
+  	},
   	increase(c) {
   		c.productQuantity++
   		if (!this.checked_pro.includes(c.productId)) {
@@ -106,6 +129,17 @@ export default {
   		this.$router.push({
   			name: 'SettleOrder'
   		})  		
+  	},
+  	getList() {
+		reqShoppingCartList({userId: this.userId}).then((res) => {
+			this.cart_list = res.data.data
+			for (let i of res.data.data ) {
+				this.all_pro.push(i.productId)
+			}
+			if (this.all_pro.length == 0) {
+				this.tip_flag = true
+			}
+		})  		
   	}
   },
   watch: {
@@ -141,16 +175,7 @@ export default {
   	}
   },
   mounted() {
-  	let userId = JSON.parse( sessionStorage.getItem('ebay-app') ).userWxOpenid
-	reqShoppingCartList({userId}).then((res) => {
-		this.cart_list = res.data.data
-		for (let i of res.data.data ) {
-			this.all_pro.push(i.productId)
-		}
-		if (this.all_pro.length == 0) {
-			this.tip_flag = true
-		}
-	})
+  	this.getList()
   }
 }
 </script>

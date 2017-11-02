@@ -11,6 +11,7 @@ export const reqBuyerOrderCreate = params => { return axios.post(`/api/buyer/ord
 //购物车
 export const reqAddToShoppingCart = params => { return axios.post(`/api/buyer/goodcar/add/${params.userId}`, params.goodCarForm) }
 export const reqShoppingCartList = params => { return axios.get(`/api/buyer/goodcar/list`, {params: params}) }
+export const reqCartDelete = params => { return axios.post(`/api/buyer/goodcar/delete`, params) }
 
 
 export const reqSellerProList = params => { return axios.get(`/api/seller/product/list`, {params: params}) }

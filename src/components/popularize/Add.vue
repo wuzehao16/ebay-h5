@@ -1,8 +1,5 @@
 <template>
 <div class="container">
-<!-- <div class="back" @click="backList">
-  <i class="fa fa-angle-left" aria-hidden="true"></i>
-</div> -->
 <div class="search">
     <div class="mint-searchbar">
       <div class="mint-searchbar-inner">
@@ -222,17 +219,9 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang='scss'>
 .container{
-  display: flex;
-  .back{
-    flex: 0 0 40px;
-    line-height: 50px;
-    text-align: center;
-    font-size: 26px;
-    color:#fff;
-    background-color: #0099f7;
-  }
+  /*display: flex;*/
   .search{
     flex: 1 0 auto;
   }

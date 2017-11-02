@@ -97,7 +97,9 @@ export default {
 			this.year = a[0]
   			this.month = a[1]
 			Indicator.close()
-			this.$refs.loadmore.onBottomLoaded()
+			if (this.$refs.loadmore.bottomStatus == 'loading') {
+				this.$refs.loadmore.onBottomLoaded()
+			}			
 	 	})
   	}  	
   }
