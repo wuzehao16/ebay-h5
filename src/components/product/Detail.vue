@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import {reqProductDetail, reqAddToShoppingCart} from '../../api'
+import {reqProductDetail, reqAddToShoppingCart, reqShoppingCartList} from '../../api'
 import {Toast} from 'mint-ui'
 export default {
   data () {
@@ -82,7 +82,8 @@ export default {
   		amount: 1,
   		collected: false,
   		items: [],
-  		isPreview: false
+  		isPreview: false,
+  		pro_in_cart: 0
   	}
   },
   methods: {
@@ -144,6 +145,16 @@ export default {
   	if (this.$route.params.isPreview) {
   		this.isPreview = this.$route.params.isPreview
   	}
+
+  	//获取购物车中商品总数
+  	let userId = JSON.parse( sessionStorage.getItem('ebay-app') ).userWxOpenid
+	reqShoppingCartList({userId}).then((res) => {
+		let added_list = res.data.data
+		for (let i of added_list ) {
+			this.pro_in_cart += i.productQuantity
+		}
+	})  	
+
 
   }
 }

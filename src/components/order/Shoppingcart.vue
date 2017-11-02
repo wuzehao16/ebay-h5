@@ -61,7 +61,7 @@ export default {
   data () {
   	return {
       checked_pro: [],
-      all_orders: [],
+      all_pro: [],
       check_all: [],
       check_all_value: ['全选'],
       bb: true,
@@ -110,7 +110,7 @@ export default {
   		if (this.cc) {
   			this.bb = false
 	  		if (this.check_all.length == 1) {
-	  			this.checked_pro = this.all_orders
+	  			this.checked_pro = this.all_pro
 	  		} else {
 	  			this.checked_pro = []
 	  		} 
@@ -124,7 +124,7 @@ export default {
 		clearTimeout(this.ccTimeout)
   		if( this.bb ){
   			this.cc = false
-	  		if (this.checked_pro.length == this.all_orders.length) {
+	  		if (this.checked_pro.length == this.all_pro.length) {
 	  			this.check_all = this.check_all_value
 	  		} else {
 				this.check_all = []
@@ -141,9 +141,9 @@ export default {
 	reqShoppingCartList({userId}).then((res) => {
 		this.cart_list = res.data.data
 		for (let i of res.data.data ) {
-			this.all_orders.push(i.productId)
+			this.all_pro.push(i.productId)
 		}
-		if (this.all_orders.length == 0) {
+		if (this.all_pro.length == 0) {
 			this.tip_flag = true
 		}
 	})
