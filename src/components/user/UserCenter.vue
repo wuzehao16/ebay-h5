@@ -8,12 +8,11 @@
 	<div class="head-r">
 		<h3>你好，{{ user.userName }}</h3>
 		<p>会员ID：{{ user.userWxOpenid }}</p>
-
 	</div>
 </div>
 
 <mt-cell is-link title="我的订单" to="/order/list" style="z-index: 100">
-	<i slot="icon" class="iconfont icon-order" style="color: red;"></i>
+	<i slot="icon" class="iconfont icon-order" style="color: #26a2ff;"></i>
 	<span style="font-size: 12px;">查看更多订单</span>
 </mt-cell>
 <mt-cell class="no-bg">
@@ -109,6 +108,10 @@ export default {
 	width: 8px;
 	height: 8px;
 }
+.mint-cell-text {
+	color: #666;
+	font-size: 14px;
+}
 </style>
 <style lang="scss" scoped>
 .iconfont {
@@ -127,13 +130,16 @@ export default {
     	width: 33%;
     	text-align: center;
     	line-height: 20px;
-    	font-size: 14px;
+    	font-size: 12px;
+    	color: red;
 	    &:active{
     		background: lightgrey;
     	}
     }
     i {
     	font-size: 24px;
+    	padding: 4px 0;
+    	display: inline-block;
     }
     span {
     	color: gray;
