@@ -1,11 +1,14 @@
 <template>
 <div class="container">
-	<mt-swipe :auto="5000" :speed="0" class="pre-banner">
+	<mt-swipe :auto="5000" :speed="0" class="pre-banner" style="background: #fff;">
 	  <mt-swipe-item v-for="(url,index) in productInfo.pic">
-	  	<div :style="{'background': 'url(' + url + ') no-repeat center',
-	  		'background-size': 'cover',
-	  		'height': '100%', 'width': '100%'}">
-				<span>{{index}}</span>
+	  	<div :style="{'background-image': 'url(' + url + ')'}" class="wrapper">
+				<span v-if="productInfo.pic && productInfo.pic.length> 0" class="page-nub">
+					
+					<span class="num1">{{index+1}}</span>
+					<span class="bg">/</span>		
+					<span class="num2">{{productInfo.pic.length}}</span>
+					</span>
 				</div>
 	  </mt-swipe-item>
 	
@@ -158,9 +161,26 @@ export default {
 
 <style lang='scss' scoped>
 $bg-red : #f23030;
+.mint-swipe{
+	background: #fff;
+}
+.mint-swipe-indicator.is-active {
+    background: red;
+}
 .pre-banner {
 	.mint-swipe-item:nth-child(odd) {
-		background: blue
+		background: #fff;
+	}
+	.mint-swipe-item:nth-child(even) {
+		background: #fff;
+	}
+	.wrapper{
+		height: 205px;
+		width: 200px;
+		margin: 0 auto;
+		background-size:auto 190px;
+		background-repeat:no-repeat;
+		background-position: center;
 	}
 }
 .container {
@@ -304,6 +324,37 @@ dl {
 		}
 	}
 }
-
+.page-nub{
+	    font-size: 16px;
+    z-index: 11;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    background: rgba(0,0,0,.15);
+    right: 15px;
+    bottom: 11px;
+    text-align: center;
+    line-height: 40px;
+    overflow: hidden;
+		.num1{
+						    font-size: 14px;
+    display: inline-block;
+    color: #fff;
+    margin-right: -3px;
+		}
+		.num2{
+			    font-size: 12px;
+    display: inline-block;
+    color: #fff;
+    margin-left: -3px;
+		}
+		.bg{
+		font-size: 12px;
+    display: inline-block;
+    color: #fff;
+		}
+}
 
 </style>

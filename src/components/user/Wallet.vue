@@ -9,14 +9,14 @@
 	</div>
 </mt-cell>
 <mt-loadmore :auto-fill="false" :bottom-method="getList" 
-	:bottom-all-loaded="allLoaded" ref="loadmore">
+	:bottom-all-loaded="allLoaded" ref="loadmore" style="margin-top:59px">
 	<div>
 		<mt-cell v-for="item in w_list" :key="item.created" class="order-container">
 			<div slot="title" class="title-box">
 				<div class="img-box" :style="{'background': 'url(' + (item.product?item.product.productIcon:null) + ') no-repeat center center,url(' + require('../../assets/wallet.jpg') + ')'}">			
 				</div>
 				<div>
-				<h3>{{ item.product?item.product.productNane:'用户提现' }}</h3>
+				<h3 style="line-height:20px;">{{ item.product?item.product.productNane:'用户提现' }}</h3>
 				<p>{{ formatTime(item.created) }}</p>
 					
 				</div>
@@ -122,6 +122,10 @@ export default {
 
 <style lang="scss">
 .time-title {
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 11;
 	background: #f5f5f5;
 	.mint-cell-title {
 		padding: 12px 0;
