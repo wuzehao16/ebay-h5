@@ -16,11 +16,12 @@
 		    <mt-cell class='set-shadow' v-for="d in publishedGoods" :key="d.created">
           <div slot="title" class="goods-list" >
             <div class="avatar" :style="{'background': 'url(' + d.productIcon + ') no-repeat center center'}"></div>
-            <div class="right">
-              <div class="title">{{ d.productNane }}</div>
-              <div class="price">￥{{ d.productPrice }}</div>
-              <mt-button type="primary" @click="goPreview(d.id)" size="small">立即推广</mt-button>
-            </div>
+              <div class="right">
+                <div class="title">{{ d.productNane }}</div>
+                <div class="price">￥{{ d.productPrice }}</div>
+                <mt-button type="primary" @click="goPreview(d.id)" size="small">立即推广</mt-button>
+              </div>
+            </div>  
   		    </mt-cell>
         </div>
   		</mt-loadmore>
