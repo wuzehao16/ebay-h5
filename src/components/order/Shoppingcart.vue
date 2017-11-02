@@ -1,7 +1,8 @@
 <template>
 <div class="container">
 
-<mt-cell-swipe v-for="c in cart_list" :key="c.createTime" :right="[{
+<div style="margin-bottom:50px;">
+	<mt-cell-swipe v-for="c in cart_list" :key="c.createTime" :right="[{
 	content: '删除',
 	style: {background:'red', color: '#fff', display: 'flex', 'align-items': 'center'}, 
 	handler: () => deletePro(c.productId)
@@ -29,7 +30,8 @@
 	  	</div>
 		</div>
 	</div>
-</mt-cell-swipe>
+</mt-cell-swipe >
+</div>
 
 <div class="no-data no-collect" v-if='tip_flag'>
 	<i class="fa fa-cart-plus"></i><br/>
@@ -53,7 +55,7 @@
 			<span>不含运费，已优惠￥0.00</span>
 		</div>
 		<mt-button type="primary" @click="goSettle"
-		style="font-size:14px;height:46px " :disabled="checked_pro.length == 0">
+		style="font-size:14px;height:56px;border-radius:0;width:200px" :disabled="checked_pro.length == 0">
 		去结算（{{ proTotal().sumAmount > 99? '99+' :proTotal().sumAmount }}件）</mt-button>
 	</div>
 
@@ -186,7 +188,7 @@ export default {
 
 <style lang="scss" >
 .mint-checkbox-core{
-	margin-left: 8px;
+	margin-left: 2px;
 		width: 15px;
 		height: 15px;
 }
@@ -204,22 +206,29 @@ export default {
 .cal-box {
 	position: fixed;
 	bottom: 0;
-    width: 100%;
-    font-size: 14px;
-    .el-wrap{
-    	height: 50px;
-			width: 45px;
-    	>div:nth-child(1) {
-    		float: left;
-    	}
-    	>div{
-    		float: right;
-    	}
-    	> div:nth-child(2) {
-    		background: gray;
-    		height: 100%;
-    	}
-    }
+	width: 100%;
+	font-size: 14px;
+	.el-wrap{
+		height: 50px;
+		width: 45px;
+		>div:nth-child(1) {
+			float: left;
+		}
+		>div{
+			float: right;
+		}
+		> div:nth-child(2) {
+			background: gray;
+			height: 100%;
+		}
+		.mint-checkbox-label{
+			font-size: 11px;
+			margin-left: 1px;
+		}
+	}
+	.mint-cell-wrapper{
+		padding-right: 0;
+	}
 
 }
 .show-label {
@@ -336,18 +345,20 @@ export default {
 .bt-total{
 	display: flex;
 	div{
+		flex: 0 0 180px;
 		margin-top:6px;
 		span{
 			display: block;
-			font-size:14px;
+			text-align:right;
+			float: right;
 		}
 		span:nth-child(1){
-			padding-left:45px;
+			padding-top:10px;
 		}
 		span:nth-child(2){
 			font-size:12px;
 			padding-top:4px;
-			padding-left:15px;
+			padding-right:10px;
 		}
 	}
 	.price{
