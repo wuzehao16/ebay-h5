@@ -1,10 +1,12 @@
 <template>
 <div class="container">
 	<mt-swipe :auto="5000" :speed="0" class="pre-banner">
-	  <mt-swipe-item v-for="url in productInfo.pic">
+	  <mt-swipe-item v-for="(url,index) in productInfo.pic">
 	  	<div :style="{'background': 'url(' + url + ') no-repeat center',
 	  		'background-size': 'cover',
-	  		'height': '100%', 'width': '100%'}"></div>
+	  		'height': '100%', 'width': '100%'}">
+				<span>{{index}}</span>
+				</div>
 	  </mt-swipe-item>
 	
 	</mt-swipe>
@@ -12,6 +14,7 @@
 	<template v-if="!isPreview">
 		<div class="cart">
 			<i class="fa fa-cart-plus" @click="toCart"></i>
+			<!-- <mt-badge type="danger" size="small" class="num">10</mt-badge> -->
 			<span class="num">1</span>
 		</div>
 	  <mt-button type="danger" @click="addToCart">加入购物车</mt-button>
@@ -161,16 +164,19 @@ $bg-red : #f23030;
 			line-height: 48px;
 			position: relative;
 			.num{
-				border-radius: 25px;
-				height: 15px;
-				width: 15px;
 				position: absolute;
 				right: 4px;
 				top: 4px;
-				line-height: 15px;
-				font-size: 12px;
 				color: #fff;
-				background-color: red;
+				display: inline-block;
+				top: 4px;
+				background-color: #f23030;
+				line-height: 10px;
+				font-style: normal;
+				border-radius: 8px;
+				padding: 1px 4px;
+				font-size: 10px;
+				border: 1px solid #fff;
 			}
 		}
 		button{
