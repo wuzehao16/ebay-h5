@@ -173,11 +173,6 @@ export default {
           this.result = 6
           
         }
-
-
-
-
-
       }
   		
   	}
@@ -222,7 +217,7 @@ export default {
     this.productId = this.$route.params.productId
     if (this.productId) {
       //测试用，设productId = 77
-      this.productId = 77
+      // this.productId = 77
       reqProductDetail({productId: this.productId}).then((res) => {
           let p = res.data.data
           this.isEdit = true

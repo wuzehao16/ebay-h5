@@ -71,6 +71,7 @@
 <script>
 import {reqProductDetail, reqAddToShoppingCart, reqShoppingCartList} from '../../api'
 import {Toast} from 'mint-ui'
+import util from '../../api/util'
 export default {
   data () {
   	return {
@@ -135,8 +136,13 @@ export default {
 		}
   },
   mounted() {
-  	if (this.$route.params.id) {
-	  	reqProductDetail({productId: this.$route.params.id}).then((res) => {
+  	if (util.getQueryStringByName('pc_preview')) {
+  		this.isPreview = true
+  	}
+
+  	if (this.$route.params.id || this.isPreview) {
+  		let productId = this.$route.params.id || util.getQueryStringByName('pc_preview')
+	  	reqProductDetail({productId}).then((res) => {
 			this.productInfo = res.data.data
 			console.log(this.productInfo)
 	  	})
