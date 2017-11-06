@@ -13,7 +13,7 @@
 	  <span class="love-it" @click="collected = !collected"><i class="iconfont" :class="{'icon-collect': !collected, 'icon-collect-color': collected}"></i><br/>收藏</span>
 	</mt-cell>
 	<mt-cell :title="'￥' + goodsInfo.productPrice" style="color:red"></mt-cell>
-  	<dl>
+<!--   	<dl>
 	  	<dt>尺寸</dt>
 	  	<dd>
 	  	<ul>
@@ -30,7 +30,7 @@
 	  			@click='selectColor(o)'>{{ o }}色</li>
 	  	</ul>
 	  	</dd>
-  	</dl>
+  	</dl> -->
   	<dl>
 	  	<dt>数量</dt>
 	  	<dd class="select-amount">

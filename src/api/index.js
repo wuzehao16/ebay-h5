@@ -31,3 +31,7 @@ export const reqProductList = params => { return axios.get(`/sell/buyer/product/
 export const reqProductDetail = params => { return axios.get(`/sell/buyer/product/detail`, {params: params}) }
 
 export const reqSellerProductSave = params => { return axios.post(`/sell/seller/product/save`, params) }
+
+//获取ebay商品
+export const reqEbayGoods = params => { return axios.get(`/sell/ebay/getGoodsInfo`, { params: params }) }
+

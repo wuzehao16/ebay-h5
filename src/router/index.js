@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
-import PreviewGoods from '@/components/popularize/PreviewGoods'
+// import PreviewGoods from '@/components/popularize/PreviewGoods'
 import PopularizeList from '@/components/popularize/List'
 import AddGoods from '@/components/popularize/add'
 import Address from '@/components/order/address'
@@ -27,11 +27,11 @@ let router = new Router({
       name: 'Hello',
       redirect: '/product/list',
     },
-    {
+/*    {
       path: '/popularize/preview',
       name: 'PreviewGoods',
       component: PreviewGoods
-    },
+    },*/
     {
       path: '/popularize/list',
       name: 'PopularizeList',

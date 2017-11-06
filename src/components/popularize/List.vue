@@ -37,7 +37,7 @@
               <div class="price">￥{{ d.productPrice }}</div>
               <div class="button-box">
               <mt-button type="primary" @click="goPreview(d.id)" size="small">立即预览</mt-button>
-              <mt-button type="primary" @click="goEdit(d.id)" size="small">编辑</mt-button>
+              <mt-button type="primary" @click="goEdit(d)" size="small">编辑</mt-button>
                 
               </div>
             </div>
@@ -83,12 +83,12 @@ export default {
   	}
   },
   methods: {
-    goEdit(id) {
-      console.log(id)
+    goEdit(row) {
       this.$router.push({
         name: 'AddGoods',
         params: {
-          productId: id
+          productId: row.id,
+          ebayItemid: row.ebayItemid
         }
       })
 

@@ -32,7 +32,7 @@
 	</mt-cell>
 	<div class="price">￥{{productInfo.price}}</div>
 	
-  	<dl>
+<!--   	<dl>
 	  	<dt>尺寸</dt>
 	  	<dd>
 	  	<ul>
@@ -49,7 +49,7 @@
 	  			@click='selectColor(o)'>{{ o }}色</li>
 	  	</ul>
 	  	</dd>
-  	</dl>
+  	</dl> -->
   	<dl>
 	  	<dt class="number-title">数量</dt>
 	  	<dd class="select-amount">
