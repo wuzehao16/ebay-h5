@@ -14,7 +14,7 @@
 			  :options="Array.of(c.productId)">
 			</mt-checklist>
 		</div>
-		<div slot="title" class="goods-list" 
+		<div slot="title" class="shop-cart-list" 
 		:style="{'background': 'url(' + c.productIcon + ') no-repeat left center'}">
 			<h3>{{ c.productName }}</h3>
 			<p style="color:#ef4f4f;display:inline-block;position:absolute;top:90px;left:110px;">￥{{c.productPrice}}</p>
@@ -38,7 +38,7 @@
 	<span>您购物车中没有商品</span>
 </div>
 
-<mt-cell class="cal-box" style="bottom: 50px;" v-if='!tip_flag'>
+<mt-cell class="cal-box" v-if='!tip_flag'>
 	<div slot="title">
 		<div class="el-wrap">
 			<div class="check-box show-label">
@@ -204,8 +204,8 @@ export default {
 	}
 }
 .cal-box {
-	position: fixed;
-	bottom: 0;
+	position: fixed!important;
+	bottom: 0!important;
 	width: 100%;
 	font-size: 14px;
 	.el-wrap{
@@ -319,7 +319,7 @@ export default {
 		}
 	}
 }
-.goods-list {
+.shop-cart-list {
 	position: relative;
 	padding: 10px 0 10px 110px;
     background-size: 90px auto!important;
