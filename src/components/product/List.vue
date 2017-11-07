@@ -1,6 +1,8 @@
 <template>
 <div class="container">	
-<mt-search v-model="filters.productName"></mt-search>
+<div>
+<mt-search v-model="filters.productName"></mt-search>  
+</div>
 <mt-loadmore 
   :auto-fill="false"
   :top-method="getProductList" 
@@ -143,7 +145,7 @@ $shadow-color: #ececec;
   }
 }
 .mint-search {
-  height: 53px;
+  height: 53px !important;
     z-index: 11;
     position: fixed;
     width: 100%;
