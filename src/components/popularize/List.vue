@@ -247,8 +247,8 @@ $shadow-color: #aaa;
       font-size: 14px;
     }
     .button-box {
-      position: absolute;
-      bottom: 16px;
+  /*     position: absolute;
+      bottom: 16px; */
       button {
         height: 27px;
       }

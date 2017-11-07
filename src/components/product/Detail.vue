@@ -1,7 +1,7 @@
 <template>
 <div class="container">
 	<mt-swipe :auto="5000" :speed="0" class="pre-banner" style="background: #fff;">
-	  <mt-swipe-item v-for="(url,index) in productInfo.pic">
+	  <mt-swipe-item v-for="(url,index) in productInfo.pic" :key="index">
 	  	<div :style="{'background-image': 'url(' + url + ')'}" class="wrapper">
 				<span v-if="productInfo.pic && productInfo.pic.length> 0" class="page-nub">
 					

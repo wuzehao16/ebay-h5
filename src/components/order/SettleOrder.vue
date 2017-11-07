@@ -11,7 +11,7 @@
 		</template>
 	</div>
 </mt-cell>
-<mt-cell v-for="order in order_info.items" style="margin-bottom: 10px;">
+<mt-cell v-for="(order, index) in order_info.items" :key="index" style="margin-bottom: 10px;">
 	<div slot="title" class="order-container" :style="{'background': 
 		'url(' + order.productIcon + ') left center no-repeat'}">
 		<h3>{{ order.productName }}L</h3>

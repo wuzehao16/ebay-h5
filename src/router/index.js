@@ -113,7 +113,7 @@ let router = new Router({
 
 router.beforeEach((to, from, next) => {
 
-  document.getElementById('app').scrollTop = 0
+  // document.getElementById('app').scrollTop = 0
 
   let user = JSON.parse( sessionStorage.getItem('ebay-app') )
   if (!user) {
