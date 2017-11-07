@@ -14,7 +14,7 @@
 			:bottom-all-loaded="allLoaded" ref="loadmore">
       <div> 
 		    <mt-cell class='set-shadow' v-for="d in publishedGoods" :key="d.created">
-          <div slot="title" class="goods-list" >
+          <div slot="title" class="popularize-list" >
             <div class="avatar" :style="{'background': 'url(' + d.productIcon + ') no-repeat center center'}"></div>
               <div class="right">
                 <div class="title">{{ d.productNane }}</div>
@@ -30,7 +30,7 @@
 		<mt-loadmore :auto-fill="false" :top-method="getWaitedList"  :bottom-method="getWaitedList" 
 			:bottom-all-loaded="allLoaded_2" ref="loadmore2">	  
 		    <mt-cell class='set-shadow' v-for="(d, index) in waitedGoods" :key="d.created">
-          <div slot="title" class="goods-list" >
+          <div slot="title" class="popularize-list" >
             <div class="avatar" :style="{'background': 'url(' + d.productIcon + ') no-repeat center center'}"></div>
             <div class="right">
               <div class="title">{{ d.productNane }}</div>
@@ -188,7 +188,7 @@ $shadow-color: #aaa;
     box-shadow: 0px 2px 3px rgba(34, 25, 25, 0.2), 0 0 1px $shadow-color, 0 0 1px $shadow-color;
 }
 .mint-tab-item-label{
-	font-size: 16px;
+	font-size: 16px!important;
 }
 .mtc {
 	margin: 54px 0 42px 0;
@@ -216,7 +216,7 @@ $shadow-color: #aaa;
     }
 }
 
-.goods-list {
+.popularize-list {
     padding: 5px ;
     height: 110px;
     width: 110px;

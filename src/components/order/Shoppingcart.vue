@@ -205,7 +205,7 @@ export default {
 }
 .cal-box {
 	position: fixed!important;
-	bottom: 0!important;
+	bottom: 50px!important;
 	width: 100%;
 	font-size: 14px;
 	.el-wrap{
@@ -243,6 +243,9 @@ export default {
 
 }
 .check-box {
+	.mint-cell:last-child {
+		background: none;
+	}
 	.mint-cell{
 		background: none;
 	}
