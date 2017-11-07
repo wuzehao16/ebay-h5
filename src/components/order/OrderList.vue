@@ -12,7 +12,7 @@
     <mt-tab-container-item id="all_orders">
   		<mt-loadmore :auto-fill="false" :top-method="getAllList" :bottom-method="getAllList" 
   			:bottom-all-loaded="allLoaded" ref="loadmore">	  
-        <div v-for="d in all_list" :key="d.orderNo" class='cell-margin'>
+        <div v-for="(d,index) in all_list" :key="d.orderNo" class='cell-margin'>
           <mt-cell>
             <div slot="title" class="order-des">
               <div><label>状态：</label><span style="color: #ef4f4f;">
@@ -28,7 +28,7 @@
               <div><label>总价：</label><span>￥{{d.orderAmount}}</span></div>
             </div>
             <div v-if="d.orderStatus == '1'">
-              <mt-button type="primary" size="small" class="pay-b">去支付</mt-button>
+              <mt-button type="primary" size="small" class="pay-b" @click="buyIt(index)">去支付</mt-button>
             </div>
           </mt-cell>
           <template v-for='i in d.productList'>
@@ -51,14 +51,14 @@
 	  <mt-tab-container-item id="to_pay">
   		<mt-loadmore :auto-fill="false" :top-method="getToPayList" :bottom-method="getToPayList" 
   			:bottom-all-loaded="allLoaded_2" ref="loadmore2">
-        <div v-for="d in to_pay_list" :key="d.orderNo" class='cell-margin'>
+        <div v-for="(d,index) in to_pay_list" :key="d.orderNo" class='cell-margin'>
           <mt-cell>
             <div slot="title" class="order-des">
               <div><label>状态：</label><span style="color: #ef4f4f;">待支付</span></div>
               <div><label>总价：</label><span>￥{{d.orderAmount}}</span></div>
             </div>
             <div>
-              <mt-button type="primary" size="small" class="pay-b">去支付</mt-button>
+              <mt-button type="primary" size="small" class="pay-b" @click="buyItForNopay(index)">去支付</mt-button>
             </div>
           </mt-cell>
           <template v-for='i in d.productList'>
@@ -141,10 +141,45 @@ export default {
       to_receive_page: 0,
 
       tip_flag: false,
-      tip_text: ''
+      tip_text: '',
+      items:[]
   	}
   },
   methods: {
+    buyIt(index){
+      let detail = this.to_pay_list[index].productList[0].orderDetail;
+        this.items.push({
+  			productId: detail.id,
+  			productName: detail.productName,
+  			productPrice: detail.productPrice,
+  			productQuantity: detail.productQuantity,
+  			productIcon: detail.productIcon
+  		})
+  		let order_info = {
+  			items: this.items
+  		}
+  		sessionStorage.setItem('order_info', JSON.stringify(order_info))
+  		this.$router.push({
+  			name: 'SettleOrder'
+  		})
+    },
+    buyItForNopay(index){
+      let detail = this.to_pay_list[index].productList[0].orderDetail;
+        this.items.push({
+  			productId: detail.id,
+  			productName: detail.productName,
+  			productPrice: detail.productPrice,
+  			productQuantity: detail.productQuantity,
+  			productIcon: detail.productIcon
+  		})
+  		let order_info = {
+  			items: this.items
+  		}
+  		sessionStorage.setItem('order_info', JSON.stringify(order_info))
+  		this.$router.push({
+  			name: 'SettleOrder'
+  		})
+    },
   	scrollTop (val) {
       document.getElementById('app').scrollTop = 0
   	},
