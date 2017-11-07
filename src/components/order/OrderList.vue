@@ -147,13 +147,13 @@ export default {
   },
   methods: {
     buyIt(index){
-      let detail = this.to_pay_list[index].productList[0].orderDetail;
+      let detail = this.all_list[index].productList[0].orderDetail;
         this.items.push({
-  			productId: detail.id,
-  			productName: detail.productName,
-  			productPrice: detail.productPrice,
-  			productQuantity: detail.productQuantity,
-  			productIcon: detail.productIcon
+  			productId: this.all_list[index].productList[0].orderDetail.id,
+  			productName: this.all_list[index].productList[0].orderDetail.productName,
+  			productPrice: this.all_list[index].productList[0].orderDetail.productPrice,
+  			productQuantity: this.all_list[index].productList[0].orderDetail.productQuantity,
+  			productIcon: this.all_list[index].productList[0].orderDetail.productIcon
   		})
   		let order_info = {
   			items: this.items
