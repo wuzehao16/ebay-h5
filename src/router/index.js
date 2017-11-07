@@ -1,22 +1,21 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
-// import PreviewGoods from '@/components/popularize/PreviewGoods'
-import PopularizeList from '@/components/popularize/List'
-import AddGoods from '@/components/popularize/add'
-import Address from '@/components/order/address'
-import AddressList from '@/components/order/addresslist'
-import SettleOrder from '@/components/order/settleorder'
-import UserCenter from '@/components/user/usercenter'
-import Wallet from '@/components/user/wallet'
-import Client from '@/components/user/client'
-import Withdraw from '@/components/user/withdraw'
-import OrderList from '@/components/order/orderlist'
-import LogisticsInfo from '@/components/order/logisticsinfo'
-import PorductList from '@/components/product/list'
-import Register from '@/components/user/register'
-import PorductDetail from '@/components/product/detail'
-import Shoppingcart from '@/components/order/Shoppingcart'
+
+const PopularizeList = () => import('@/components/popularize/List')
+const AddGoods = () => import('@/components/popularize/add')
+const Address = () => import('@/components/order/address')
+const AddressList = () => import('@/components/order/addresslist')
+const SettleOrder = () => import('@/components/order/settleorder')
+const UserCenter = () => import('@/components/user/usercenter')
+const Wallet = () => import('@/components/user/wallet')
+const Client = () => import('@/components/user/client')
+const Withdraw = () => import('@/components/user/withdraw')
+const OrderList = () => import('@/components/order/orderlist')
+const LogisticsInfo = () => import('@/components/order/logisticsinfo')
+const ProductList = () => import('@/components/product/list')
+const Register = () => import('@/components/user/register')
+const PorductDetail = () => import('@/components/product/detail')
+const Shoppingcart = () => import('@/components/order/Shoppingcart')
 
 Vue.use(Router)
 
@@ -27,11 +26,6 @@ let router = new Router({
       name: 'Hello',
       redirect: '/product/list',
     },
-/*    {
-      path: '/popularize/preview',
-      name: 'PreviewGoods',
-      component: PreviewGoods
-    },*/
     {
       path: '/popularize/list',
       name: 'PopularizeList',
@@ -89,8 +83,8 @@ let router = new Router({
     },
     {
       path: '/product/list',
-      name: 'PorductList',
-      component: PorductList
+      name: 'ProductList',
+      component: ProductList
     },
     {
       path: '/product/detail',
@@ -112,9 +106,6 @@ let router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
-
-  // document.getElementById('app').scrollTop = 0
-
   let user = JSON.parse( sessionStorage.getItem('ebay-app') )
   if (!user) {
     let obj = {
