@@ -306,7 +306,7 @@ export default {
     margin-bottom: -2px;
 }
 .mint-tab-item-label{
-	font-size: 16px;
+	font-size: 16px !important;
 
 }
 .mtc {

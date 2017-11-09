@@ -168,7 +168,7 @@ $shadow-color: #ececec;
   }
 }
 .mint-tab-item-label{
-	font-size: 16px;
+	font-size: 16px !important;
 
 }
 .mint-navbar .mint-tab-item.is-selected {
