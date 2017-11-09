@@ -77,6 +77,7 @@ export default {
 .container {
   min-height: 100vh;
   background: #fff;
+	color:#999;
   h3 {
     margin: 0;
     padding: 40px 0;
