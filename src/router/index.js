@@ -125,7 +125,7 @@ import util from '../api/util'
 router.beforeEach((to, from, next) => {
   let user = JSON.parse( sessionStorage.getItem('ebay-app') )
   let openid = util.getQueryStringByName('wxOpenid')
-  if (openid) {
+  if (openid && !user) {
     console.log(openid)
     reqWechatUserInfo({openid}).then((res) => {
         console.log(res)
@@ -135,15 +135,14 @@ router.beforeEach((to, from, next) => {
       }
       next()
     }).catch((err) => {  })
-  }
+  } else {
+    if (to.path == '/auth' && user) {
+      next('/product/list')
+    }
 
-
-  if (to.path == '/auth' && user) {
-    next('/product/list')
-  }
-
-  if (to.path != '/auth' && !user) {
-    next({name: 'AuthWechat', params: {path: to.path}})
+    if (to.path != '/auth' && !user) {
+      next({name: 'AuthWechat', params: {path: to.path}})
+    }    
   }
 
   next()
