@@ -22,38 +22,48 @@
 
 <div class="goods-container" v-if="flag">
 	<mt-swipe :auto="5000" :speed="0" class="pre-banner">
-	  <mt-swipe-item v-for="i in pro_info.productPic.split('@')">
-      <li :style="{'background': 'url(' + i + ') no-repeat center'}"></li>
+	  <mt-swipe-item v-for="i in pro_info.productPic.split('@')"> 
+      <!-- <div style="display:table;">
+         <div  style="display: table-cell;
+    vertical-align: middle;
+    text-align: center;"> -->
+    <div style="text-align:center;">
+      <img :src="i" style="max-height:281.25px;">
+      </div>
+     
     </mt-swipe-item>
 	</mt-swipe>
 
 
 	<form>
-		<mt-cell :title="'商品名称：' + ebay.title"></mt-cell>
+		<mt-cell :title="ebay.title"></mt-cell>
 		<mt-field v-model="pro_info.productNane"
       placeholder="请输入商品名称" ></mt-field>
 		<mt-cell>
-      <div slot="title" v-if='ebay.price'>商品价格：{{ ebay.price.currency + " : " + ebay.price.value}}</div>
+      <div slot="title" v-if='ebay.price'>{{ ebay.price.currency + " : " + ebay.price.value}}</div>
     </mt-cell>
 		<mt-field  v-model="pro_info.productPrice"
       placeholder="请输入商品价格" 
 			style="margin-bottom: 10px;"></mt-field>
 
 		<template v-for="(item, index) in ebay.localizedAspects">
-			<mt-cell :title="'参数' + (index + 1) + '名称:' + item.name "></mt-cell>
-			<mt-field v-model="else_key[index]" :placeholder="'请翻译参数' + (index + 1)" ></mt-field>
-			<mt-cell :title="'参数' + (index + 1) + '内容:' + item.value "></mt-cell>
-			<mt-field v-model="else_value[index]" :placeholder="'请翻译参数' + (index + 1) + '内容'" 
-				style="margin-bottom: 10px;"></mt-field>
-		</template>						
+			<mt-cell :title=" item.name " style="font-size:14px"></mt-cell>
+			<mt-field v-model="else_key[index]" :placeholder="'请输入译文'" style="font-size:12px"></mt-field>
+			<mt-cell :title=" item.value" style="font-size:14px"></mt-cell>
+			<mt-field v-model="else_value[index]" :placeholder="'请输入译文' " 
+				style="margin-bottom: 10px;font-size:12px"></mt-field>
+		</template>				
+    		<div v-html="ebay.description">
+
+        </div>
+        <mt-cell title=" 商品介绍 " style="font-size:14px;margin-top:10px;"></mt-cell>
+          <textarea v-model="pro_info.productMemo" cols="30" rows="10" style="width:98%"></textarea>
+        
 	</form>
 
-	<mt-tabbar :fixed="true">
 	  <div class="bt-group">
-		  <mt-button size="small" type="primary" @click="proSubmit">提审</mt-button>
-		  <mt-button size="small" type="primary" @click="backList">返回列表</mt-button>
+		  <mt-button  type="primary" @click="proSubmit" class="btn-submit">提审</mt-button>
 	  </div>
-	</mt-tabbar>
 
 </div>
 <div class="no-product" v-if="show_tip">没有该商品或该商品不能在本平台翻译</div>
@@ -85,7 +95,8 @@ export default {
         productPic: '',//以@连接
         productPrice: '',//post时要求number类型
         productIcon: '',
-        items: []
+        items: [],
+        productMemo:""
       },
   	}
   },
@@ -241,7 +252,10 @@ export default {
 .container {
 	margin-bottom: 44px;
 	.bt-group{
-		margin: 0 auto;
+		.btn-submit{
+      width: 100%;
+      border-radius: 0;
+    }
 	}
 }
 .mint-search {
@@ -249,7 +263,8 @@ export default {
 }
 
 .pre-banner {
-	height: 200px;
+	height: 281.25px;
+  background-color: #fff;
   li {
     height: 100%;
     width: 100%;

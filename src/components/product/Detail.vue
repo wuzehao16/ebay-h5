@@ -60,8 +60,30 @@
 
   	</dl>
 
-  	<mt-cell title="商品介绍"></mt-cell>
-  	<mt-cell v-for="d in productInfo.productAttr" :key="d.created" :title="d.attrName + ' :'" :label="d.attrValue + ''"></mt-cell>
+
+		<mt-navbar v-model="selected">
+			<mt-tab-item id="1">商品介绍</mt-tab-item>
+			<mt-tab-item id="2">商品规格</mt-tab-item>
+		</mt-navbar>
+		<!-- tab-container -->
+		<mt-tab-container v-model="selected" class="tab-container">
+			<mt-tab-container-item id="1">
+				<div class="container1">{{productInfo.productMemo ||'暂无商品介绍'}}</div>
+			</mt-tab-container-item>
+			<mt-tab-container-item id="2">
+				<div class="detail" id="wareStandard" style="display: block;">
+				<table class="table-border" width="100%">
+					<tbody>
+						<tr v-for="d in productInfo.productAttr" :key="d.created">
+							<td>{{d.attrName}}</td>
+							<td>{{d.attrValue}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			</mt-tab-container-item>
+		</mt-tab-container>
+  	
 
 
 
@@ -229,7 +251,7 @@ $bg-red : #f23030;
 	.price{
 		font-size: 23px;
 		background-color: #fff;
-		color:red;
+		color:#0099f7;
 		padding-bottom: 10px;	
   }
 }
@@ -362,5 +384,41 @@ dl {
     color: #fff;
 		}
 }
-
+//商品介绍 商品规格
+.tab-container{
+	margin-top: 6px;
+	background-color: #fff;
+	.mint-tab-container-wrap{
+		padding: 10px;
+		.container1{
+			font-size: 14px;
+			line-height: 22px;
+			padding: 10px;
+			color: #999;
+		}
+		.detail{
+			position: relative;
+			padding: 5px 0;
+			font-size: .75em;
+			color: #5a5a5a;
+			overflow: hidden;
+			height: 100%;
+			margin: 0 10px 12px 10px;
+			.table-border{
+			  border-bottom: solid 1px #e7e7e7;
+				border-left: solid 1px #e7e7e7;
+				min-width: 100%;
+				border-collapse: collapse;
+				border-spacing: 0;
+				word-wrap: break-word;
+				word-break: break-all;
+				td{
+					border-top: solid 1px #e7e7e7;
+					border-right: solid 1px #e7e7e7;
+					padding: 10px;
+				}
+			}
+		}
+	}
+}
 </style>
