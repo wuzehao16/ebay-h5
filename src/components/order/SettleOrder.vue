@@ -44,29 +44,23 @@ import { Toast, MessageBox } from 'mint-ui'
 export default {
   data () {
   	return {
-
-  		order_info: {
-
-  		},
+  		order_info: {},
   		carriage: 50.00,
   		receiver_info: {
   			name: '',
   			phone: '',
   			address: ''
   		}
-  		
-  		
   	}
   },
   methods: {
   	chooseAddress() {
-  		console.log(this.order_info,this.receiver_info)
   		this.$router.push({
   			name: 'AddressList',
   			params: {
-					order_info: this.order_info,
-					seleceted:this.receiver_info,
-					radio_value:1
+				order_info: this.order_info,
+				seleceted: this.receiver_info,
+				radio_value: 1
   			}
   		})
   	},
@@ -82,17 +76,11 @@ export default {
   			openid: JSON.parse( sessionStorage.getItem('ebay-app') ).userWxOpenid,
   			carriage: this.carriage
   		})
-  		console.log(this.order_info)
-  		
-
   		reqBuyerOrderCreate(this.order_info).then((res) => {
-  			console.log(res)
   			if(res.status == 200) {
   				MessageBox('提示','微信接口待联调')
   			}
-
   		})
-
   	}
   },
   computed: {
@@ -114,14 +102,12 @@ export default {
   	if (!this.order_info) {
   		this.$router.push('/product/list')
   	}
-
   	let a = this.$route.params.receiver_info
   	if (a) {
   		this.receiver_info.name = a.cneeName
   		this.receiver_info.phone = a.cneePhone
   		this.receiver_info.address = a.cneeAddress
   	}
-
   }
 }	
 </script>
@@ -138,10 +124,10 @@ export default {
 		}
 }
 .receiver {
-		.choose{
-			margin-top: 20px;
-			text-align: center;
-		}
+	.choose{
+		margin-top: 20px;
+		text-align: center;
+	}
 	p {
 		margin: 15px 0 5px 10px;
 		font-size: 16px

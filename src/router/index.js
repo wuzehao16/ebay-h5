@@ -1,29 +1,35 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-const PopularizeList = () => import('@/components/popularize/List')
-const AddGoods = () => import('@/components/popularize/add')
-const Address = () => import('@/components/order/address')
-const AddressList = () => import('@/components/order/addresslist')
-const SettleOrder = () => import('@/components/order/settleorder')
-const UserCenter = () => import('@/components/user/usercenter')
-const Wallet = () => import('@/components/user/wallet')
-const Client = () => import('@/components/user/client')
-const Withdraw = () => import('@/components/user/withdraw')
-const OrderList = () => import('@/components/order/orderlist')
-const LogisticsInfo = () => import('@/components/order/logisticsinfo')
-const ProductList = () => import('@/components/product/list')
-const Register = () => import('@/components/user/register')
-const PorductDetail = () => import('@/components/product/detail')
-const Shoppingcart = () => import('@/components/order/Shoppingcart')
+const PopularizeList = r => require.ensure([], () => r(require('@/components/popularize/List')), 'PopularizeList')
+const AddGoods = r => require.ensure([], () => r(require('@/components/popularize/add')), 'AddGoods')
+const Address = r => require.ensure([], () => r(require('@/components/order/address')), 'Address')
+const AddressList = r => require.ensure([], () => r(require('@/components/order/addresslist')), 'AddressList')
+const SettleOrder = r => require.ensure([], () => r(require('@/components/order/settleorder')), 'SettleOrder')
+
+const UserCenter = r => require.ensure([], () => r(require('@/components/user/usercenter')), 'UserCenter')
+
+const Wallet = r => require.ensure([], () => r(require('@/components/user/wallet')), 'Wallet')
+const Client = r => require.ensure([], () => r(require('@/components/user/client')), 'Client')
+const Withdraw = r => require.ensure([], () => r(require('@/components/user/withdraw')), 'Withdraw')
+
+
+const OrderList = r => require.ensure([], () => r(require('@/components/order/orderlist')), 'OrderList')
+
+const LogisticsInfo = r => require.ensure([], () => r(require('@/components/order/logisticsinfo')), 'LogisticsInfo')
+const ProductList = r => require.ensure([], () => r(require('@/components/product/list')), 'ProductList')
+const Register = r => require.ensure([], () => r(require('@/components/user/register')), 'Register')
+const PorductDetail = r => require.ensure([], () => r(require('@/components/product/detail')), 'PorductDetail')
+const AuthWechat = r => require.ensure([], () => r(require('@/components/auth/Auth')), 'AuthWechat')
+const Shoppingcart = r => require.ensure([], () => r(require('@/components/order/Shoppingcart')), 'Shoppingcart')
 
 Vue.use(Router)
 
 let router = new Router({
+  mode: 'history',
   routes: [
     {
    	  path: '/',
-      name: 'Hello',
       redirect: '/product/list',
     },
     {
@@ -97,26 +103,55 @@ let router = new Router({
       component: Register
     },
     {
+      path: '/auth',
+      name: 'AuthWechat',
+      component: AuthWechat
+    },    
+    {
       path: '/order/shoppingcart',
       name: 'Shoppingcart',
       component: Shoppingcart
+    },
+    {
+      path: '*',
+      redirect: '/product/list'
     }
 
   ]
 })
 
+import {reqWechatUserInfo} from '../api'
+import util from '../api/util'
 router.beforeEach((to, from, next) => {
   let user = JSON.parse( sessionStorage.getItem('ebay-app') )
-  if (!user) {
-    let obj = {
-      id: '1',
-      userWxOpenid: '112233'
-    }
-    sessionStorage.setItem('ebay-app', JSON.stringify(obj))
+  let openid = util.getQueryStringByName('wxOpenid')
+  if (openid) {
+    console.log(openid)
+    reqWechatUserInfo({openid}).then((res) => {
+        console.log(res)
+      if (res.data.code == 0) {
+        let obj = res.data.data
+        sessionStorage.setItem('ebay-app', JSON.stringify(obj))
+      }
+      next()
+    }).catch((err) => {  })
   }
-  setTimeout(() => {
-    next()
-  }, 100)
+
+
+  if (to.path == '/auth' && user) {
+    next('/product/list')
+  }
+
+  if (to.path != '/auth' && !user) {
+    next({name: 'AuthWechat', params: {path: to.path}})
+  }
+
+  next()
+
 })
+
+
+
+
 
 export default router

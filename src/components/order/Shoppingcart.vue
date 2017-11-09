@@ -100,7 +100,6 @@ export default {
 					this.getList()
 				}
 			})
-		  
 		}).catch((err) => {
 			console.log(err)
 		})

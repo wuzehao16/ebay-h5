@@ -1,7 +1,10 @@
 import axios from 'axios' 
 
-//test
-// axios.defaults.baseURL = 'http://fks3989.tunnel.qydev.com'
+// test
+axios.defaults.baseURL = 'http://fks3989.tunnel.qydev.com'
+
+
+export const baseUrl = 'http://fks3989.tunnel.qydev.com'
 
 export const reqUserInfo = params => { return axios.get(`/sell/ebay/user/account/${params.id}`, params) }
 //我的钱包
@@ -40,4 +43,9 @@ export const reqEbayGoods = params => { return axios.get(`/sell/ebay/getGoodsInf
 
 //微信授权
 export const reqWechatAuth = params => { return axios.get(`/sell/wechat/authorize`, { params: params }) }
+
+//微信分享
+export const reqWechatSignature = params => { return axios.get(`/sell/wechat/signature`, { params: params }) }
+//openid获取信息
+export const reqWechatUserInfo = params => { return axios.get(`/sell/wechat/getUserInfo`, { params: params }) }
 

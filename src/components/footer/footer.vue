@@ -2,7 +2,7 @@
   <div  class="footer">
     <ul class="tab3">
       <li>
-        <router-link class="col" :to="{name: 'PorductList'}">
+        <router-link class="col" :to="{name: 'ProductList'}">
           <i class="fa fa-home"></i>
         <span class="nd-p">首页</span>
         </router-link>
