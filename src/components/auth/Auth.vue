@@ -13,7 +13,6 @@ export default {
 	},
 	mounted() {
 		let path = this.$route.params.path
-	    sessionStorage.setItem('test-auth', JSON.stringify("ahahhahaha"))
 	    let returnUrl = location.protocol + "//" + location.host
 	    			+ (path || '/product/list')
 	    console.log('returnUrl:', returnUrl)

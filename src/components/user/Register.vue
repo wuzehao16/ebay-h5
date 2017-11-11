@@ -2,8 +2,10 @@
 <div class="container">
 	<h3>申请成为分销商</h3>
 	<div>
-		<mt-field class="set-line" label="用户名" placeholder="请输入用户名" v-model="editForm.userName"></mt-field>
-		<mt-field class="set-line" label="手机号" placeholder="请输入手机号" type="tel" v-model="editForm.userPhone"></mt-field>
+		<mt-field class="set-line" label="用户名" placeholder="请输入用户名"
+       v-model="editForm.userName"></mt-field>
+		<mt-field class="set-line" label="手机号" placeholder="请输入手机号" type="tel" 
+        v-model="editForm.userPhone"></mt-field>
 		<mt-field class="set-line" label="身份证"  v-model="editForm.createdby"></mt-field>
 		<mt-field class="set-line" label="现居地址"  v-model="editForm.userAddr"></mt-field>
 		
@@ -18,13 +20,13 @@
 </template>
 
 <script>
-import { reqUserUpdate } from "../../api";
+import { reqUserUpdate, reqUserInfo } from "../../api";
 import { Indicator, Toast } from "mint-ui";
 export default {
   data() {
     return {
       editForm: {
-        id: JSON.parse(sessionStorage.getItem("ebay-app")).id,
+        id: "",
         userCtype: "1", //1为分销商
         userName: "",
         userPhone: "",
@@ -59,6 +61,30 @@ export default {
         this.$router.push("/user/usercenter");
       });
     }
+
+  },
+  mounted() {
+    this.editForm.id = JSON.parse(sessionStorage.getItem("ebay-app")).id
+    Indicator.open({
+      text: "检测会员状态...",
+      spinnerType: "fading-circle"
+    })
+    reqUserInfo({id: this.editForm.id}).then((res) => {
+      if (res.data.code == 0 && res.data.data.userCtype == '1') {
+          let instance = Toast({
+            message: '您已是会员，系统为您跳转首页！',
+            position: 'bottom'
+          })
+          setTimeout(() => {
+            instance.close()
+            this.$router.push('/product/list')
+          }, 2000)
+      } else {
+        Indicator.close()
+      }
+    })
+
+
   }
 };
 </script>

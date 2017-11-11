@@ -82,10 +82,6 @@
 			</div>
 			</mt-tab-container-item>
 		</mt-tab-container>
-  	
-
-
-
 </div>
 </template>
 
@@ -157,15 +153,19 @@ export default {
 		}
   },
   mounted() {
-  	if (util.getQueryStringByName('pc_preview')) {
+  	if (this.$route.query.pc_preview) {
   		this.isPreview = true
   	}
 
   	if (this.$route.params.id || this.isPreview) {
-  		let productId = this.$route.params.id || util.getQueryStringByName('pc_preview')
+  		let productId = this.$route.params.id || this.$route.query.pc_preview
 	  	reqProductDetail({productId}).then((res) => {
 			this.productInfo = res.data.data
 			console.log(this.productInfo)
+//微信分享
+		let shareUrl = location.href + '?pc_preview=' + this.productInfo.id
+	  	this.wxShare(this.productInfo.name, this.productInfo.productMemo, shareUrl, this.productInfo.icon)
+
 	  	})
   	} else {
   		this.$router.push('/product/list')

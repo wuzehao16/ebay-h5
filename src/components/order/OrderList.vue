@@ -132,7 +132,7 @@ export default {
       all_list: [],
       all_page: 0,
       pa: {
-        userWxOpenid: JSON.parse( sessionStorage.getItem('ebay-app') ).userWxOpenid,
+        userWxOpenid: '',
         size: 10
       },
       to_pay_list: [],
@@ -266,6 +266,7 @@ export default {
   },
   mounted() {
       this.selected = this.$route.params.active_tab || 'all_orders'
+      this.userWxOpenid = JSON.parse( sessionStorage.getItem('ebay-app') ).userWxOpenid
       this.init()
   },
   watch: {

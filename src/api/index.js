@@ -1,10 +1,9 @@
 import axios from 'axios' 
 
 // test
-axios.defaults.baseURL = 'http://fks3989.tunnel.qydev.com'
+// axios.defaults.baseURL = 'http://fks3989.tunnel.qydev.com'
 
-
-export const baseUrl = 'http://fks3989.tunnel.qydev.com'
+export const baseUrl = (process.env.NODE_ENV === 'production') ? 'http://www.wstsoftware.com' : 'http://fks3989.free.ngrok.cc'
 
 export const reqUserInfo = params => { return axios.get(`/sell/ebay/user/account/${params.id}`, params) }
 //我的钱包
@@ -19,7 +18,6 @@ export const reqAddToShoppingCart = params => { return axios.post(`/sell/buyer/g
 export const reqShoppingCartList = params => { return axios.get(`/sell/buyer/goodcar/list`, {params: params}) }
 export const reqCartDelete = params => { return axios.delete(`/sell/buyer/goodcar/delete/${params.productId}/${params.userId}`) }
 
-
 export const reqSellerProList = params => { return axios.get(`/sell/seller/product/list`, {params: params}) }
 
 export const reqAddressList = params => { return axios.get(`/sell/ebay/user/userCnee/list`, {params: params}) }
@@ -28,7 +26,6 @@ export const reqAddressDelete = params => { return axios.post(`/sell/ebay/user/u
 
 export const reqMyCusCount = params => { return axios.get(`/sell/ebay/user/user/myCustomerCount`, {params: params}) }
 export const reqMyCustomerList = params => { return axios.get(`/sell/ebay/user/user/myCustomer`, {params: params}) }
-
 
 //成为分销商
 export const reqUserUpdate = params => { return axios.post(`/sell/ebay/user/${params.id}/update`, params) }

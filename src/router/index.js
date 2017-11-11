@@ -121,36 +121,32 @@ let router = new Router({
 })
 
 import {reqWechatUserInfo} from '../api'
-import util from '../api/util'
+// import store from '@/store'
+import {baseUrl} from '../api'
 router.beforeEach((to, from, next) => {
   let user = JSON.parse( sessionStorage.getItem('ebay-app') )
-  let openid = util.getQueryStringByName('wxOpenid')
-  if (openid && !user) {
-    console.log(openid)
+  let openid = to.query.wxOpenid
+
+/*  if (!user && !openid) {//未申请授权
+    let returnUrl = location.protocol + "//" + location.host
+          + (to.path || '/product/list')
+    console.log('returnUrl:', returnUrl)
+    window.location.href = baseUrl + '/sell/wechat/authorize?returnUrl=' + returnUrl 
+  } else if (!user && openid) {//已完成授权但未从后台获取已授权用户的信息
     reqWechatUserInfo({openid}).then((res) => {
         console.log(res)
       if (res.data.code == 0) {
         let obj = res.data.data
         sessionStorage.setItem('ebay-app', JSON.stringify(obj))
+        next()
+      } else {
+        next('/product/list')
       }
-      next()
-    }).catch((err) => {  })
+    }).catch((err) => {})    
   } else {
-    if (to.path == '/auth' && user) {
-      next('/product/list')
-    }
-
-    if (to.path != '/auth' && !user) {
-      next({name: 'AuthWechat', params: {path: to.path}})
-    }    
-  }
-
+    next()
+  }*/
   next()
-
 })
-
-
-
-
 
 export default router

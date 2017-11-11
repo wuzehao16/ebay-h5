@@ -2,7 +2,6 @@
 
   <div id="app">
     <!-- <img src="./assets/logo.png"> -->
-
     <router-view/>
   </div>
 </template>
@@ -74,7 +73,7 @@ h3 {
 }
 .no-data{
   height: 100px;
-  position: absolute;
+  position: fixed;
   width: 100%;
   z-index: 1000;
   background: #eeeeee;
