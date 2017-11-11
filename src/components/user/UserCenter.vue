@@ -58,7 +58,7 @@
 
 <script>
 import {reqUserInfo, reqMyCusCount, reqWechatAuth, baseUrl} from '../../api'
-import axios from 'axios'
+import { Indicator, Toast } from "mint-ui"
 export default {
   data () {
   	return {
@@ -77,22 +77,25 @@ export default {
   	}
   },
   mounted() {
+    Indicator.open({
+      spinnerType: "fading-circle"
+    })
   	this.user = JSON.parse(sessionStorage.getItem('ebay-app'))
   	reqUserInfo({id: this.user.id}).then((res) => {
   		if (res.data.code == 0) {
   			this.user = res.data.data
+  			if (this.user.userCtype == '1') {
+			  	reqMyCusCount(this.user).then((res) => {
+			  		if (res.data.data) {
+			  			this.count = res.data.data
+			  		}
+			  	})  				
+  			}
+  		} else {
+  			Toast(res.data.msg)
   		}
-  	})
-  	reqMyCusCount(this.user).then((res) => {
-  		if (res.data.data) {
-  			this.count = res.data.data
-  		}
-  	})
-
-//微信分享
-  	// this.wxShare('haha', 'this is me.', location.href, 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=638139655,3405095075&fm=27&gp=0.jpg')
-
-
+  		Indicator.close()
+  	}).catch((err) => { Indicator.close() })
   }
 }
 </script>

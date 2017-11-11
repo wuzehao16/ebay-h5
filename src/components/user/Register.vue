@@ -25,8 +25,8 @@
 </template>
 
 <script>
-import { reqUserUpdate, reqUserInfo } from "../../api";
-import { Indicator, Toast } from "mint-ui";
+import { reqUserUpdate, reqUserInfo } from "../../api"
+import { Indicator, Toast } from "mint-ui"
 export default {
   data() {
     return {
@@ -69,27 +69,29 @@ export default {
 
   },
   mounted() {
-    this.editForm.id = JSON.parse(sessionStorage.getItem("ebay-app")).id
-    Indicator.open({
-      text: "检测会员状态...",
-      spinnerType: "fading-circle"
+    this.$nextTick(function () {
+      setTimeout(() => {
+        this.editForm.id = JSON.parse(sessionStorage.getItem("ebay-app")).id
+        Indicator.open({
+          text: "检测会员状态...",
+          spinnerType: "fading-circle"
+        })
+        reqUserInfo({id: this.editForm.id}).then((res) => {
+          if (res.data.code == 0 && res.data.data.userCtype == '1') {
+              let instance = Toast({
+                message: '您已是会员，系统为您跳转首页！',
+                position: 'bottom'
+              })
+              setTimeout(() => {
+                instance.close()
+                this.$router.push('/product/list')
+              }, 2000)
+          } else {
+            Indicator.close()
+          }
+        })
+      }, 0)
     })
-    reqUserInfo({id: this.editForm.id}).then((res) => {
-      if (res.data.code == 0 && res.data.data.userCtype == '1') {
-          let instance = Toast({
-            message: '您已是会员，系统为您跳转首页！',
-            position: 'bottom'
-          })
-          setTimeout(() => {
-            instance.close()
-            this.$router.push('/product/list')
-          }, 2000)
-      } else {
-        Indicator.close()
-      }
-    })
-
-
   }
 };
 </script>

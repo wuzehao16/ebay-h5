@@ -10,7 +10,7 @@
 	:bottom-all-loaded="allLoaded" 
   ref="loadmore" 
   class="main-wrapper" 
-  style="margin:42px 0;">
+  style="margin:42px 0;min-height: 50vh;">
   <div class="no-data" v-if='tip_flag'>{{ tip_text }}</div>
 
   <div> 

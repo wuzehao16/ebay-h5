@@ -96,7 +96,8 @@ export default {
         productPrice: '',//post时要求number类型
         productIcon: '',
         items: [],
-        productMemo:""
+        productMemo:"",
+        productUsd: ''
       },
   	}
   },
@@ -169,6 +170,7 @@ export default {
             this.flag = true
             console.log('ebay', this.ebay)
             this.pro_info.productIcon = this.ebay.image.imageUrl
+            this.pro_info.productUsd = this.ebay.price.value
             let imgArr = []
             imgArr.push(this.pro_info.productIcon)
             for (let i of this.ebay.additionalImages) {
@@ -226,7 +228,8 @@ export default {
             productPic: (p.pic ? p.pic.join('@') : ''),
             productPrice: p.price,
             productIcon: p.icon,
-            items: p.productAttr
+            items: p.productAttr,
+            productUsd: p.productUsd
           }
           for (let i in p.productAttr) {
             this.else_key[i] = p.productAttr[i].attrName
