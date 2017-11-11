@@ -38,7 +38,7 @@
 	<span>您购物车中没有商品</span>
 </div>
 
-<mt-cell class="cal-box" v-if='!tip_flag'>
+<mt-cell class="cal-box" v-if='tip_flag2'>
 	<div slot="title">
 		<div class="el-wrap">
 			<div class="check-box show-label">
@@ -84,6 +84,7 @@ export default {
       bbTimeout: '',
       ccTimeout: '',
       tip_flag: false,
+      tip_flag2: false,
       cart_list: [],
       userId: JSON.parse( sessionStorage.getItem('ebay-app') ).userWxOpenid
   	}
@@ -100,7 +101,6 @@ export default {
 					this.getList()
 				}
 			})
-		  
 		}).catch((err) => {
 			console.log(err)
 		})
@@ -136,14 +136,16 @@ export default {
   		})  		
   	},
   	getList() {
-		reqShoppingCartList({userId: this.userId}).then((res) => {
+		reqShoppingCartList({userId: this.userId, size: 100}).then((res) => {
 			this.cart_list = res.data.data
 			for (let i of res.data.data ) {
 				this.all_pro.push(i.productId)
 			}
 
-			if (this.cart_list.length == 0) {
+			if (this.all_pro.length == 0) {
 				this.tip_flag = true
+			} else {
+				this.tip_flag2 = true
 			}
 		})  		
   	}

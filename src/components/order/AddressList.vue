@@ -134,8 +134,7 @@ export default {
     }
   },
   mounted() {
-		this.getList();
-		console.log(this.seleceted)
+		this.getList()
   }
 };
 </script>

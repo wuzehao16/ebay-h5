@@ -261,7 +261,6 @@ import { Toast } from 'mint-ui'
         this.addressXian = arr[2]
         this.addressStreet = arr[3]
         this.addressDetail = arr[4]
-console.log(this.addForm)
         this.isEdit = true
       }
     }

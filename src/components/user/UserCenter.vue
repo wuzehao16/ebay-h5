@@ -3,10 +3,10 @@
 
 <div class="header" :style="{'background': 'url(' + require('../../assets/back.jpg') + 
 		') no-repeat','background-size': 'cover'}">
-	<div :style="{'background': 'url(' + require('../../assets/test.png') + 
-		') no-repeat'}" class="head-pic"></div>
+	<div :style="{'background': 'url(' + user.userWxPicture + 
+		') no-repeat,url(' + require('../../assets/test.png') + ') no-repeat'}" class="head-pic"></div>
 	<div class="head-r">
-		<h3>你好，{{ user.userName }}</h3>
+		<h3>你好，{{ user.userWxName }}</h3>
 		<p>会员ID：{{ user.userWxOpenid }}</p>
 	</div>
 </div>
@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import {reqUserInfo, reqMyCusCount} from '../../api'
+import {reqUserInfo, reqMyCusCount, reqWechatAuth, baseUrl} from '../../api'
 import axios from 'axios'
 export default {
   data () {
@@ -77,18 +77,21 @@ export default {
   	}
   },
   mounted() {
-  	let user = JSON.parse(sessionStorage.getItem('ebay-app'))
-  	reqUserInfo(user).then((res) => {
-  		// console.log(res)
-  		this.user = res.data.data
+  	this.user = JSON.parse(sessionStorage.getItem('ebay-app'))
+  	reqUserInfo({id: this.user.id}).then((res) => {
+  		if (res.data.code == 0) {
+  			this.user = res.data.data
+  		}
   	})
-  	reqMyCusCount(user).then((res) => {
-  		console.log(res.data.data)
+  	reqMyCusCount(this.user).then((res) => {
   		if (res.data.data) {
   			this.count = res.data.data
   		}
-
   	})
+
+//微信分享
+  	// this.wxShare('haha', 'this is me.', location.href, 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=638139655,3405095075&fm=27&gp=0.jpg')
+
 
   }
 }
