@@ -1,12 +1,17 @@
 <template>
 <div class="container">
-	<h3>申请成为分销商</h3>
+	<h3>申请成为卖家</h3>
 	<div>
 		<mt-field class="set-line" label="用户名" placeholder="请输入用户名" v-model="editForm.userName"></mt-field>
 		<mt-field class="set-line" label="手机号" placeholder="请输入手机号" type="tel" v-model="editForm.userPhone"></mt-field>
 		<mt-field class="set-line" label="身份证"  v-model="editForm.createdby"></mt-field>
 		<mt-field class="set-line" label="现居地址"  v-model="editForm.userAddr"></mt-field>
-		
+		<ul>
+      <li>1.请输入正确的手机号</li>
+      <li>2.我们会在3个工作日内审核完成</li>
+      <li>3.申请成为卖家后你可以新增发布自己的商品</li>
+      
+    </ul>
 		<!-- <mt-field class="set-line" label="验证码" placeholder="请输入验证码" v-model="captcha">
 		  <mt-button type="default" size="small">获取</mt-button>
 		</mt-field> -->
@@ -75,6 +80,14 @@ export default {
 </style>
 <style lang="scss" scoped>
 .container {
+  ul{
+    font-size:14px;
+    margin:20px 0 0 10px;
+    li{
+      list-style: none;
+      line-height: 24px;
+    }
+  }
   min-height: 100vh;
   background: #fff;
 	color:#999;
