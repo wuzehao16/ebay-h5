@@ -27,16 +27,13 @@ import {reqWechatSignature} from './api'
 Vue.prototype.wxShare = function(title, desc, link, imgUrl) {
 	let url = document.location.href
 	reqWechatSignature({url}).then((res) => {
-		console.log("res", res)
 		if (res.data.code == 0) {
 			let obj = Object.assign({
-				debug: false,//true会有弹框
+				debug: true,//true会有弹框
 				jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
 			}, res.data.data)
-			console.log("config:", obj)
 			wx.config(obj)		
 		}
-
 	})
 
 	wx.ready(function(){

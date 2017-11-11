@@ -93,7 +93,7 @@ let router = new Router({
       component: ProductList
     },
     {
-      path: '/product/detail',
+      path: '/product/detail/:id',
       name: 'PorductDetail',
       component: PorductDetail
     },
@@ -120,6 +120,7 @@ let router = new Router({
   ]
 })
 
+
 import {reqWechatUserInfo} from '../api'
 // import store from '@/store'
 import {baseUrl} from '../api'
@@ -127,12 +128,17 @@ router.beforeEach((to, from, next) => {
   let user = JSON.parse( sessionStorage.getItem('ebay-app') )
   let openid = to.query.wxOpenid
 
-/*  if (!user && !openid) {//未申请授权
+  if (!user && !openid) {//未申请授权
     let returnUrl = location.protocol + "//" + location.host
           + (to.path || '/product/list')
     console.log('returnUrl:', returnUrl)
-    window.location.href = baseUrl + '/sell/wechat/authorize?returnUrl=' + returnUrl 
+
+    let aa = baseUrl + '/sell/wechat/authorize?returnUrl=' + returnUrl 
+    console.log(aa)
+    window.location.href = aa
+
   } else if (!user && openid) {//已完成授权但未从后台获取已授权用户的信息
+    console.log(22222)
     reqWechatUserInfo({openid}).then((res) => {
         console.log(res)
       if (res.data.code == 0) {
@@ -145,8 +151,8 @@ router.beforeEach((to, from, next) => {
     }).catch((err) => {})    
   } else {
     next()
-  }*/
-  next()
+  }
+
 })
 
 export default router

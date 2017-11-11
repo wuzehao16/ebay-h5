@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import {reqProductDetail, reqAddToShoppingCart, reqShoppingCartList} from '../../api'
+import {reqProductDetail, reqAddToShoppingCart, reqShoppingCartList, reqWechatUserInfo} from '../../api'
 import {Toast} from 'mint-ui'
 import util from '../../api/util'
 export default {
@@ -103,6 +103,27 @@ export default {
   		isPreview: false,
   		pro_in_cart: 0
   	}
+  },
+  beforeRouteEnter (to, from, next) {
+  	console.log(to)
+	  let user = JSON.parse( sessionStorage.getItem('ebay-app') )
+	  let openid = to.query.wxOpenid
+	  if (!user && !openid) {
+	  	 location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx7b2ea819030c5b48&redirect_uri=http%3A%2F%2Ffks3989.free.ngrok.cc%2Fsell%2Fwechat%2FuserInfo&response_type=code&scope=snsapi_userinfo&state=http%3A%2F%2Flocalhost%3A8089' + to.path
+	  } else if (!user && openid) {
+	    reqWechatUserInfo({openid}).then((res) => {
+	        console.log(res)
+	      if (res.data.code == 0) {
+	        let obj = res.data.data
+	        sessionStorage.setItem('ebay-app', JSON.stringify(obj))
+	        next()
+	      } else {
+	        next('/product/list')
+	      }
+	    }).catch((err) => {}) 	  	
+	  } else {
+	  	next()
+	  }
   },
   methods: {
   	addToCart() {
@@ -161,11 +182,11 @@ export default {
   		let productId = this.$route.params.id || this.$route.query.pc_preview
 	  	reqProductDetail({productId}).then((res) => {
 			this.productInfo = res.data.data
-			console.log(this.productInfo)
-//微信分享
-		let shareUrl = location.href + '?pc_preview=' + this.productInfo.id
-	  	this.wxShare(this.productInfo.name, this.productInfo.productMemo, shareUrl, this.productInfo.icon)
+		//微信分享
+		let shareUrl = location.protocol + "//" + location.host 
+				+ '/product/detail/' + productId
 
+	  	this.wxShare(this.productInfo.name, this.productInfo.productMemo, shareUrl, this.productInfo.icon)
 	  	})
   	} else {
   		this.$router.push('/product/list')

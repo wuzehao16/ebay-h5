@@ -138,6 +138,7 @@ export default {
       Indicator.open({
         spinnerType: 'fading-circle'
       })
+      console.log('pro_info:', Object.assign({}, this.pro_info))
       reqSellerProductSave(this.pro_info).then((res) => {
         Indicator.close()
         if (res.data.code == 0) {
