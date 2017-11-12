@@ -66,20 +66,20 @@
 </template>
 
 <style lang="scss">
-.address-details{
-  .mint-cell-title{
+.address-details {
+  .mint-cell-title {
     margin-top: -50px;
   }
 }
-.address-info{
-   color: gray;
-   padding-left:10px;
-   padding-top: 5px;
-   font-size: 14px;
+.address-info {
+  color: gray;
+  padding-left: 10px;
+  padding-top: 5px;
+  font-size: 14px;
 }
 .input-address {
-  .mint-cell-title{
-    color:#999;
+  .mint-cell-title {
+    color: #999;
   }
   .mint-field-other {
     position: absolute;
@@ -96,173 +96,208 @@
 </style>
 
 <script>
-import s from '@/assets/address4.json'
-import {reqAddressCreate, reqAddressDelete} from '../../api'
-import { Toast } from 'mint-ui'
-  export default {
-    name: 'address',
-    data () {
-      return {
-        isEdit: false,
-        popupVisible: false,
-        popupVisible2: false,
-        popupVisible3: false,
-      	popupVisible4: false,
-        addForm: {
-          cneeAddress: '',
-          cneeName: '',
-          cneePhone: '',
-          userId: JSON.parse(sessionStorage.getItem('ebay-app')).id
-        },
-        companyName:'',
-        addressSlots: [
-          {
-            flex: 1,
-            values: Object.keys(s),
-            className: 'slot1',
-            textAlign: 'center'
-          }
-        ],
-        citySlots: [
-          {
-            flex: 1,
-            values: [],
-            className: 'slot1',
-            textAlign: 'center'
-          }
-        ],
-        xianSlots: [
-          {
-            flex: 1,
-            values: [],
-            className: 'slot1',
-            textAlign: 'center'
-          }
-        ],
-        streetSlots: [
-          {
-            flex: 1,
-            values: [],
-            className: 'slot1',
-            textAlign: 'center'
-          }
-        ],
-        addressProvince: '',
-        addressCity: '',
-        addressXian: '',
-        addressStreet: '',
-        addressDetail: ''
-        
+import s from "@/assets/address4.json";
+import { reqAddressCreate, reqAddressDelete } from "../../api";
+import { Toast } from "mint-ui";
+export default {
+  name: "address",
+  data() {
+    return {
+      isEdit: false,
+      popupVisible: false,
+      popupVisible2: false,
+      popupVisible3: false,
+      popupVisible4: false,
+      addForm: {
+        cneeAddress: "",
+        cneeName: "",
+        cneePhone: "",
+        userId: JSON.parse(sessionStorage.getItem('ebay-app')).id
+      },
+      companyName: "",
+      addressSlots: [
+        {
+          flex: 1,
+          values: Object.keys(s),
+          className: "slot1",
+          textAlign: "center"
+        }
+      ],
+      citySlots: [
+        {
+          flex: 1,
+          values: [],
+          className: "slot1",
+          textAlign: "center"
+        }
+      ],
+      xianSlots: [
+        {
+          flex: 1,
+          values: [],
+          className: "slot1",
+          textAlign: "center"
+        }
+      ],
+      streetSlots: [
+        {
+          flex: 1,
+          values: [],
+          className: "slot1",
+          textAlign: "center"
+        }
+      ],
+      addressProvince: "",
+      addressCity: "",
+      addressXian: "",
+      addressStreet: "",
+      addressDetail: ""
+    };
+  },
+  methods: {
+    deleteSubmit() {
+      let obj = {
+        id: this.addForm.id,
+        isDelete: "Y"
+      };
+      reqAddressDelete(obj).then(res => {
+        Toast({
+          message: "删除成功,即将返回",
+          iconClass: "icon icon-success"
+        });
+        let _this = this;
+        setTimeout(function() {
+          _this.$router.push("/order/addresslist");
+        }, 2000);
+      });
+    },
+    validateForm() {
+      if (this.addForm.cneeName.match(/^[ ]*$/)) {
+        Toast({
+          message: "请输入收货人姓名",
+          position: "top"
+        });
+        return false;
+      }
+      if (!/^1[3|4|5|7|8][0-9]\d{4,8}$/.test(this.addForm.cneePhone)) {
+        Toast({
+          message: "请输入正确手机号",
+          position: "top"
+        });
+        return false;
+      }
+      if (!this.addressProvince ||!this.addressCity ||!this.addressXian||!this.addressStreet||this.addressProvince.match(/^[ ]*$/)||this.addressCity.match(/^[ ]*$/)||this.addressXian.match(/^[ ]*$/)||this.addressStreet.match(/^[ ]*$/)) {
+        Toast({
+          message: "请输入收货人地址",
+          position: "top"
+        });
+        return false;
+      }
+      if (this.addressDetail.match(/^[ ]*$/)) {
+        Toast({
+          message: "请输入收货详细地址",
+          position: "top"
+        });
+        return false;
+      }
+      return true
+    },
+    addressSubmit() {
+      if (!this.validateForm()) {
+        return;
+      }
+      this.addForm.cneeAddress =
+        this.addressProvince +
+        "@" +
+        this.addressCity +
+        "@" +
+        this.addressXian +
+        "@" +
+        this.addressStreet +
+        "@" +
+        this.addressDetail;
+      reqAddressCreate(this.addForm).then(res => {
+        let i = Toast({
+          message: "操作成功,即将返回",
+          iconClass: "icon icon-success"
+        });
+        let _this = this;
+        setTimeout(function() {
+          _this.$router.push("/order/addresslist");
+        }, 2000);
+      });
+    },
+    onProvinceChange(picker, values) {
+      this.addressProvince = values[0];
+      this.addressCity = "";
+      this.addressXian = "";
+      this.addressStreet = "";
+    },
+    touchCity() {
+      if (this.addressProvince) {
+        this.citySlots[0].values = Object.keys(s[this.addressProvince]);
+        this.popupVisible2 = true;
+      } else {
+        Toast({
+          message: "请选择省份",
+          position: "bottom",
+          duration: 1000
+        });
       }
     },
-    methods: {
-      deleteSubmit () {
-
-        let obj = {
-          id: this.addForm.id,
-          isDelete: 'Y'
-        }
-        reqAddressDelete(obj).then((res) => {
-          Toast({
-            message: '删除成功,即将返回',
-            iconClass: 'icon icon-success'
-          })
-          let _this = this
-          setTimeout(function() {
-            _this.$router.push("/order/addresslist")
-          }, 2000)           
-        })
-
-       
-      },
-      addressSubmit () {
-        this.addForm.cneeAddress = this.addressProvince + '@' + this.addressCity + '@' +
-              this.addressXian + '@' + this.addressStreet + '@' + this.addressDetail
-        reqAddressCreate(this.addForm).then((res) => {
-          let i = Toast({
-            message: '操作成功,即将返回',
-            iconClass: 'icon icon-success'
-          })
-          let _this = this
-          setTimeout(function() {
-            _this.$router.push("/order/addresslist")
-          }, 2000)          
-        })
-      },
-      onProvinceChange(picker, values) {
-        this.addressProvince = values[0]
-        this.addressCity = ''
-        this.addressXian = ''
-        this.addressStreet = ''
-      },
-      touchCity () {
-        if (this.addressProvince) {
-          this.citySlots[0].values = Object.keys(s[this.addressProvince])
-          this.popupVisible2 = true
-        } else {
-          Toast({
-            message: '请选择省份',
-            position: 'bottom',
-            duration: 1000
-          })
-        }
-      },
-      touchXian () {
-        if (this.addressCity ) {
-          let xianObj = s[this.addressProvince][this.addressCity]
-          this.xianSlots[0].values = Object.keys(xianObj)
-          this.popupVisible3 = true
-        } else {
-          Toast({
-            message: '请选择市',
-            position: 'bottom',
-            duration: 1000
-          })
-        }
-      },
-      touchStreet () {
-        if (this.addressXian) {
-          let streetObj = s[this.addressProvince][this.addressCity][this.addressXian]
-          this.streetSlots[0].values = streetObj
-          this.popupVisible4 = true
-        } else {
-          Toast({
-            message: '请选择区/县',
-            position: 'bottom',
-            duration: 1000
-          })          
-        }
-      },
-      onCityChange(p, v) {
-        this.addressCity = v[0]
-        this.addressXian = ''
-        this.addressStreet = ''        
-      },
-      onXianChange(p, v) {
-        this.addressXian = v[0]
-        this.addressStreet = ''
-      },
-      onStreetChange(picker, values){
-        this.addressStreet = values[0]
-      },
-    },
-    watch: {
-
-    },
-    created(){
-     
-    },
-    mounted(){
-      if (this.$route.params.address_info) {
-        this.addForm = this.$route.params.address_info
-        let arr = this.addForm.cneeAddress.split('@')
-        this.addressProvince = arr[0]
-        this.addressCity = arr[1]
-        this.addressXian = arr[2]
-        this.addressStreet = arr[3]
-        this.addressDetail = arr[4]
-        this.isEdit = true
+    touchXian() {
+      if (this.addressCity) {
+        let xianObj = s[this.addressProvince][this.addressCity];
+        this.xianSlots[0].values = Object.keys(xianObj);
+        this.popupVisible3 = true;
+      } else {
+        Toast({
+          message: "请选择市",
+          position: "bottom",
+          duration: 1000
+        });
       }
+    },
+    touchStreet() {
+      if (this.addressXian) {
+        let streetObj =
+          s[this.addressProvince][this.addressCity][this.addressXian];
+        this.streetSlots[0].values = streetObj;
+        this.popupVisible4 = true;
+      } else {
+        Toast({
+          message: "请选择区/县",
+          position: "bottom",
+          duration: 1000
+        });
+      }
+    },
+    onCityChange(p, v) {
+      this.addressCity = v[0];
+      this.addressXian = "";
+      this.addressStreet = "";
+    },
+    onXianChange(p, v) {
+      this.addressXian = v[0];
+      this.addressStreet = "";
+    },
+    onStreetChange(picker, values) {
+      this.addressStreet = values[0];
+    }
+  },
+  watch: {},
+  created() {},
+  mounted() {
+    if (this.$route.params.address_info) {
+      this.addForm = this.$route.params.address_info;
+      let arr = this.addForm.cneeAddress.split("@");
+      this.addressProvince = arr[0];
+      this.addressCity = arr[1];
+      this.addressXian = arr[2];
+      this.addressStreet = arr[3];
+      this.addressDetail = arr[4];
+      this.isEdit = true;
     }
   }
+};
 </script>
