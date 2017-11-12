@@ -53,7 +53,7 @@
 			<mt-field v-model="else_value[index]" :placeholder="'请输入译文' " 
 				style="margin-bottom: 10px;font-size:12px"></mt-field>
 		</template>				
-    		<div v-html="ebay.description">
+    		<div v-html="ebay.description" class="desc-wrap">
 
         </div>
         <mt-cell title=" 商品介绍 " style="font-size:14px;margin-top:10px;"></mt-cell>
@@ -160,16 +160,17 @@ export default {
         Indicator.open({
           spinnerType: 'fading-circle'
         })        
-        let itemId = 'v1|' + this.currentValue + '|0'
+        let itemId = this.currentValue
         reqEbayGoods({itemId}).then((res) => {
           console.log(res)
           if (res.data.errors) {
             this.show_tip = true
           } else if (res.data.itemId) {
             this.ebay = res.data
-
             this.flag = true
-            console.log('ebay', this.ebay)
+            // console.log('ebay', Object.assign({} ,this.ebay))
+
+
             this.pro_info.productIcon = this.ebay.image.imageUrl
             this.pro_info.productUsd = this.ebay.price.value
             let imgArr = []
@@ -246,6 +247,11 @@ export default {
 .container{
   .search{
     flex: 1 0 auto;
+  }
+}
+.desc-wrap {
+  table, img {
+    width: 100%!important;
   }
 }
 .no-product{

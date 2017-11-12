@@ -40,7 +40,8 @@ export const reqEbayGoods = params => { return axios.get(`/sell/ebay/getGoodsInf
 
 //微信授权
 export const reqWechatAuth = params => { return axios.get(`/sell/wechat/authorize`, { params: params }) }
-
+//获取授权链接
+export const reqWechatUrl = params => { return axios.get(`/sell/wechat/authorizeUrl`, { params: params}) }
 //微信分享
 export const reqWechatSignature = params => { return axios.get(`/sell/wechat/signature`, { params: params }) }
 //openid获取信息

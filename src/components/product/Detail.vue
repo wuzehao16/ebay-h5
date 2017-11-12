@@ -86,7 +86,8 @@
 </template>
 
 <script>
-import {reqProductDetail, reqAddToShoppingCart, reqShoppingCartList, reqWechatUserInfo} from '../../api'
+import {reqProductDetail, reqAddToShoppingCart, reqWechatUrl,
+	reqShoppingCartList, reqWechatUserInfo} from '../../api'
 import {Toast} from 'mint-ui'
 import util from '../../api/util'
 export default {
@@ -109,7 +110,14 @@ export default {
 	  let user = JSON.parse( sessionStorage.getItem('ebay-app') )
 	  let openid = to.query.wxOpenid
 	  if (!user && !openid) {
-	  	 location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx7b2ea819030c5b48&redirect_uri=http%3A%2F%2Ffks3989.free.ngrok.cc%2Fsell%2Fwechat%2FuserInfo&response_type=code&scope=snsapi_userinfo&state=http%3A%2F%2Flocalhost%3A8089' + to.path
+		let returnUrl = location.protocol + '//' + location.host + to.path	 
+		reqWechatUrl({returnUrl}).then((res) => {
+			if (res.data.code == 0) {
+				location.href = res.data.data
+			} else {
+				next('/product/list')
+			}
+		}).catch((err) => {next('/product/list')})
 	  } else if (!user && openid) {
 	    reqWechatUserInfo({openid}).then((res) => {
 	        console.log(res)
