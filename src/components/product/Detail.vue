@@ -67,7 +67,10 @@
 		<!-- tab-container -->
 		<mt-tab-container v-model="selected" class="tab-container">
 			<mt-tab-container-item id="1">
-				<div class="container1">{{productInfo.productMemo ||'暂无商品介绍'}}</div>
+				<div class="container1">
+					
+					<p >{{productInfo.productMemo ||'暂无商品介绍'}}</p>
+					</div>
 			</mt-tab-container-item>
 			<mt-tab-container-item id="2">
 				<div class="detail" id="wareStandard" style="display: block;">
@@ -131,7 +134,7 @@ export default {
 	    }).catch((err) => {}) 	  	
 	  } else {
 	  	next()
-	  }
+		}
   },
   methods: {
   	addToCart() {
@@ -240,7 +243,7 @@ $bg-red : #f23030;
 	}
 }
 .container {
-	margin-bottom: 42px;
+	margin-bottom: 52px;
 	.addCart{
 		display: flex;
 		div{
@@ -423,6 +426,10 @@ dl {
 			line-height: 22px;
 			padding: 10px;
 			color: #999;
+			margin-bottom: 50px;
+			p{
+				height: 100%;
+			}
 		}
 		.detail{
 			position: relative;

@@ -46,9 +46,9 @@
       placeholder="请输入商品价格" 
 			style="margin-bottom: 10px;"></mt-field>
 
-		<template v-for="(item, index) in ebay.localizedAspects">
-			<mt-cell :title=" item.name " style="font-size:14px"></mt-cell>
-			<mt-field v-model="else_key[index]" :placeholder="'请输入译文'" style="font-size:12px"></mt-field>
+		<template v-for="(item, index) in ebay.localizedAspects" >
+			<mt-cell :title=" item.name " style="font-size:14px" :id="'id'+index"></mt-cell>
+			<mt-field v-model="else_key[index]" :placeholder="'请输入译文'" style="font-size:12px" :id="'input'+index"></mt-field>
 			<mt-cell :title=" item.value" style="font-size:14px"></mt-cell>
 			<mt-field v-model="else_value[index]" :placeholder="'请输入译文' " 
 				style="margin-bottom: 10px;font-size:12px"></mt-field>
@@ -90,7 +90,8 @@ export default {
         ebayItemid: '',
         auditStatus: '0',//待审核
         productStatus: '下架',
-        userWxOpenid: JSON.parse( sessionStorage.getItem('ebay-app') ).userWxOpenid,
+        // userWxOpenid: JSON.parse( sessionStorage.getItem('ebay-app') ).userWxOpenid,
+        userWxOpenid:1,
         productNane: '',
         productPic: '',//以@连接
         productPrice: '',//post时要求number类型
@@ -241,6 +242,21 @@ export default {
     }
   }
 }
+        //获取页面高度
+        var clientHeight = document.body.clientHeight;
+        //设置监听聚焦事件
+        var focusElem;
+        document.body.addEventListener("focus", function(e) {
+            focusElem = e.target
+        }, true);
+        //设置监听窗口变化时间
+        window.addEventListener("resize", function() {
+          console.log(document.body.clientHeight)
+            if(focusElem&& document.body.clientHeight < clientHeight) {
+                //使用scrollIntoView方法来控制输入框
+                focusElem.scrollIntoView(false);
+            }
+        });
 </script>
 
 <style lang='scss'>
