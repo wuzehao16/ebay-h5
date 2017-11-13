@@ -50,7 +50,7 @@ export default {
         });
         return false;
       }
-      if (!/^1[3|4|5|8][0-9]\d{4,8}$/.test(this.editForm.userPhone)) {
+      if (!/^1[3|4|5|8]\d{9}$/.test(this.editForm.userPhone)) {
         Toast({
           message: "请输入正确手机号",
           position: "top"
