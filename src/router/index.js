@@ -22,6 +22,7 @@ const Register = r => require.ensure([], () => r(require('@/components/user/regi
 const PorductDetail = r => require.ensure([], () => r(require('@/components/product/detail')), 'PorductDetail')
 const AuthWechat = r => require.ensure([], () => r(require('@/components/auth/Auth')), 'AuthWechat')
 const Shoppingcart = r => require.ensure([], () => r(require('@/components/order/Shoppingcart')), 'Shoppingcart')
+const PcPreviewGoods = r => require.ensure([], () => r(require('@/components/popularize/PreviewGoods')), 'PcPreviewGoods')
 
 Vue.use(Router)
 
@@ -41,6 +42,11 @@ let router = new Router({
       path: '/popularize/add',
       name: 'AddGoods',
       component: AddGoods
+    },
+    {
+      path: '/popularize/pc_preview/:id',
+      name: 'PcPreviewGoods',
+      component: PcPreviewGoods
     },
     {
       path: '/order/address',
@@ -125,34 +131,38 @@ import {reqWechatUserInfo} from '../api'
 // import store from '@/store'
 import {baseUrl} from '../api'
 router.beforeEach((to, from, next) => {
-  let user = JSON.parse( sessionStorage.getItem('ebay-app') )
-  let openid = to.query.wxOpenid
 
-  if (!user && !openid) {//未申请授权
-    let returnUrl = location.protocol + "//" + location.host
-          + (to.path || '/product/list')
-    console.log('returnUrl:', returnUrl)
-
-    let aa = baseUrl + '/sell/wechat/authorize?returnUrl=' + returnUrl 
-    console.log(aa)
-    window.location.href = aa
-
-  } else if (!user && openid) {//已完成授权但未从后台获取已授权用户的信息
-    console.log(22222)
-    reqWechatUserInfo({openid}).then((res) => {
-        console.log(res)
-      if (res.data.code == 0) {
-        let obj = res.data.data
-        sessionStorage.setItem('ebay-app', JSON.stringify(obj))
-        next()
-      } else {
-        next('/product/list')
-      }
-    }).catch((err) => {})    
-  } else {
+  if (to.name == 'PcPreviewGoods') {
     next()
-  }
+  } else {
+    let user = JSON.parse( sessionStorage.getItem('ebay-app') )
+    let openid = to.query.wxOpenid
 
+    if (!user && !openid) {//未申请授权
+      let returnUrl = location.protocol + "//" + location.host
+            + (to.path || '/product/list')
+      console.log('returnUrl:', returnUrl)
+
+      let aa = baseUrl + '/sell/wechat/authorize?returnUrl=' + returnUrl 
+      console.log(aa)
+      window.location.href = aa
+
+    } else if (!user && openid) {//已完成授权但未从后台获取已授权用户的信息
+      console.log(22222)
+      reqWechatUserInfo({openid}).then((res) => {
+          console.log(res)
+        if (res.data.code == 0) {
+          let obj = res.data.data
+          sessionStorage.setItem('ebay-app', JSON.stringify(obj))
+          next()
+        } else {
+          next('/product/list')
+        }
+      }).catch((err) => {})    
+    } else {
+      next()
+    }    
+  }
 
 })
 

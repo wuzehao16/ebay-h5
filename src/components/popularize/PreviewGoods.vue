@@ -12,20 +12,6 @@
 	  </mt-swipe-item>
 	
 	</mt-swipe>
-	<mt-tabbar :fixed="true" class="addCart">
-	<template v-if="!isPreview">
-		<div class="cart">
-			<i class="fa fa-cart-plus" @click="toCart"></i>
-			<!-- <mt-badge type="danger" size="small" class="num">10</mt-badge> -->
-			<span class="num">{{ pro_in_cart < 100 ? pro_in_cart : '99+' }}</span>
-		</div>
-	  <mt-button type="danger" @click="addToCart">加入购物车</mt-button>
-	  <mt-button type="primary"
-	  	@click="buyIt">立即购买</mt-button>
-	</template>
-	  <mt-button v-if="isPreview" type="primary" size="large" 
-	  	@click="backList">返回我的发布</mt-button>
-	</mt-tabbar>
 	<mt-cell :title="productInfo.name" label="" style="padding-top:10px">
 	  <span class="love-it" @click="collected = !collected"><i class="iconfont" :class="{'icon-collect': !collected, 'icon-collect-color': collected}"></i><br/>收藏</span>
 	</mt-cell>
@@ -67,10 +53,7 @@
 		<!-- tab-container -->
 		<mt-tab-container v-model="selected" class="tab-container">
 			<mt-tab-container-item id="1">
-				<div class="container1">
-					
-					<p >{{productInfo.productMemo ||'暂无商品介绍'}}</p>
-					</div>
+				<div class="container1">{{productInfo.productMemo ||'暂无商品介绍'}}</div>
 			</mt-tab-container-item>
 			<mt-tab-container-item id="2">
 				<div class="detail" id="wareStandard" style="display: block;">
@@ -89,10 +72,8 @@
 </template>
 
 <script>
-import {reqProductDetail, reqAddToShoppingCart, reqWechatUrl,
-	reqShoppingCartList, reqWechatUserInfo} from '../../api'
-import {Toast} from 'mint-ui'
-import util from '../../api/util'
+//本页面专为PC端预览、审核而用
+import {reqProductDetail} from '../../api'
 export default {
   data () {
   	return {
@@ -104,116 +85,17 @@ export default {
   		amount: 1,
   		collected: false,
   		items: [],
-  		isPreview: false,
-  		pro_in_cart: 0
   	}
-  },
-  beforeRouteEnter (to, from, next) {
-  	console.log(to)
-	  let user = JSON.parse( sessionStorage.getItem('ebay-app') )
-	  let openid = to.query.wxOpenid
-	  if (!user && !openid) {
-		let returnUrl = location.protocol + '//' + location.host + to.path	 
-		reqWechatUrl({returnUrl}).then((res) => {
-			if (res.data.code == 0) {
-				location.href = res.data.data
-			} else {
-				next('/product/list')
-			}
-		}).catch((err) => {next('/product/list')})
-	  } else if (!user && openid) {
-	    reqWechatUserInfo({openid}).then((res) => {
-	        console.log(res)
-	      if (res.data.code == 0) {
-	        let obj = res.data.data
-	        sessionStorage.setItem('ebay-app', JSON.stringify(obj))
-	        next()
-	      } else {
-	        next('/product/list')
-	      }
-	    }).catch((err) => {}) 	  	
-	  } else {
-	  	next()
-		}
-  },
-  methods: {
-  	addToCart() {
-  		let userId = JSON.parse( sessionStorage.getItem('ebay-app') ).userWxOpenid
-  		let goodCarForm = {
-  			productId: this.productInfo.id,
-  			productName: this.productInfo.name,
-  			productPrice: this.productInfo.price,
-  			productQuantity: this.amount,
-  			productIcon: this.productInfo.icon  			
-  		}
-  		reqAddToShoppingCart({userId, goodCarForm}).then((res) => {
-			if (res.data.code == 0 && res.data.msg == '成功') {
-				Toast('已加入购物车')
-				this.pro_in_cart++
-			} else {
-				Toast(res.data.msg)
-			}
-  		})
-  	},
-  	selectSize(o) {
-  		this.activeSize = o
-  	},
-  	selectColor(o) {
-  		this.activeColor = o
-  	},
-  	buyIt() {
-  		this.items.push({
-  			productId: this.productInfo.id,
-  			productName: this.productInfo.name,
-  			productPrice: this.productInfo.price,
-  			productQuantity: this.amount,
-  			productIcon: this.productInfo.icon
-  		})
-  		let order_info = {
-  			items: this.items
-  		}
-  		sessionStorage.setItem('order_info', JSON.stringify(order_info))
-  		this.$router.push({
-  			name: 'SettleOrder'
-  		})
-  	},
-  	backList() {
-  		this.$router.push('/popularize/list')
-		},
-		toCart(){
-			this.$router.push('/order/shoppingcart')
-		}
   },
   mounted() {
-  	if (this.$route.query.pc_preview) {
-  		this.isPreview = true
-  	}
-
-  	if (this.$route.params.id || this.isPreview) {
-  		let productId = this.$route.params.id || this.$route.query.pc_preview
+  	if (this.$route.params.id) {
+  		let productId = this.$route.params.id
 	  	reqProductDetail({productId}).then((res) => {
 			this.productInfo = res.data.data
-		//微信分享
-		let shareUrl = location.protocol + "//" + location.host 
-				+ '/product/detail/' + productId
-
-	  	this.wxShare(this.productInfo.name, this.productInfo.productMemo, shareUrl, this.productInfo.icon)
-	  	})
+		})
   	} else {
   		this.$router.push('/product/list')
   	}
-  	if (this.$route.params.isPreview) {
-  		this.isPreview = this.$route.params.isPreview
-  	}
-
-  	//获取购物车中商品总数
-  	let userId = JSON.parse( sessionStorage.getItem('ebay-app') ).userWxOpenid
-	reqShoppingCartList({userId}).then((res) => {
-		let added_list = res.data.data
-		for (let i of added_list ) {
-			this.pro_in_cart += i.productQuantity
-		}
-	})
   }
 }
 </script>
@@ -243,7 +125,7 @@ $bg-red : #f23030;
 	}
 }
 .container {
-	margin-bottom: 52px;
+	margin-bottom: 42px;
 	.addCart{
 		display: flex;
 		div{
@@ -303,7 +185,7 @@ $bg-red : #f23030;
 		border-bottom-left-radius: 5px;
 	}
 	.increase{
-				border-top-right-radius: 5px;
+		border-top-right-radius: 5px;
 		border-bottom-right-radius: 5px;
 	}
 	.f{
@@ -427,10 +309,6 @@ dl {
 			line-height: 22px;
 			padding: 10px;
 			color: #999;
-			margin-bottom: 50px;
-			p{
-				height: 100%;
-			}
 		}
 		.detail{
 			position: relative;
