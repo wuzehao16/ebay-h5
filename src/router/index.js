@@ -142,9 +142,8 @@ router.beforeEach((to, from, next) => {
       let returnUrl = location.protocol + "//" + location.host
             + (to.path || '/product/list')
       console.log('returnUrl:', returnUrl)
-
+      returnUrl = window.encodeURIComponent(returnUrl)
       let aa = baseUrl + '/sell/wechat/authorize?returnUrl=' + returnUrl 
-      console.log(aa)
       window.location.href = aa
 
     } else if (!user && openid) {//已完成授权但未从后台获取已授权用户的信息
