@@ -34,7 +34,7 @@
 </div>
 
 <div class="no-data no-collect" v-if='tip_flag'>
-	<i class="fa fa-cart-plus"></i><br/>
+	<i class="iconfont icon-cart"></i><br/>
 	<span>您购物车中没有商品</span>
 </div>
 
@@ -86,7 +86,7 @@ export default {
       tip_flag: false,
       tip_flag2: false,
       cart_list: [],
-      userId: JSON.parse( sessionStorage.getItem('ebay-app') ).userWxOpenid
+      userId: ''
   	}
   },
   methods: {
@@ -183,7 +183,10 @@ export default {
   	}
   },
   mounted() {
-  	this.getList()
+  	this.userId = JSON.parse( sessionStorage.getItem('ebay-app') ).userWxOpenid
+  	if (this.userId) {
+  		this.getList()
+  	}
   }
 }
 </script>

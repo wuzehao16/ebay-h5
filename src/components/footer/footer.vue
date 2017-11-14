@@ -3,25 +3,25 @@
     <ul class="tab3">
       <li>
         <router-link class="col" :to="{name: 'ProductList'}">
-          <i class="fa fa-home"></i>
+          <i class="iconfont icon-home"></i>
         <span class="nd-p">首页</span>
         </router-link>
       </li>
       <li>
         <router-link class="col" :to="{name: 'Shoppingcart'}" >
-          <i class="fa fa-cart-plus"></i>
+          <i class="iconfont icon-cart"></i>
         <span class="nd-p"> 购物车</span>
         </router-link>
       </li>
       <li>
         <router-link class="col " :to="{name: 'PopularizeList'} ">
-          <i class="fa fa-share-alt"></i>
+          <i class="iconfont icon-share"></i>
           <span class="nd-p">我要推广</span>
         </router-link>
       </li>
       <li>
         <router-link class="col" :to="{name: 'UserCenter'}" >
-          <i class="fa fa-user"></i>
+          <i class="iconfont icon-user"></i>
         <span class="nd-p"> 会员中心</span>
         </router-link>
       </li>

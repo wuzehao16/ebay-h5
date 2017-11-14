@@ -2,7 +2,11 @@
 
   <div id="app">
     <!-- <img src="./assets/logo.png"> -->
-    <router-view/>
+    <transition name="slide-left">
+    <keep-alive>
+      <router-view class="child-view"></router-view>
+    </keep-alive>
+    </transition>
   </div>
 </template>
 
@@ -24,6 +28,30 @@ $ebay-blue :#0099f7;
   background-color: #EEEEEE;
   -webkit-overflow-scrolling: touch;
 }
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0
+}
+.child-view {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transition: all .9s cubic-bezier(.55,0,.1,1);
+}
+.slide-left-enter, .slide-right-leave-active {
+  opacity: 0;
+  -webkit-transform: translate(30px, 0);
+  transform: translate(30px, 0);
+}
+.slide-left-leave-active, .slide-right-enter {
+  opacity: 0;
+  -webkit-transform: translate(-30px, 0);
+  transform: translate(-30px, 0);
+}
+
 .clearfix:after{
   content:"";
   height:0;

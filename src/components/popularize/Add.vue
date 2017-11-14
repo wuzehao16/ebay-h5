@@ -22,7 +22,7 @@
 
 <div class="goods-container" v-if="flag">
 	<mt-swipe :auto="5000" :speed="0" class="pre-banner">
-	  <mt-swipe-item v-for="i in pro_info.productPic.split('@')"> 
+	  <mt-swipe-item v-for="i in pro_info.productPic.split('@')" :key="i"> 
       <!-- <div style="display:table;">
          <div  style="display: table-cell;
     vertical-align: middle;

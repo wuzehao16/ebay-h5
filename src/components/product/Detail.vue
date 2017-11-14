@@ -15,7 +15,7 @@
 	<mt-tabbar :fixed="true" class="addCart">
 	<template v-if="!isPreview">
 		<div class="cart">
-			<i class="fa fa-cart-plus" @click="toCart"></i>
+			<i class="iconfont icon-cart" @click="toCart" style="font-size: 30px;"></i>
 			<!-- <mt-badge type="danger" size="small" class="num">10</mt-badge> -->
 			<span class="num">{{ pro_in_cart < 100 ? pro_in_cart : '99+' }}</span>
 		</div>

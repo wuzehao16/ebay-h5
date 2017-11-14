@@ -3,12 +3,14 @@
 
 <div class="header" :style="{'background': 'url(' + require('../../assets/back.jpg') + 
 		') no-repeat','background-size': 'cover'}">
+<template v-if="user.userWxPicture">
 	<div :style="{'background': 'url(' + user.userWxPicture + 
 		') no-repeat,url(' + require('../../assets/test.png') + ') no-repeat'}" class="head-pic"></div>
 	<div class="head-r">
 		<h3>你好，{{ user.userWxName }}</h3>
 		<p>会员ID：{{ user.userWxOpenid }}</p>
 	</div>
+</template>
 </div>
 
 <mt-cell is-link title="我的订单" to="/order/list" style="z-index: 100">
@@ -50,9 +52,9 @@
 		<i slot="icon" class="iconfont icon-popularize" style="color:#4caf50;font-size: 10px;margin-left: -3px;"></i>
 	</mt-cell>	
 </template>
-	<mt-cell title="我要下单" is-link to="/product/list">
-		<i slot="icon" class="iconfont icon-go-buy" style="color:#2196f3;"></i>
-	</mt-cell>
+<mt-cell title="我要下单" is-link to="/product/list">
+	<i slot="icon" class="iconfont icon-go-buy" style="color:#2196f3;"></i>
+</mt-cell>
 </div>
 </template>
 
@@ -81,6 +83,7 @@ export default {
       spinnerType: "fading-circle"
     })
   	this.user = JSON.parse(sessionStorage.getItem('ebay-app'))
+  	
   	reqUserInfo({id: this.user.id}).then((res) => {
   		if (res.data.code == 0) {
   			this.user = res.data.data

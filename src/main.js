@@ -8,7 +8,7 @@ import Mint from 'mint-ui'
 import 'mint-ui/lib/style.css'
 // import 'normalize.css'
 import '@/assets/fonts/iconfont.css'
-import '@/assets/fonts/font-awesome.css'
+// import '@/assets/fonts/font-awesome.css'
 import wx from 'weixin-js-sdk'
 Vue.use(Mint)
 
