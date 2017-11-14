@@ -44,7 +44,7 @@
 import {reqProductList} from '../../api'
 import {Indicator} from 'mint-ui'
 import Footer from '@/components/footer/footer'
-import _ from 'lodash'
+import debounce from 'lodash/debounce'
 export default {
   data () {
   	return {
@@ -110,7 +110,7 @@ export default {
         }
       })
     },
-    searchByName: _.debounce(function(){
+    searchByName: debounce(function(){
         this.pro_list = []
         this.filters.page = 0
         this.getProductList()

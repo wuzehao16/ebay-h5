@@ -76,7 +76,7 @@ ul{
   margin: 0;
 }
 .mint-indicator-mask {
-  z-index: 1000;
+  z-index: -1;
 }
 .mint-tab-item-label{
   font-size: 16px;
