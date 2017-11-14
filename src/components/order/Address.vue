@@ -179,7 +179,7 @@ export default {
         });
         return false;
       }
-      if (!/^1[3|4|5|7|8][0-9]\d{4,8}$/.test(this.addForm.cneePhone)) {
+      if (!/^1[3|4|5|7|8]\d{9}$/.test(this.addForm.cneePhone)) {
         Toast({
           message: "请输入正确手机号",
           position: "top"
