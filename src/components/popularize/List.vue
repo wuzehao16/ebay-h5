@@ -83,8 +83,15 @@ export default {
   	}
   },
   activated(){
-    console.log(this.$route)
-    
+    let justAdded = this.$route.params.justAdded
+    if (justAdded) {
+      this.selected = 'wait_audit'
+      if (this.waitedGoods.length != 0) {
+          this.WaitedAuditPage = 0
+          this.waitedGoods = []
+          this.getWaitedList()
+      }
+    }
   },
   methods: {
     goEdit(row) {

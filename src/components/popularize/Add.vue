@@ -84,7 +84,6 @@ export default {
       else_value: [],
       isEdit: false,
       productId: '',
-
       ebay: {},
       pro_info: {
         ebayItemid: '',
@@ -146,8 +145,15 @@ export default {
           let instance = Toast('提审成功')
           setTimeout(() => {
             instance.close();
-            this.$router.push('/popularize/list')
+            this.$router.push({
+                name: 'PopularizeList',
+                params: {
+                    justAdded: true
+                }
+            })
           }, 2000)          
+        } else {
+          Toast(res.data.msg)
         }
       })
     },
