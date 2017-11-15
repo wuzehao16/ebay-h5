@@ -278,7 +278,7 @@ export default {
 }
 
 </script>
-<style lang='scss'>
+<style lang='scss' scoped>
 .container{
   .search{
     flex: 1 0 auto;
@@ -316,5 +316,7 @@ export default {
     background-size: contain!important;
   }
 }
-
+.desc-wrap {
+  overflow-x: scroll;
+}
 </style>

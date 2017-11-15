@@ -58,7 +58,7 @@ $ebay-blue :#0099f7;
 }
 
 .mint-searchbar{
-  background-color: #0099f7;
+  background-color: #0099f7!important;
   height: 42px;
   .mint-searchbar-inner{
     border-radius: 25px;

@@ -198,9 +198,9 @@ $shadow-color: #aaa;
     margin: 10px 0 10px 0;
     box-shadow: 0px 2px 3px rgba(34, 25, 25, 0.2), 0 0 1px $shadow-color, 0 0 1px $shadow-color;
 }
-.mint-tab-item-label{
-	font-size: 16px!important;
-}
+.my-nav{
+  font-size: 16px!important;
+} 
 .mtc {
 	margin: 54px 0 42px 0;
 }
