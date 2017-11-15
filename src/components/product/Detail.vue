@@ -150,6 +150,8 @@ export default {
 			if (res.data.code == 0 && res.data.msg == '成功') {
 				Toast('已加入购物车')
 				this.pro_in_cart++
+				//vuex 更改状态 以便去到购物车会更新
+				this.$store.commit('setCartRefresh')
 			} else {
 				Toast(res.data.msg)
 			}

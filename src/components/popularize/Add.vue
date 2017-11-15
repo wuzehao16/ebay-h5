@@ -98,6 +98,7 @@ export default {
         productMemo:"",
         productUsd: ''
       },
+      pro_info_bak: {}
   	}
   },
   methods: {
@@ -144,7 +145,7 @@ export default {
         if (res.data.code == 0) {
           let instance = Toast('提审成功')
           setTimeout(() => {
-            instance.close();
+            instance.close()
             this.$router.push({
                 name: 'PopularizeList',
                 params: {
@@ -221,7 +222,14 @@ export default {
         deep: true
     }
   },
-  mounted () {
+  activated () {
+    console.log(3252342)
+    this.flag = false
+    this.currentValue = ''
+    this.else_key = []
+    this.else_value = []
+    this.pro_info = Object.assign({}, this.pro_info_bak)
+
     this.productId = this.$route.params.productId
     if (this.productId) {
       this.currentValue = this.$route.params.ebayItemid
@@ -247,8 +255,10 @@ export default {
           }
       })
     }
-  }
-}
+  },
+  mounted() {
+      this.pro_info_bak = Object.assign({}, this.pro_info)
+
         //获取页面高度
         var clientHeight = document.body.clientHeight;
         //设置监听聚焦事件
@@ -264,6 +274,9 @@ export default {
                 focusElem.scrollIntoView(false);
             }
         });
+  }
+}
+
 </script>
 <style lang='scss'>
 .container{

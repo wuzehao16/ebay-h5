@@ -98,18 +98,18 @@ export default {
   },
   methods: {
     getSelected(val) {
-			this.seleceted = val;
-			let that = this;
-			this.radio_value = val.cneeAddress;
-			console.log(val,this.radio_value)
-			setTimeout(function() {
-				that.$router.push({
-					name: "SettleOrder",
-					params: {
-						receiver_info: that.seleceted
-					}
-				});
-			}, 600);
+		this.seleceted = val;
+		let that = this;
+		this.radio_value = val.cneeAddress;
+		console.log(this.seleceted)
+		setTimeout(function() {
+			that.$router.push({
+				name: "SettleOrder",
+				params: {
+					receiver_info: that.seleceted
+				}
+			});
+		}, 600);
     },
     addNew() {
       this.$router.push("/order/address");
@@ -135,6 +135,11 @@ export default {
   },
   mounted() {
 		this.getList()
+  },
+  activated() {
+  	  if (this.$route.params.needRefresh) {
+  	  	this.getList()
+  	  }
   }
-};
+}
 </script>

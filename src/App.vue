@@ -1,5 +1,4 @@
 <template>
-
   <div id="app">
     <!-- <img src="./assets/logo.png"> -->
     <transition name="slide-left">
@@ -10,7 +9,6 @@
     <foot v-if="$store.state.showFoot"></foot>
   </div>
 </template>
-
 <script>
 import Footer from '@/components/footer/footer'
 export default {

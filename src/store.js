@@ -6,7 +6,8 @@ Vue.use(Vuex)
 const state = {
 	count: 1,
 	isLogin: false,
-	showFoot: true
+	showFoot: true,
+	cartNeedRefresh: 'no'
 }
 const mutations = {
 	add(state) {
@@ -14,7 +15,13 @@ const mutations = {
 	},
 	changeLogin(state) {
 		state.isLogin = true
-	}
+	},
+	setCartRefresh(state) {
+		state.cartNeedRefresh = 'need'
+	},
+	resetCartStatus(state) {
+		state.cartNeedRefresh = 'no'
+	}	
 }
 
 export default new Vuex.Store({

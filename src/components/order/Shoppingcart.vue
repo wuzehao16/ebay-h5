@@ -182,6 +182,13 @@ export default {
   	if (this.userId) {
   		this.getList()
   	}
+  },
+  activated() {
+  	if (this.$store.state.cartNeedRefresh == 'need') {
+  		this.getList()
+  		//重置购物车状态
+		this.$store.commit('resetCartStatus')
+  	}
   }
 }
 </script>

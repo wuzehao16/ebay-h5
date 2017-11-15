@@ -97,7 +97,7 @@ export default {
       return (Number.parseFloat(this.goods_all_price) + this.carriage ).toFixed(2)
     }
   },
-  mounted () {
+  activated () {
   	this.order_info = JSON.parse(sessionStorage.getItem('order_info'))
   	if (!this.order_info) {
   		this.$router.push('/product/list')

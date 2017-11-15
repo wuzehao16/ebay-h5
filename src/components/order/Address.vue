@@ -98,7 +98,7 @@
 <script>
 import s from "@/assets/address4.json";
 import { reqAddressCreate, reqAddressDelete } from "../../api";
-import { Toast } from "mint-ui";
+import { Toast, Indicator } from "mint-ui";
 export default {
   name: "address",
   data() {
@@ -159,17 +159,31 @@ export default {
       let obj = {
         id: this.addForm.id,
         isDelete: "Y"
-      };
+      }
+      Indicator.open({
+        spinnerType: 'fading-circle'
+      })      
       reqAddressDelete(obj).then(res => {
-        Toast({
-          message: "删除成功,即将返回",
-          iconClass: "icon icon-success"
-        });
-        let _this = this;
-        setTimeout(function() {
-          _this.$router.push("/order/addresslist");
-        }, 2000);
-      });
+        Indicator.close()
+        if (res.data.code == 0) {
+          Toast({
+            message: "删除成功,即将返回",
+            iconClass: "icon icon-success"
+          })
+          let _this = this
+          setTimeout(function() {
+            _this.$router.push({
+                name: 'AddressList',
+                params: {
+                   needRefresh: true
+                }
+            })
+          }, 2000)  
+        } else {
+          Toast(res.data.msg)
+        }
+
+      }).catch((err) => {})
     },
     validateForm() {
       if (this.addForm.cneeName.match(/^[ ]*$/)) {
@@ -216,16 +230,29 @@ export default {
         this.addressStreet +
         "@" +
         this.addressDetail;
+      Indicator.open({
+        spinnerType: 'fading-circle'
+      })           
       reqAddressCreate(this.addForm).then(res => {
-        let i = Toast({
-          message: "操作成功,即将返回",
-          iconClass: "icon icon-success"
-        });
-        let _this = this;
-        setTimeout(function() {
-          _this.$router.push("/order/addresslist");
-        }, 2000);
-      });
+        Indicator.close()
+        if (res.data.code == 0) {
+          let i = Toast({
+            message: "操作成功,即将返回",
+            iconClass: "icon icon-success"
+          })
+          let _this = this
+          setTimeout(function() {
+            _this.$router.push({
+                name: 'AddressList',
+                params: {
+                   needRefresh: true
+                }
+            })
+          }, 2000)
+        } else {
+          Toast(res.data.msg)
+        }
+      })
     },
     onProvinceChange(picker, values) {
       this.addressProvince = values[0];
@@ -285,9 +312,7 @@ export default {
       this.addressStreet = values[0];
     }
   },
-  watch: {},
-  created() {},
-  mounted() {
+  activated() {
     if (this.$route.params.address_info) {
       this.addForm = this.$route.params.address_info;
       let arr = this.addForm.cneeAddress.split("@");
