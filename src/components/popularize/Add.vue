@@ -136,6 +136,7 @@ export default {
       }
       this.pro_info.productPrice = Number.parseFloat(this.pro_info.productPrice)
       this.isEdit ? this.pro_info.productId = this.productId : ''
+      this.pro_info.productUsd = Number.parseFloat(this.pro_info.productUsd)
       Indicator.open({
         spinnerType: 'fading-circle'
       })
@@ -232,6 +233,7 @@ export default {
             productPrice: p.price,
             productIcon: p.icon,
             items: p.productAttr,
+            productMemo: p.productMemo,
             productUsd: p.productUsd
           }
           for (let i in p.productAttr) {
