@@ -138,7 +138,8 @@ export default {
   },
   methods: {
   	addToCart() {
-  		let userId = JSON.parse( sessionStorage.getItem('ebay-app') ).userWxOpenid
+  		let userId = JSON.parse( sessionStorage.getItem('ebay-app') ).id
+  		// userWxOpenid
   		let goodCarForm = {
   			productId: this.productInfo.id,
   			productName: this.productInfo.name,
@@ -181,12 +182,26 @@ export default {
   	},
   	backList() {
   		this.$router.push('/popularize/list')
-		},
-		toCart(){
-			this.$router.push('/order/shoppingcart')
-		}
+	},
+	toCart(){
+		this.$router.push('/order/shoppingcart')
+	},
+	getCartAmount() {
+	  	//获取购物车中商品总数
+	  	let userId = JSON.parse( sessionStorage.getItem('ebay-app') ).id
+		reqShoppingCartList({userId}).then((res) => {
+			let added_list = res.data.data
+			this.pro_in_cart = 0
+			for (let i of added_list ) {
+				this.pro_in_cart += i.productQuantity
+			}
+		})		
+	}
   },
   mounted() {
+  	this.getCartAmount()
+  },
+  activated() {
   	if (this.$route.query.pc_preview) {
   		this.isPreview = true
   	}
@@ -207,15 +222,10 @@ export default {
   	if (this.$route.params.isPreview) {
   		this.isPreview = this.$route.params.isPreview
   	}
-
-  	//获取购物车中商品总数
-  	let userId = JSON.parse( sessionStorage.getItem('ebay-app') ).userWxOpenid
-	reqShoppingCartList({userId}).then((res) => {
-		let added_list = res.data.data
-		for (let i of added_list ) {
-			this.pro_in_cart += i.productQuantity
-		}
-	})
+  	if (this.$store.state.cartAmount == 'changed') {
+  		this.$store.commit('resetCartAmountFlag')
+  		this.getCartAmount()
+  	}	
   }
 }
 </script>

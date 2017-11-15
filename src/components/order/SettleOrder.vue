@@ -1,5 +1,6 @@
 <template>
 <div class="container">	
+<div class="c2">
 <mt-cell class="address" >
 	<div slot="title" @click="chooseAddress" class="receiver">
 		<template v-if="receiver_info.name">
@@ -34,7 +35,7 @@
 <mt-button size="large" @click="submitOrder">确认订单</mt-button>
 </div>
 
-
+</div>
 </div>
 </template>
 
@@ -151,7 +152,10 @@ $red-color: #ef4f4f;
 }
 .container{
     background: #EEEEEE;
-    height: 100%;	
+    height: 100%;
+}
+.c2 {
+    margin-bottom: 60px;
 }
 .order-container {
     padding: 10px 0 10px 80px;

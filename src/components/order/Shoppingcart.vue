@@ -92,8 +92,9 @@ export default {
   			let productId = val  + ''//string
 			reqCartDelete({productId, userId: this.userId}).then((res) => {
 				console.log(res)
-				if (res.data.msg = '成功') {
+				if (res.data.msg == '成功') {
 					this.getList()
+					this.$store.commit('changeCartAmount')
 				}
 			})
 		}).catch((err) => {
@@ -133,13 +134,16 @@ export default {
   	getList() {
 		reqShoppingCartList({userId: this.userId, size: 100}).then((res) => {
 			this.cart_list = res.data.data
+			this.all_pro = []
 			for (let i of res.data.data ) {
 				this.all_pro.push(i.productId)
 			}
 
 			if (this.all_pro.length == 0) {
 				this.tip_flag = true
+				this.tip_flag2 = false
 			} else {
+				this.tip_flag = false
 				this.tip_flag2 = true
 			}
 		})  		
@@ -178,7 +182,7 @@ export default {
   	}
   },
   mounted() {
-  	this.userId = JSON.parse( sessionStorage.getItem('ebay-app') ).userWxOpenid
+  	this.userId = JSON.parse( sessionStorage.getItem('ebay-app') ).id
   	if (this.userId) {
   		this.getList()
   	}
