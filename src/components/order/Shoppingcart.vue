@@ -30,36 +30,38 @@
 	  	</div>
 		</div>
 	</div>
-</mt-cell-swipe >
+	</mt-cell-swipe >
 </div>
 
 <div class="no-data no-collect" v-if='tip_flag'>
 	<i class="iconfont icon-cart"></i><br/>
 	<span>您购物车中没有商品</span>
 </div>
-
-<mt-cell class="cal-box" v-if='tip_flag2'>
-	<div slot="title">
-		<div class="el-wrap">
-			<div class="check-box show-label">
-				<mt-checklist
-				  v-model="check_all"
-				  :options="check_all_value">
-				</mt-checklist>
+<div class="foot-cart">
+	<mt-cell class="cal-box" v-if='tip_flag2'>
+		<div slot="title">
+			<div class="el-wrap">
+				<div class="check-box show-label">
+					<mt-checklist
+					  v-model="check_all"
+					  :options="check_all_value">
+					</mt-checklist>
+				</div>
 			</div>
 		</div>
-	</div>
-	<div class="bt-total">
-		<div>
-			<span>总计：<em class="price">￥{{ proTotal().sumPrice }}</em>&nbsp;&nbsp;</span>
-			<span>不含运费，已优惠￥0.00</span>
+		<div class="bt-total">
+			<div>
+				<span>总计：<em class="price">￥{{ proTotal.sumPrice }}</em>
+				&nbsp;</span>
+				<span>不含运费，已优惠￥0.00</span>
+			</div>
+			<mt-button type="primary" @click="goSettle"
+			style="font-size:14px;height:56px;border-radius:0;width:200px" :disabled="checked_pro.length == 0">
+			去结算（{{ proTotal.sumAmount > 99? '99+' :proTotal.sumAmount }}件）</mt-button>
 		</div>
-		<mt-button type="primary" @click="goSettle"
-		style="font-size:14px;height:56px;border-radius:0;width:200px" :disabled="checked_pro.length == 0">
-		去结算（{{ proTotal().sumAmount > 99? '99+' :proTotal().sumAmount }}件）</mt-button>
-	</div>
+	</mt-cell>
+</div>
 
-</mt-cell>
 
 </div>	
 </template>
@@ -82,6 +84,20 @@ export default {
       tip_flag2: false,
       cart_list: [],
       userId: ''
+  	}
+  },
+  computed: {
+  	proTotal() {
+		let sumAmount = 0, sumPrice = 0
+
+  		for (let i of this.cart_list) {
+  			if (this.checked_pro.includes(i.productId)) {
+  				sumAmount += i.productQuantity
+  				sumPrice += i.productPrice * i.productQuantity
+  			}
+  		}
+  		sumPrice = sumPrice.toFixed(2)
+		return {sumAmount, sumPrice}  		
   	}
   },
   methods: {
@@ -107,17 +123,6 @@ export default {
   			this.checked_pro.push(c.productId)
   		}
   	},
-  	proTotal() {
-		let sumAmount = 0, sumPrice = 0
-  		for (let i of this.cart_list) {
-  			if (this.checked_pro.includes(i.productId)) {
-  				sumAmount += i.productQuantity
-  				sumPrice += i.productPrice * i.productQuantity
-  			}
-  		}
-  		sumPrice = sumPrice.toFixed(2)
-  		return {sumAmount, sumPrice}
-  	},
   	goSettle() {
   		let items = []
   		for (let i of this.cart_list) {
@@ -138,7 +143,6 @@ export default {
 			for (let i of res.data.data ) {
 				this.all_pro.push(i.productId)
 			}
-
 			if (this.all_pro.length == 0) {
 				this.tip_flag = true
 				this.tip_flag2 = false
@@ -214,8 +218,13 @@ export default {
 		margin-bottom: 10px;
 	}
 }
+.foot-cart {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+}
 .cal-box {
-	position: fixed!important;
+	position: absolute;
 	bottom: 50px!important;
 	width: 100%;
 	font-size: 14px;
@@ -225,13 +234,6 @@ export default {
 		>div:nth-child(1) {
 			float: left;
 		}
-		>div{
-			float: right;
-		}
-		> div:nth-child(2) {
-			background: gray;
-			height: 100%;
-		}
 		.mint-checkbox-label{
 			font-size: 11px;
 			margin-left: 1px;
@@ -240,7 +242,30 @@ export default {
 	.mint-cell-wrapper{
 		padding-right: 0;
 	}
-
+	.bt-total{
+		display: flex;
+		div{
+			flex: 0 0 180px;
+			margin-top:6px;
+			span{
+				display: block;
+				text-align:right;
+				float: right;
+			}
+			span:nth-child(1){
+				padding-top:10px;
+			}
+			span:nth-child(2){
+				font-size:12px;
+				padding-top:4px;
+				padding-right:10px;
+			}
+		}
+		.price{
+			font-style: normal;
+			color: #CC0505;
+		}
+	}
 }
 .show-label {
 	.mint-checkbox-label{
@@ -356,28 +381,5 @@ export default {
     bottom: 16px;
   }
 }
-.bt-total{
-	display: flex;
-	div{
-		flex: 0 0 180px;
-		margin-top:6px;
-		span{
-			display: block;
-			text-align:right;
-			float: right;
-		}
-		span:nth-child(1){
-			padding-top:10px;
-		}
-		span:nth-child(2){
-			font-size:12px;
-			padding-top:4px;
-			padding-right:10px;
-		}
-	}
-	.price{
-		font-style:normal;
-		color:red;
-	}
-}
+
 </style>
