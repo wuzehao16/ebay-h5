@@ -14,42 +14,60 @@
 	        </div>
 	    </div>
 	</a>
-	<p class='w-tip'>当前零钱余额{{ balance }}元，<i @click="amount = '' + balance">全部提现</i></p>
+	<p class='w-tip'>当前零钱余额{{ user.userBalance }}元，<i @click="amount = '' + user.userBalance">全部提现</i></p>
 	<mt-button type="default" size="large" class='confirm' @click="submit">确认</mt-button>
 	<div class="w-tip">2小时内到账</div>
 </div>
 </template>
 
 <script>
+import {reqUserInfo} from '../../api'
 import { Toast } from 'mint-ui'
 export default {
   data () {
   	return {
   	  amount: '',
-  	  balance: 789.99
+  	  user: {
+  	  	userBalance: 0
+  	  }
   	}
   },
   methods: {
   	submit () {
-  		if(Number.parseInt(this.amount) > Number.parseInt(this.balance)) {
+  		if (this.amount == '') {
+  			Toast({
+  				message: "请输入提现金额!",
+  				position: 'bottom'
+  			})
+  			return false
+  		}
+  		if(Number.parseInt(this.amount) > Number.parseInt(this.user.userBalance)) {
 			Toast({
 			  message: '提现金额不能大于余额！',
-			  position: 'bottom',
-			  duration: 3000
-			})  			
-  		} else {
-  			if(this.amount) {
-  				let i = Toast({
-				  message: '已发起提现',
-				  iconClass: 'icon icon-success'
-				})
-				let _this = this
-				setTimeout(() => {
-					i.close()
-					_this.$router.push("/user/usercenter")
-				}, 2000)
-  			}
-  		}
+			  position: 'bottom'
+			})
+			return false		
+  		}  
+		if(this.amount) {
+			let i = Toast({
+			  message: '已发起提现',
+			  position: 'bottom'
+			})
+			setTimeout(() => {
+				i.close()
+				this.$router.push("/user/usercenter")
+			}, 2000)
+		}
+  		
+  	},
+  	getNewInfo (id) {
+	  	reqUserInfo({id}).then((res) => {
+	  		if (res.data.code == 0) {
+	  			this.user = res.data.data
+	  		} else {
+	  			Toast(res.data.msg)
+	  		}
+	  	}).catch((err) => {})  		
   	}
   },
   watch: {
@@ -64,6 +82,14 @@ export default {
 	    //只能输入两个小数
 	    this.amount = this.amount.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3')
   	}
+  },
+  mounted() {
+  	let id = JSON.parse( sessionStorage.getItem('ebay-app') ).id
+  	if (id) {
+  		this.getNewInfo(id)
+  	} else {
+  		this.$router.push('/product/list')
+  	}
   }
 }	
 </script>
@@ -74,6 +100,7 @@ export default {
 	background: #fff;
 	text-align: center;
 	padding: 40px;
+	box-sizing: border-box;
 	.title {
 		padding: 20px;
 		font-size: 30px;

@@ -128,9 +128,14 @@ let router = new Router({
 
 
 import {reqWechatUserInfo} from '../api'
-// import store from '@/store'
+import store from '@/store'
 import {baseUrl} from '../api'
 router.beforeEach((to, from, next) => {
+    if (['PopularizeList', 'AddGoods'].includes(to.name)) {
+        store.state.showFoot = false
+    } else {
+        store.state.showFoot = true
+    }
 
   if (to.name == 'PcPreviewGoods') {
     next()
@@ -162,6 +167,16 @@ router.beforeEach((to, from, next) => {
       next()
     }    
   }
+
+
+
+       /*   let obj = {
+            id: '20',
+            userWxOpenid: 'oyNDcwRQUAv0Oahba6SUlXLwobgw'
+          }
+          sessionStorage.setItem('ebay-app', JSON.stringify(obj))
+          next()
+*/
 
 })
 

@@ -48,13 +48,13 @@
 	<mt-cell title="我要提现" is-link to="/user/withdraw">
 		<i slot="icon" class="iconfont icon-withdraw" style="color:#ff9800;"></i>
 	</mt-cell>
-	<mt-cell title="我要推广" is-link to="/popularize/list">
+<!-- 	<mt-cell title="我要推广" is-link to="/popularize/list">
 		<i slot="icon" class="iconfont icon-popularize" style="color:#4caf50;font-size: 10px;margin-left: -3px;"></i>
-	</mt-cell>	
+	</mt-cell> -->	
 </template>
-<mt-cell title="我要下单" is-link to="/product/list">
+<!-- <mt-cell title="我要下单" is-link to="/product/list">
 	<i slot="icon" class="iconfont icon-go-buy" style="color:#2196f3;"></i>
-</mt-cell>
+</mt-cell> -->
 </div>
 </template>
 

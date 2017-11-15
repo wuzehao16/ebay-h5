@@ -36,14 +36,12 @@
   <div class="to-top" @click="toTop">
     <i class="iconfont icon-top"></i>
   </div>
-    <bottom></bottom>
 </div>
 </template>
 
 <script>
 import {reqProductList} from '../../api'
 import {Indicator} from 'mint-ui'
-import Footer from '@/components/footer/footer'
 import debounce from 'lodash/debounce'
 export default {
   data () {
@@ -59,9 +57,6 @@ export default {
       tip_flag: false,
       tip_text: ''
   	}
-  },
-  components:{
-    'bottom':Footer
   },
   methods: {
     showSpinner() {

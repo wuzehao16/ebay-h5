@@ -3,16 +3,21 @@
   <div id="app">
     <!-- <img src="./assets/logo.png"> -->
     <transition name="slide-left">
-    <keep-alive>
-      <router-view class="child-view"></router-view>
-    </keep-alive>
+      <keep-alive>
+        <router-view class="child-view"></router-view>
+      </keep-alive>
     </transition>
+    <foot v-if="$store.state.showFoot"></foot>
   </div>
 </template>
 
 <script>
+import Footer from '@/components/footer/footer'
 export default {
   name: 'app',
+  components:{
+    'foot':Footer
+  },
 }
 </script>
 
@@ -27,6 +32,8 @@ $ebay-blue :#0099f7;
   overflow: scroll;
   background-color: #EEEEEE;
   -webkit-overflow-scrolling: touch;
+  position: absolute;
+  width: 100%;
 }
 
 .fade-enter-active, .fade-leave-active {
@@ -37,9 +44,9 @@ $ebay-blue :#0099f7;
 }
 .child-view {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  transition: all .9s cubic-bezier(.55,0,.1,1);
+  width: 100vw;
+  height: 100vh;
+  transition: all .6s cubic-bezier(.55,0,.1,1);
 }
 .slide-left-enter, .slide-right-leave-active {
   opacity: 0;
@@ -51,6 +58,31 @@ $ebay-blue :#0099f7;
   -webkit-transform: translate(-30px, 0);
   transform: translate(-30px, 0);
 }
+
+.mint-searchbar{
+  background-color: #0099f7;
+  height: 42px;
+  .mint-searchbar-inner{
+    border-radius: 25px;
+    i{
+      font-size: 16px;
+      margin-left: 8px;
+    }
+  }
+  .mint-searchbar-cancel{
+    color: #fff;
+  }
+}
+.mint-search {
+  height: 53px !important;
+    z-index: 11;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    // overflow: hidden;
+    // z-index: 1;
+}
+
 
 .clearfix:after{
   content:"";

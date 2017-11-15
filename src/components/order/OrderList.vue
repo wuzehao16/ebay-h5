@@ -111,18 +111,13 @@
   <div class="to-top" @click="scrollTop">
     <i class="iconfont icon-top"></i>
   </div>
-  <bottom></bottom>
 </div>
 </template>
 
 <script>
 import {reqBuyerOrderList} from '../../api'
 import { Indicator } from 'mint-ui'
-import Footer from '@/components/footer/footer';
 export default {
-  components:{
-    'bottom':Footer
-  },
   data () {
   	return {
   		selected: '',

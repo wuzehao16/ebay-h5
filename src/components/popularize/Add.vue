@@ -90,8 +90,7 @@ export default {
         ebayItemid: '',
         auditStatus: '0',//待审核
         productStatus: '下架',
-        // userWxOpenid: JSON.parse( sessionStorage.getItem('ebay-app') ).userWxOpenid,
-        userWxOpenid:1,
+        userWxOpenid: JSON.parse( sessionStorage.getItem('ebay-app') ).userWxOpenid,
         productNane: '',
         productPic: '',//以@连接
         productPrice: '',//post时要求number类型
@@ -260,7 +259,6 @@ export default {
             }
         });
 </script>
-
 <style lang='scss'>
 .container{
   .search{
@@ -278,7 +276,6 @@ export default {
     color: #9E9E9E;  
 }
 .container {
-	margin-bottom: 44px;
 	.bt-group{
 		.btn-submit{
       width: 100%;

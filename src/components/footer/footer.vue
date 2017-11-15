@@ -16,7 +16,7 @@
       <li>
         <router-link class="col " :to="{name: 'PopularizeList'} ">
           <i class="iconfont icon-share"></i>
-          <span class="nd-p">我要推广</span>
+          <span class="nd-p">发布商品</span>
         </router-link>
       </li>
       <li>

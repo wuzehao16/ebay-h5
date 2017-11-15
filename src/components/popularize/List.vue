@@ -19,7 +19,7 @@
               <div class="right">
                 <div class="title">{{ d.productNane }}</div>
                 <div class="price">￥{{ d.productPrice }}</div>
-                <mt-button type="primary" @click="goPreview(d.id)" size="small">立即推广</mt-button>
+                <mt-button type="primary" @click="goPreview(d.id)" size="small">分享朋友圈</mt-button>
               </div>
             </div>  
   		    </mt-cell>
@@ -71,7 +71,7 @@ export default {
   		allLoaded_2: false,
       reqListObj: {
         size: 10,
-        userId: JSON.parse( sessionStorage.getItem('ebay-app') ).userWxOpenid,//此处userId传openId
+        userWxOpenid: JSON.parse( sessionStorage.getItem('ebay-app') ).userWxOpenid,
       },
       publishedPage: 0,
       WaitedAuditPage: 0,
@@ -81,6 +81,10 @@ export default {
       tip_flag: false,
       tip_text: ''
   	}
+  },
+  activated(){
+    console.log(this.$route)
+    
   },
   methods: {
     goEdit(row) {

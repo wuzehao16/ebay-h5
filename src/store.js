@@ -5,7 +5,8 @@ Vue.use(Vuex)
 
 const state = {
 	count: 1,
-	isLogin: false
+	isLogin: false,
+	showFoot: true
 }
 const mutations = {
 	add(state) {

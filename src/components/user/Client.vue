@@ -12,8 +12,6 @@
 		<mt-cell value="7月28日 18:22" v-for="item in items" :key="item">
 			<div slot="title" class="client-container">
 				<p>啷里个啷啷中国中啷啷中国中啷啷中国中中中{{ item }}</p>
-				<!-- <img :src=" require('../../assets/test.png') "> -->
-
 				<div class="img-box" :style="{'background': 'url(' + 'xxfffdd' + ') no-repeat center center,url(' + require('../../assets/test.png') + ')'}">			
 				</div>				
 
@@ -72,7 +70,7 @@ export default {
 		this.getList(val)
   	},
   	formatTime(val) {
-  		return util.formatDate.format(new Date(val), 'MM月dd日 hh:mm:ss')
+  		return util.formatDate.format(new Date(val), 'MM月dd日 hh:mm:ss') 
   	},
   	getList() {
   		let date = this.chosenDate || new Date()
@@ -102,6 +100,9 @@ export default {
 			}			
 	 	})
   	}  	
+  },
+  mounted() {
+  	this.getList()
   }
 }	
 </script>

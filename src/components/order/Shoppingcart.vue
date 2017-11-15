@@ -61,18 +61,13 @@
 
 </mt-cell>
 
-<bottom></bottom>
 </div>	
 </template>
 
 <script>
 import {reqShoppingCartList, reqCartDelete} from '../../api'
 import { MessageBox } from 'mint-ui'
-import Footer from '@/components/footer/footer';
 export default {
-  components:{
-    'bottom':Footer
-  },
   data () {
   	return {
       checked_pro: [],
