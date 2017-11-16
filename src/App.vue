@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <!-- <img src="./assets/logo.png"> -->
-    <transition name="slide-left">
+    <transition name="fade">
       <keep-alive>
         <router-view class="child-view"></router-view>
       </keep-alive>
@@ -19,8 +19,7 @@ export default {
 }
 </script>
 
-<style <style lang="scss">
-
+<style lang="scss">
 $ebay-blue :#0099f7;
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -44,17 +43,23 @@ $ebay-blue :#0099f7;
   position: absolute;
   width: 100vw;
   height: 100vh;
-  transition: all .6s cubic-bezier(.55,0,.1,1);
+  transition: all 1s cubic-bezier(.55,0,.1,1);
 }
 .slide-left-enter, .slide-right-leave-active {
   opacity: 0;
   -webkit-transform: translate(30px, 0);
-  transform: translate(30px, 0);
+  transform: translate(30px, 0); 
 }
 .slide-left-leave-active, .slide-right-enter {
   opacity: 0;
   -webkit-transform: translate(-30px, 0);
-  transform: translate(-30px, 0);
+  transform: translate(-30px, 0); 
+}
+.slide-left-enter, .slide-right-leave-active,
+.slide-left-leave-active, .slide-right-enter {
+  .foot-cart {
+    transform: scale(0);
+  }
 }
 
 .mint-searchbar{
@@ -77,10 +82,7 @@ $ebay-blue :#0099f7;
     position: fixed;
     width: 100%;
     top: 0;
-    // overflow: hidden;
-    // z-index: 1;
 }
-
 
 .clearfix:after{
   content:"";

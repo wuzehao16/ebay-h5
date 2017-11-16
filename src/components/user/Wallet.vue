@@ -113,9 +113,6 @@ export default {
   },
   mounted() {
   	this.getList()
-  	setTimeout(() => {
-  		document.getElementById('app').scrollTop = 0
-  	}, 500)
   }
 }	
 </script>

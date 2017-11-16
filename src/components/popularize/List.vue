@@ -1,5 +1,6 @@
 <template>
 <div class="container">	
+<div>
 	<mt-navbar v-model="selected" class="my-nav" :fixed="true">
 	  <mt-tab-item id="published">已发布商品</mt-tab-item>
 	  <mt-tab-item id="wait_audit">待审核商品</mt-tab-item>
@@ -47,14 +48,15 @@
 
 	  </mt-tab-container-item>
 	</mt-tab-container>
-
-  <div class="to-top" @click="toTop">
+</div>
+  <div class="to-top" @click="goTop">
     <i class="iconfont icon-top"></i>
   </div>
+  <!-- <mt-tabbar :fixed="true" > -->
+    <mt-button type="primary" size="large" @click="addNew" class="add-product">新增商品<i class="iconfont icon-add" style="font-size:18px;padding-left:5px;"></i></mt-button>
+  <!-- </mt-tabbar>     -->
 
-	<mt-tabbar :fixed="true">
-	  <mt-button type="primary" size="large" @click="addNew" class="addProduct">新增商品<i class="iconfont icon-add" style="font-size:18px;padding-left:5px;"></i></mt-button>
-	</mt-tabbar>
+
 
 </div>
 </template>
@@ -156,9 +158,6 @@ export default {
         Indicator.close()
       })      
     },
-  	toTop (val) {
-      document.getElementById('app').scrollTop = 0
-  	},
   	addNew() {
   		this.$router.push("/popularize/add")
   	},
@@ -190,6 +189,17 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.add-product{
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 50px;
+  border-radius: 0;
+  background-color: #0099f7;
+}  
+</style>
 
 <style lang="scss" scoped>
 $ebay-blue :#0099f7;
@@ -265,10 +275,5 @@ $shadow-color: #aaa;
       }
     }
   }
-}
-.addProduct{
-  height: 50px;
-  border-radius: 0;
-  background-color: #0099f7;
 }
 </style>

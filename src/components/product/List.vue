@@ -10,7 +10,7 @@
 	:bottom-all-loaded="allLoaded" 
   ref="loadmore" 
   class="main-wrapper" 
-  style="margin:42px 0;min-height: 50vh;">
+  style="margin:42px 0;">
   <div class="no-data" v-if='tip_flag'>{{ tip_text }}</div>
 
   <div> 
@@ -33,7 +33,7 @@
 	</div>
 </mt-loadmore>
 
-  <div class="to-top" @click="toTop">
+  <div class="to-top" @click="goTop">
     <i class="iconfont icon-top"></i>
   </div>
 </div>
@@ -94,9 +94,6 @@ export default {
         Indicator.close()
       })
     },
-  	toTop (val) {
-      document.getElementById('app').scrollTop = 0
-  	},
     goDetail(val) {
       this.$router.push({
         name: 'PorductDetail',

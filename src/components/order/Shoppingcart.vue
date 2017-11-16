@@ -1,7 +1,7 @@
 <template>
 <div class="container">
 
-<div style="margin-bottom:50px;">
+<div>
 	<mt-cell-swipe v-for="c in cart_list" :key="c.createTime" :right="[{
 	content: '删除',
 	style: {background:'red', color: '#fff', display: 'flex', 'align-items': 'center'}, 
@@ -220,12 +220,12 @@ export default {
 }
 .foot-cart {
 	position: fixed;
-	bottom: 0;
+	bottom: 50px;
 	width: 100%;
+	height: 56px;
 }
 .cal-box {
 	position: absolute;
-	bottom: 50px!important;
 	width: 100%;
 	font-size: 14px;
 	.el-wrap{

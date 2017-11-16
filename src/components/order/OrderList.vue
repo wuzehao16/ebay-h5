@@ -108,7 +108,7 @@
       </mt-loadmore>
 	  </mt-tab-container-item>
 	</mt-tab-container>
-  <div class="to-top" @click="scrollTop">
+  <div class="to-top" @click="goTop">
     <i class="iconfont icon-top"></i>
   </div>
 </div>
@@ -175,9 +175,6 @@ export default {
   			name: 'SettleOrder'
   		})
     },
-  	scrollTop (val) {
-      document.getElementById('app').scrollTop = 0
-  	},
     showSpinner() {
       Indicator.open({
         text: '加载中...',

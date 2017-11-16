@@ -21,6 +21,9 @@ new Vue({
   components: { App }
 })
 
+Vue.prototype.goTop = function() {
+  document.getElementById('app').scrollTop = 0
+}
 import {reqWechatSignature} from './api'
 Vue.prototype.wxShare = function(title, desc, link, imgUrl) {
 	let url = document.location.href
