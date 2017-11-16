@@ -141,7 +141,7 @@ $shadow-color: #ececec;
   background-color: #EEEEEE;
 }
 .mint-cell{
-  border-bottom:node; 
+  border-bottom:none; 
 }
 .set-shadow .mint-cell-wrapper{
   background-image:none;

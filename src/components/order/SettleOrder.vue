@@ -12,6 +12,7 @@
 		</template>
 	</div>
 </mt-cell>
+<div class="buying-goods">	
 <mt-cell v-for="(order, index) in order_info.items" :key="index" style="margin-bottom: 10px;">
 	<div slot="title" class="order-container" :style="{'background': 
 		'url(' + order.productIcon + ') left center no-repeat'}">
@@ -21,6 +22,7 @@
 		<span class="amount">x{{ order.productQuantity }}</span></div>
 	</div>
 </mt-cell>
+</div>
 
 <mt-cell title="商品金额">
 	<div class="red-color">￥{{ goods_all_price }}</div>
@@ -32,7 +34,7 @@
 	<div>实付金额：<span class="red-color">￥{{ total_money }}</span></div>
 </mt-cell>
 <div class='to-wechat'>
-<mt-button size="large" @click="submitOrder">确认订单</mt-button>
+<mt-button size="large" @click="submitOrder">微信支付</mt-button>
 </div>
 
 </div>
@@ -114,10 +116,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.buying-goods {
+	margin-top: 86px;
+}
 .address{
+		position: fixed;
+		top: 0;
+		width: 100%;
+		z-index: 10;
 		height: 80px;
 		margin-bottom: 10px;
-    background-color: #fff !important;
+    	background-color: #fff !important;
 		background: url("../../assets/stripe.png") bottom center repeat-x;
 		background-size: 50px 4px;
 		.mint-cell-wrapper{
@@ -180,7 +189,7 @@ $red-color: #ef4f4f;
 		color: gray;
 	}
 	.price {
-		color: $red-color;
+		color: #0099f7;
 	}
 	.amount {
 		float: right;

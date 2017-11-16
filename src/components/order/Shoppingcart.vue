@@ -17,7 +17,7 @@
 		<div slot="title" class="shop-cart-list" 
 		:style="{'background': 'url(' + c.productIcon + ') no-repeat left center'}">
 			<h3>{{ c.productName }}</h3>
-			<p style="color:#ef4f4f;display:inline-block;position:absolute;top:90px;left:110px;">￥{{c.productPrice}}</p>
+			<p style="color:#0099f7;display:inline-block;position:absolute;top:90px;left:110px;">￥{{c.productPrice}}</p>
 	  	<div class="select-amount">
 	  		<div class="f decrease" 
 	  		@click="c.productQuantity > 1 ? c.productQuantity-- : ''" 

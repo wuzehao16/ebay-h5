@@ -204,6 +204,8 @@ export default {
   activated() {
   	if (this.$route.query.pc_preview) {
   		this.isPreview = true
+  	} else {
+  		this.isPreview = false
   	}
 
   	if (this.$route.params.id || this.isPreview) {
@@ -258,6 +260,7 @@ $bg-red : #f23030;
 	margin-bottom: 52px;
 	.addCart{
 		display: flex;
+		margin-bottom: -2px;
 		div{
 			flex:0 0 50px;
 			color: #999;
@@ -428,9 +431,10 @@ dl {
     color: #fff;
 		}
 }
-//商品介绍 商品规格
+/*商品介绍 商品规格*/
 .tab-container{
 	margin-top: 6px;
+	margin-bottom: 50px;
 	background-color: #fff;
 	.mint-tab-container-wrap{
 		padding: 10px;
