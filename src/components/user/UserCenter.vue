@@ -127,10 +127,10 @@ export default {
 	vertical-align: middle;
 	font-size: 18px;
 }
-.container {
+/* .container {
 	background: #eee;
 	height: 100%;
-}
+} */
 .order-type {
     list-style-type: none;
     padding: 0px 0;

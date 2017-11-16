@@ -73,6 +73,7 @@ export default {
   background-color: #fff;
     box-shadow: 0 0 10PX 0 rgba(155,143,143,0.6);
   -webkit-box-shadow: 0 0 10PX 0 rgba(155,143,143,0.6);
+  z-index: 1000;
 }
 .tab3{
   width: 100%;

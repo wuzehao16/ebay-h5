@@ -136,15 +136,7 @@ $shadow-color: #ececec;
     color: #fff;
   }
 }
-.mint-search {
-  height: 53px !important;
-    z-index: 11;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    // overflow: hidden;
-    // z-index: 1;
-}
+
 .main-wrapper{
   background-color: #EEEEEE;
 }

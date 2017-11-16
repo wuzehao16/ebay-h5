@@ -25,25 +25,30 @@ $ebay-blue :#0099f7;
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  height: 100vh;
+  // height: 100vh;
   overflow: scroll;
   background-color: #EEEEEE;
   -webkit-overflow-scrolling: touch;
-  position: absolute;
-  width: 100%;
+/*   position: absolute;
+  width: 100%; */
 }
 
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s
+ .fade-leave-active {
+  transition: opacity .2s;
 }
-.fade-enter, .fade-leave-to {
-  opacity: 0
+.fade-enter-active {
+  transition:  opacity .6s;
 }
+
+.fade-enter, .fade-leave {
+  opacity: 0;
+}
+
 .child-view {
-  position: absolute;
+  // position: absolute;
   width: 100vw;
   height: 100vh;
-  transition: all 1s cubic-bezier(.55,0,.1,1);
+  // transition: all 1s cubic-bezier(.55,0,.1,1);
 }
 .slide-left-enter, .slide-right-leave-active {
   opacity: 0;

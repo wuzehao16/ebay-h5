@@ -28,6 +28,10 @@ Vue.use(Router)
 
 let router = new Router({
   mode: 'history',
+  scrollBehavior (to, from, savedPosition) {
+    console.log(savedPosition)
+    return { x: 0, y: 0 }
+  },
   routes: [
     {
    	  path: '/',
@@ -131,11 +135,7 @@ import {reqWechatUserInfo} from '../api'
 import store from '@/store'
 import {baseUrl} from '../api'
 router.beforeEach((to, from, next) => {
-    if (['PopularizeList', 'AddGoods'].includes(to.name)) {
-        store.state.showFoot = false
-    } else {
-        store.state.showFoot = true
-    }
+
 
   if (to.name == 'PcPreviewGoods') {
     next()
@@ -168,16 +168,23 @@ router.beforeEach((to, from, next) => {
     }    
   }
 
+/*  let obj = {
+    id: '20',
+    userWxOpenid: 'oyNDcwRQUAv0Oahba6SUlXLwobgw'
+  }
+  sessionStorage.setItem('ebay-app', JSON.stringify(obj))
+  next()*/
 
 
-       /*   let obj = {
-            id: '20',
-            userWxOpenid: 'oyNDcwRQUAv0Oahba6SUlXLwobgw'
-          }
-          sessionStorage.setItem('ebay-app', JSON.stringify(obj))
-          next()
-*/
+})
 
+router.afterEach((to, from) => {
+  //特定页面不显示底部
+    if (['PopularizeList', 'AddGoods', 'AddressList', 'Address', 'PorductDetail'].includes(to.name)) {
+        store.state.showFoot = false
+    } else {
+        store.state.showFoot = true
+    }  
 })
 
 export default router
