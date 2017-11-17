@@ -77,6 +77,7 @@ export default {
           spinnerType: "fading-circle"
         })
         reqUserInfo({id: this.editForm.id}).then((res) => {
+          Indicator.close()
           if (res.data.code == 0 && res.data.data.userCtype == '1') {
               let instance = Toast({
                 message: '您已是会员，系统为您跳转首页！',
@@ -85,9 +86,9 @@ export default {
               setTimeout(() => {
                 instance.close()
                 this.$router.push('/product/list')
-              }, 2000)
-          } else {
-            Indicator.close()
+              }, 3000)
+          } else if (res.data.code != 0) {
+            Toast(res.data.msg)
           }
         })
       }, 0)

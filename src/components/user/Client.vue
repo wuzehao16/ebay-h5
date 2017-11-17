@@ -9,14 +9,14 @@
 <mt-loadmore :auto-fill="false" :bottom-method="getList" 
 	:bottom-all-loaded="allLoaded" ref="loadmore" class="client-more">
 	<div>
-		<mt-cell value="7月28日 18:22" v-for="item in items" :key="item">
+<!-- 		<mt-cell value="7月28日 18:22" v-for="item in items" :key="item">
 			<div slot="title" class="client-container">
 				<p>啷里个啷啷中国中啷啷中国中啷啷中国中中中{{ item }}</p>
 				<div class="img-box" :style="{'background': 'url(' + 'xxfffdd' + ') no-repeat center center,url(' + require('../../assets/test.png') + ')'}">			
 				</div>				
 
 			</div>
-		</mt-cell> 
+		</mt-cell>  -->
 	</div>
     <div class="no-data" v-if="no_data_tip">您该月没有客户</div>
 

@@ -192,7 +192,9 @@ export default {
 
 <style lang="scss">
 .my-nav{
-  font-size: 16px!important;
+  .mint-tab-item-label {
+    font-size: 16px!important;
+  }
 } 
 .add-product{
   position: fixed;
