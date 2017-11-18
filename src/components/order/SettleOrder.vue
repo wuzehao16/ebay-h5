@@ -42,17 +42,21 @@
 </template>
 
 <script>
-import {reqBuyerOrderCreate} from '../../api'
+import {reqBuyerOrderCreate, baseUrl, reqPayCreate} from '../../api'
 import { Toast, MessageBox } from 'mint-ui'
 export default {
   data () {
   	return {
   		order_info: {},
-  		carriage: 50.00,
+  		carriage: 0.00,
   		receiver_info: {
   			name: '',
   			phone: '',
   			address: ''
+  		},
+  		pay_info: {
+  			orderId: '',
+		 	returnUrl: baseUrl + '/user/usercenter'
   		}
   	}
   },
@@ -80,8 +84,14 @@ export default {
   			carriage: this.carriage
   		})
   		reqBuyerOrderCreate(this.order_info).then((res) => {
-  			if(res.status == 200) {
-  				MessageBox('提示','微信接口待联调')
+  			if(res.data.code == 0) {
+  				this.pay_info.orderId = res.data.data.orderId
+  				console.log(this.pay_info)
+  				reqPayCreate(this.pay_info).then((res) => {
+
+  				})
+
+  				// MessageBox('提示','微信接口待联调')
   			}
   		})
   	}

@@ -29,10 +29,12 @@
 		</ul>
 	</div>
 </mt-cell>
+<mt-cell is-link title="我的钱包" to="/user/wallet" style="z-index: 100;">
+	<i slot="icon" class="iconfont icon-wallet" style="color: #ff9800;"></i>
+</mt-cell>
+
+
 <template v-if="user.userCtype == '1'">
-	<mt-cell is-link title="我的钱包" to="/user/wallet" style="z-index: 100;">
-		<i slot="icon" class="iconfont icon-wallet" style="color: #ff9800;"></i>
-	</mt-cell>
 	<mt-cell class="no-bg">
 		<div slot="title" >
 			<ul class="order-type clearfix">
@@ -77,16 +79,20 @@ export default {
   			}
   		})
   	}
+  }, 
+  activated() {
+  	this.user = JSON.parse(sessionStorage.getItem('ebay-app'))
   },
   mounted() {
     Indicator.open({
       spinnerType: "fading-circle"
     })
   	this.user = JSON.parse(sessionStorage.getItem('ebay-app'))
-  	
   	reqUserInfo({id: this.user.id}).then((res) => {
   		if (res.data.code == 0) {
   			this.user = res.data.data
+			//update
+			sessionStorage.setItem('ebay-app', JSON.stringify(this.user))
   			if (this.user.userCtype == '1') {
 			  	reqMyCusCount(this.user).then((res) => {
 			  		if (res.data.data) {

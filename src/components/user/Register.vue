@@ -63,12 +63,19 @@ export default {
       });
       reqUserUpdate(this.editForm).then(res => {
         Indicator.close();
-        this.$router.push("/user/usercenter");
-      });
+        if (res.data.code == 0) {
+          let user = JSON.parse(sessionStorage.getItem("ebay-app"))
+          user.userCtype = '1'
+          sessionStorage.setItem('ebay-app', JSON.stringify(user))
+          this.$router.push("/user/usercenter");
+        } else {
+          Toast(res.data.msg)
+        }
+      }).catch(err => { Indicator.close() })
     }
 
   },
-  mounted() {
+  activated() {
     this.$nextTick(function () {
       setTimeout(() => {
         this.editForm.id = JSON.parse(sessionStorage.getItem("ebay-app")).id

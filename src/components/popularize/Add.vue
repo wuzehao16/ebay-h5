@@ -259,21 +259,20 @@ export default {
   mounted() {
       this.pro_info_bak = Object.assign({}, this.pro_info)
 
-        //获取页面高度
-        var clientHeight = document.body.clientHeight;
-        //设置监听聚焦事件
-        var focusElem;
-        document.body.addEventListener("focus", function(e) {
-            focusElem = e.target
-        }, true);
-        //设置监听窗口变化时间
-        window.addEventListener("resize", function() {
-          console.log(document.body.clientHeight)
-            if(focusElem&& document.body.clientHeight < clientHeight) {
-                //使用scrollIntoView方法来控制输入框
-                focusElem.scrollIntoView(false);
-            }
-        });
+      //获取页面高度
+      var clientHeight = document.body.clientHeight;
+      //设置监听聚焦事件
+      var focusElem
+      document.body.addEventListener("focus", function(e) {
+          focusElem = e.target
+      }, true)
+      //设置监听窗口变化时间
+      window.addEventListener("resize", function() {
+          if(focusElem&& document.body.clientHeight < clientHeight) {
+              //使用scrollIntoView方法来控制输入框
+              focusElem.scrollIntoView(false);
+          }
+      })
   }
 }
 

@@ -16,13 +16,13 @@
 	</a>
 	<p class='w-tip'>当前零钱余额{{ user.userBalance }}元，<i @click="amount = '' + user.userBalance">全部提现</i></p>
 	<mt-button type="default" size="large" class='confirm' @click="submit">确认</mt-button>
-	<div class="w-tip">2小时内到账</div>
+	<div class="w-tip">24小时内到账</div>
 </div>
 </template>
 
 <script>
-import {reqUserInfo} from '../../api'
-import { Toast } from 'mint-ui'
+import {reqUserInfo, reqWithdrawCreate} from '../../api'
+import { Toast, Indicator } from 'mint-ui'
 export default {
   data () {
   	return {
@@ -41,24 +41,40 @@ export default {
   			})
   			return false
   		}
-  		if(Number.parseInt(this.amount) > Number.parseInt(this.user.userBalance)) {
+  		if (this.amount == '0') {
+  			Toast({
+  				message: '您的余额为0，不能发起提现请求！',
+  				position: 'bottom'
+  			})
+  			return false
+  		}
+  		if(Number.parseInt(this.amount) > Number.parseFloat(this.user.userBalance)) {
 			Toast({
 			  message: '提现金额不能大于余额！',
 			  position: 'bottom'
 			})
 			return false		
   		}  
-		if(this.amount) {
-			let i = Toast({
-			  message: '已发起提现',
-			  position: 'bottom'
-			})
-			setTimeout(() => {
-				i.close()
-				this.$router.push("/user/usercenter")
-			}, 2000)
-		}
-  		
+
+	    Indicator.open({
+	      spinnerType: "fading-circle"
+	    })
+  		reqWithdrawCreate({
+  			userId: this.user.id,
+  			drawAmount: Number.parseFloat(this.amount)
+  		}).then((res) => {
+  			Indicator.close()
+  			if (res.data.code == 0) {
+				Toast({
+				  message: '已发起提现',
+				  position: 'bottom'
+				})
+  			} else {
+  				Toast(res.data.msg)
+  			}
+  		}).catch(err => {
+  			Indicator.close()
+  		})
   	},
   	getNewInfo (id) {
 	  	reqUserInfo({id}).then((res) => {
@@ -83,20 +99,22 @@ export default {
 	    this.amount = this.amount.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3')
   	}
   },
-  mounted() {
+  activated() {
   	let id = JSON.parse( sessionStorage.getItem('ebay-app') ).id
   	if (id) {
   		this.getNewInfo(id)
   	} else {
   		this.$router.push('/product/list')
   	}
+  },
+  deactivated() {
+  	this.amount = ''
   }
 }	
 </script>
 
 <style lang="scss" scoped>
 .container {
-	height: 100%;
 	background: #fff;
 	text-align: center;
 	padding: 40px;

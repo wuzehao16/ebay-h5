@@ -8,7 +8,8 @@ const state = {
 	isLogin: false,
 	showFoot: true,
 	cartNeedRefresh: 'no',
-	cartAmount: ''
+	cartAmount: '',
+	authPage: [ 'PopularizeList', 'AddGoods', 'Withdraw', ] //分销商才能进入的页面
 }
 const mutations = {
 	add(state) {
