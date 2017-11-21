@@ -3,7 +3,7 @@ import axios from 'axios'
 // test
 // axios.defaults.baseURL = 'http://fks3989.tunnel.qydev.com'
 
-export const baseUrl = (process.env.NODE_ENV === 'production') ? 'http://www.wstsoftware.com' : 'http://liyou.tunnel.qydev.com'
+export const baseUrl = (process.env.NODE_ENV === 'production') ? 'http://www.wstsoftware.com' : 'http://fks3989.free.ngrok.cc'
 
 export const reqUserInfo = params => { return axios.get(`/sell/ebay/user/account/${params.id}`, params) }
 //我的钱包
@@ -21,7 +21,7 @@ export const reqBuyerOrderCreate = params => { return axios.post(`/sell/buyer/or
 
 //购物车
 export const reqAddToShoppingCart = params => { return axios.post(`/sell/buyer/goodcar/add/${params.userId}`, params.goodCarForm) }
-export const reqShoppingCartList = params => { return axios.get(`/sell/buyer/goodcar/list/${params.userId}/0/1000`) }
+export const reqShoppingCartList = params => { return axios.get(`/sell/buyer/goodcar/list`, {params: params}) }
 export const reqCartDelete = params => { return axios.delete(`/sell/buyer/goodcar/delete/${params.productId}/${params.userId}`) }
 
 export const reqSellerProList = params => { return axios.get(`/sell/seller/product/list`, {params: params}) }
@@ -37,9 +37,9 @@ export const reqMyCustomerList = params => { return axios.get(`/sell/ebay/user/u
 export const reqUserUpdate = params => { return axios.post(`/sell/ebay/user/${params.id}/update`, params) }
 
 export const reqProductList = params => { return axios.get(`/sell/buyer/product/list`,{params: params}) }
-export const reqProductDetail = params => { return axios.get(`/sell/buyer/product/detail/${params.productId}`) }
+export const reqProductDetail = params => { return axios.get(`/sell/buyer/product/detail`, {params: params}) }
 
-export const reqSellerProductSave = params => { return axios.put(`/sell/seller/product/save`, params) }
+export const reqSellerProductSave = params => { return axios.post(`/sell/seller/product/save`, params) }
 
 //获取ebay商品
 export const reqEbayGoods = params => { return axios.get(`/sell/ebay/getGoodsInfo`, { params: params }) }

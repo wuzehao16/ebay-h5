@@ -29,7 +29,6 @@ Vue.use(Router)
 let router = new Router({
   mode: 'history',
   scrollBehavior (to, from, savedPosition) {
-    console.log(savedPosition)
     return { x: 0, y: 0 }
   },
   routes: [
@@ -134,8 +133,8 @@ let router = new Router({
 import {reqWechatUserInfo} from '../api'
 import store from '@/store'
 import {baseUrl} from '../api'
+import { MessageBox } from 'mint-ui'
 router.beforeEach((to, from, next) => {
-
 
   if (to.name == 'PcPreviewGoods') {
     next()
@@ -164,23 +163,50 @@ router.beforeEach((to, from, next) => {
         }
       }).catch((err) => {})    
     } else {
-      next()
+      if (user.userCtype == '2' && store.state.authPage.includes(to.name)) {
+        MessageBox.confirm('分销商才有权限进入，去注册成为分销商?').then(action => {
+          next('/user/register')
+        }).catch(err => {
+          if (from.name) {
+            next(false)
+          } else {
+            next('/product/list')
+          }
+        })
+      } else {
+        next()
+      }
     }    
   }
 
-/*  let obj = {
+/*  let user = {
     id: '20',
-    userWxOpenid: 'oyNDcwRQUAv0Oahba6SUlXLwobgw'
+    userWxOpenid: 'oyNDcwRQUAv0Oahba6SUlXLwobgw',
+    userCtype: '1'
   }
-  sessionStorage.setItem('ebay-app', JSON.stringify(obj))
-  next()*/
+  sessionStorage.setItem('ebay-app', JSON.stringify(user))
+next()*/
+ /* let user = JSON.parse( sessionStorage.getItem('ebay-app') )
+
+  if (user.userCtype == '2' && store.state.authPage.includes(to.name)) {
+    console.log(9374937)
+    MessageBox.confirm('分销商才有权限进入，去注册成为分销商?').then(action => {
+      next('/user/register')
+    }).catch(err => {
+      next(false)
+    })
+
+  } else {
+    next()
+  }*/
 
 
 })
 
 router.afterEach((to, from) => {
   //特定页面不显示底部
-    if (['PopularizeList', 'AddGoods', 'AddressList', 'Address', 'PorductDetail'].includes(to.name)) {
+    if (['PopularizeList', 'AddGoods', 'AddressList', 'Address',
+       'PorductDetail', 'SettleOrder', 'Withdraw', 'Register' ].includes(to.name)) {
         store.state.showFoot = false
     } else {
         store.state.showFoot = true

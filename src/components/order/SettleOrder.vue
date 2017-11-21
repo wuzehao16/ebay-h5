@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import {reqBuyerOrderCreate, baseUrl, reqPayCreate} from '../../api'
+import {reqBuyerOrderCreate, baseUrl, reqPayCreate, reqAddressList} from '../../api'
 import { Toast, MessageBox } from 'mint-ui'
 export default {
   data () {
@@ -71,6 +71,42 @@ export default {
   			}
   		})
   	},
+  	onBridgeReady(payResponse) {
+  		let _this = this
+		WeixinJSBridge.invoke(
+			'getBrandWCPayRequest', {
+			"appId" : payResponse.appId, //公众号名称，由商户传入
+			"timeStamp" : payResponse.timeStamp, //时间戳，自1970年以来的秒数
+			"nonceStr" : payResponse.nonceStr, //随机串
+			"package" : payResponse.package,
+			"signType" : "MD5", //微信签名方式：
+			"paySign" : payResponse.paySign //微信签名
+		},
+		function (res) {
+			if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+				Toast('您已成功支付')
+				_this.$router.push('/user/usercenter')
+			} else if (res.err_msg == 'get_brand_wcpay_request:cancel') {
+				Toast('您已取消支付')
+			} else {
+				console.log('支付失败')
+			}
+		})
+  	},
+  	wechatPay(payResponse) {
+  		let _this = this
+		if (typeof WeixinJSBridge == "undefined") {
+			console.debug("WeixinJSBridge is undefined!");
+			if (document.addEventListener) {
+				document.addEventListener('WeixinJSBridgeReady', this.onBridgeReady(payResponse), false);
+			} else if (document.attachEvent) {
+				document.attachEvent('WeixinJSBridgeReady', this.onBridgeReady(payResponse));
+				document.attachEvent('onWeixinJSBridgeReady', this.onBridgeReady(payResponse));
+			}
+		} else {
+			this.onBridgeReady(payResponse)
+		}
+  	},
   	submitOrder() {
   		if(!this.receiver_info.name) {
 	        Toast({
@@ -88,10 +124,10 @@ export default {
   				this.pay_info.orderId = res.data.data.orderId
   				console.log(this.pay_info)
   				reqPayCreate(this.pay_info).then((res) => {
-
+  					if (res.data.code == 0) {
+  						this.wechatPay(res.data.data.payResponse)
+  					}
   				})
-
-  				// MessageBox('提示','微信接口待联调')
   			}
   		})
   	}
@@ -121,6 +157,38 @@ export default {
   		this.receiver_info.phone = a.cneePhone
   		this.receiver_info.address = a.cneeAddress
   	}
+  },
+  deactivated() {
+  	if (this.$route.name != 'AddressList') {
+  		sessionStorage.setItem('order_info', JSON.stringify({}))
+  	}
+  },
+  mounted() {
+      let obj = {
+        userId: JSON.parse(sessionStorage.getItem("ebay-app")).id,
+        page: 0,
+        size: 100
+      }  	
+      reqAddressList(obj).then(res => {
+      	if (res.data.code == 0) {
+        	let list = res.data.data.content
+        	let cnee = {updated: 0}
+        	if (list.length > 0) {
+	        	list.forEach((v, i, a) => {
+	        		if (v.isDefaute == 'Y' && v.updated > cnee.updated) {
+	        			cnee = v
+	        		}
+	        	})
+	        	if (!cnee.id) {
+	        		cnee = list[0]
+	        	}
+		  		this.receiver_info.name = cnee.cneeName
+		  		this.receiver_info.phone = cnee.cneePhone
+		  		this.receiver_info.address = cnee.cneeAddress
+        	}
+
+      	}
+      })
   }
 }	
 </script>

@@ -127,10 +127,10 @@ export default {
         userId: JSON.parse(sessionStorage.getItem("ebay-app")).id,
         page: this.page,
         size: 100
-      };
+      }
       reqAddressList(obj).then(res => {
         this.addressList = res.data.data.content;
-      });
+      })
     }
   },
   mounted() {

@@ -109,7 +109,6 @@ export default {
   	}
   },
   beforeRouteEnter (to, from, next) {
-  	console.log(to)
 	  let user = JSON.parse( sessionStorage.getItem('ebay-app') )
 	  let openid = to.query.wxOpenid
 	  if (!user && !openid) {
@@ -134,7 +133,7 @@ export default {
 	    }).catch((err) => {}) 	  	
 	  } else {
 	  	next()
-		}
+	  }
   },
   methods: {
   	addToCart() {
@@ -165,6 +164,7 @@ export default {
   		this.activeColor = o
   	},
   	buyIt() {
+  		this.items = []
   		this.items.push({
   			productId: this.productInfo.id,
   			productName: this.productInfo.name,
@@ -189,6 +189,7 @@ export default {
 	getCartAmount() {
 	  	//获取购物车中商品总数
 	  	let userId = JSON.parse( sessionStorage.getItem('ebay-app') ).id
+	  	
 		reqShoppingCartList({userId}).then((res) => {
 			let added_list = res.data.data
 			this.pro_in_cart = 0

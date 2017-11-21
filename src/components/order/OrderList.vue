@@ -6,13 +6,13 @@
 	  <mt-tab-item id="to_receive">待收货</mt-tab-item>
 	</mt-navbar>
 	<!-- tab-container -->
-	<mt-tab-container v-model="selected" class="mtc">
+	<mt-tab-container v-model="selected" class="order-wrap">
    <div class="no-data" v-if='tip_flag'>{{ tip_text }}</div>
     <!-- 全部订单 -->
     <mt-tab-container-item id="all_orders">
   		<mt-loadmore :auto-fill="false" :top-method="getAllList" :bottom-method="getAllList" 
   			:bottom-all-loaded="allLoaded" ref="loadmore">	  
-        <div v-for="(d,index) in all_list" :key="d.orderNo" class='cell-margin'>
+        <div v-for="(d, index) in all_list" :key="d.orderNo" class='cell-margin'>
           <mt-cell>
             <div slot="title" class="order-des">
               <div><label>状态：</label><span style="color: #ef4f4f;">
@@ -28,7 +28,7 @@
               <div><label>总价：</label><span>￥{{d.orderAmount}}</span></div>
             </div>
             <div v-if="d.orderStatus == '1'">
-              <mt-button type="primary" size="small" class="pay-b" @click="buyIt(index)">去支付</mt-button>
+              <mt-button type="primary" size="small" class="pay-b" @click="goPay(d.productList)">去支付</mt-button>
             </div>
           </mt-cell>
           <template v-for='i in d.productList'>
@@ -58,7 +58,7 @@
               <div><label>总价：</label><span>￥{{d.orderAmount}}</span></div>
             </div>
             <div>
-              <mt-button type="primary" size="small" class="pay-b" @click="buyItForNopay(index)">去支付</mt-button>
+              <mt-button type="primary" size="small" class="pay-b" @click="goPay(d.productList)">去支付</mt-button>
             </div>
           </mt-cell>
           <template v-for='i in d.productList'>
@@ -141,36 +141,18 @@ export default {
   	}
   },
   methods: {
-    buyIt(index){
-      let detail = this.all_list[index].productList[0].orderDetail;
+    goPay(row){
+      this.items = []
+      for (let d of row) {
         this.items.push({
-  			productId: this.all_list[index].productList[0].orderDetail.id,
-  			productName: this.all_list[index].productList[0].orderDetail.productName,
-  			productPrice: this.all_list[index].productList[0].orderDetail.productPrice,
-  			productQuantity: this.all_list[index].productList[0].orderDetail.productQuantity,
-  			productIcon: this.all_list[index].productList[0].orderDetail.productIcon
-  		})
-  		let order_info = {
-  			items: this.items
-  		}
-  		sessionStorage.setItem('order_info', JSON.stringify(order_info))
-  		this.$router.push({
-  			name: 'SettleOrder'
-  		})
-    },
-    buyItForNopay(index){
-      let detail = this.to_pay_list[index].productList[0].orderDetail;
-        this.items.push({
-  			productId: detail.id,
-  			productName: detail.productName,
-  			productPrice: detail.productPrice,
-  			productQuantity: detail.productQuantity,
-  			productIcon: detail.productIcon
-  		})
-  		let order_info = {
-  			items: this.items
-  		}
-  		sessionStorage.setItem('order_info', JSON.stringify(order_info))
+          productId: d.orderDetail.id,
+          productName: d.orderDetail.productName,
+          productPrice: d.orderDetail.productPrice,
+          productQuantity: d.orderDetail.productQuantity,
+          productIcon: d.orderDetail.productIcon
+        })        
+      }
+  		sessionStorage.setItem('order_info', JSON.stringify({items: this.items}))
   		this.$router.push({
   			name: 'SettleOrder'
   		})
@@ -256,10 +238,18 @@ export default {
       }      
     }
   },
-  mounted() {
+  activated() {
+      this.pa.userWxOpenid = JSON.parse( sessionStorage.getItem('ebay-app') ).userWxOpenid
       this.selected = this.$route.params.active_tab || 'all_orders'
-      this.userWxOpenid = JSON.parse( sessionStorage.getItem('ebay-app') ).userWxOpenid
-      this.init()
+  },
+  deactivated() {
+      this.selected = ''
+      this.all_page = 0
+      this.to_pay_page = 0
+      this.to_receive_page = 0
+      this.all_list = []
+      this.to_pay_list = []
+      this.to_receive_list = []
   },
   watch: {
     selected(val) {
@@ -302,9 +292,9 @@ export default {
 	font-size: 16px !important;
 
 }
-.mtc {
+.order-wrap {
 	margin-top: 54px;
-  margin-bottom: 52px;
+  margin-bottom: 100px;
 }
 .to-top {
     position: fixed;
