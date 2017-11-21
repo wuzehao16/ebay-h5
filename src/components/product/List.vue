@@ -11,17 +11,9 @@
   ref="loadmore" 
   class="main-wrapper" 
   style="margin:42px 0;">
-  <div class="no-data" v-if='tip_flag'>{{ tip_text }}</div>
-
   <div> 
-    <mt-cell 
-      class='set-shadow' 
-      v-for="d in pro_list" 
-      :key="d.created" >
-      <div 
-      slot="title" 
-      class="goodss-list" 
-      @click="goDetail(d.id)">
+    <mt-cell class='set-shadow' v-for="d in pro_list" :key="d.created" >
+      <div slot="title" class="goodss-list" @click="goDetail(d.id)">
         <div class="avatar" :style="{'background': 'url(' + d.productIcon + ') no-repeat center center'}"></div>
         <div class="right" >
           <div class="title">{{ d.productNane }}</div>
@@ -33,15 +25,33 @@
 	</div>
 </mt-loadmore>
 
-  <div class="to-top" @click="goTop">
-    <i class="iconfont icon-top"></i>
+<div class="to-top" @click="goTop">
+  <i class="iconfont icon-top"></i>
+</div>
+
+<mt-popup :modal="false" class="popup-search"
+  v-model="popupVisible"
+  position="right">
+  <div class="no-data" v-if='tip_flag' style="background:none;">{{ tip_text }}</div>
+  <div v-if="showSearched" style="margin-bottom: 50px;"> 
+    <mt-cell class='set-shadow' v-for="d in pro_search_list" :key="d.created" >
+      <div slot="title" class="goodss-list" @click="goDetail(d.id)">
+        <div class="avatar" :style="{'background': 'url(' + d.productIcon + ') no-repeat center center'}"></div>
+        <div class="right" >
+          <div class="title">{{ d.productNane }}</div>
+          <div class="price">￥{{ d.productPrice }}</div>
+          <mt-button type="primary"  size="small">立即购买</mt-button>
+        </div>
+      </div>
+    </mt-cell>
   </div>
+</mt-popup>
 </div>
 </template>
 
 <script>
 import {reqProductList} from '../../api'
-import {Indicator} from 'mint-ui'
+import {Indicator, Popup, Toast } from 'mint-ui'
 import debounce from 'lodash/debounce'
 export default {
   data () {
@@ -55,7 +65,10 @@ export default {
       },
       pro_list: [],
       tip_flag: false,
-      tip_text: ''
+      tip_text: '',
+      popupVisible: false,
+      showSearched: false,
+      pro_search_list: []
   	}
   },
   methods: {
@@ -68,27 +81,41 @@ export default {
     },
     getProductList() {
       this.showSpinner()
-      reqProductList(this.filters).then((res) => {
-        let arr = res.data.data.content
-        if(arr.length) {
-          for(let el of arr) {
-            this.pro_list.push(el)
-          }
-          this.filters.page++
+      let obj
+      if (this.popupVisible) {
+        obj = {
+          page: 0,
+          size: 1000,
+          auditStatus: '1',
+          productName: this.filters.productName          
         }
-        if (this.pro_list.length == 0) {
-          if (this.filters.productName == '') {
-            this.tip_text = '还没有商品哦~敬请期待'
+      } else {
+        obj = this.filters
+      }
+      reqProductList(obj).then((res) => {
+        Indicator.close()
+        if (res.data.code == 0) {
+          let arr = res.data.data.content
+          if(arr.length && !this.popupVisible) {
+            for(let el of arr) {
+              this.pro_list.push(el)
+            }
+            this.filters.page++
           } else {
-            this.tip_text = '未搜索到符合查询条件的商品'
+            this.pro_search_list = arr
+            if (arr.length == 0) {
+              this.tip_text = '未搜索到符合查询条件的商品'
+              this.tip_flag = true
+            }
+            this.showSearched = true
           }
-          this.tip_flag = true
+        } else {
+          Toast(res.data.msg)
         }
         this.$refs.loadmore.onTopLoaded()
         if (this.$refs.loadmore.bottomStatus == 'loading') {
           this.$refs.loadmore.onBottomLoaded()
         }
-        Indicator.close()
       }).catch((err) => {
         console.log(err)
         Indicator.close()
@@ -103,17 +130,44 @@ export default {
       })
     },
     searchByName: debounce(function(){
-        this.pro_list = []
-        this.filters.page = 0
+        this.showSearched = false
         this.getProductList()
     }, 500)
   },
   mounted() {
     this.getProductList()
+
+    let _this = this
+    let el = document.getElementsByClassName("mint-searchbar-core")[0]
+    let el2 = document.getElementsByClassName("mint-searchbar-cancel")[0]
+    el.addEventListener('focus', function() {
+      _this.popupVisible = true
+      if (_this.filters.productName == '') {
+        _this.tip_text = '请输入关键词搜索'
+        _this.tip_flag = true
+      }
+    })
+    el2.addEventListener('click', function() {
+      _this.popupVisible = false
+    })
   },
   watch: {
     'filters.productName' (val) {
-        this.searchByName()
+        if (val) {
+          this.searchByName()
+        } else {
+          this.tip_text = '请输入关键词搜索'
+          this.tip_flag = true
+          this.showSearched = false
+        }
+    }
+  },
+  beforeRouteLeave (to, from, next) {
+    if (this.popupVisible) {
+      this.popupVisible = false
+      next(false)
+    } else {
+      next()
     }
   }
 }
@@ -136,7 +190,13 @@ $shadow-color: #ececec;
     color: #fff;
   }
 }
-
+.popup-search {
+  height: 100%;
+  width: 100%;
+  margin-top: 42px;
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;  
+}
 .main-wrapper{
   background-color: #EEEEEE;
 }

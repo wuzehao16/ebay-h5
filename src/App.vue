@@ -26,8 +26,8 @@ $ebay-blue :#0099f7;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   // height: 100vh;
-  overflow: scroll;
   background-color: #EEEEEE;
+  overflow: scroll;
   -webkit-overflow-scrolling: touch;
 /*   position: absolute;
   width: 100%; */
