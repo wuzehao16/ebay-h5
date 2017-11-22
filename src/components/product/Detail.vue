@@ -49,6 +49,10 @@
 	  	</ul>
 	  	</dd>
   	</dl> -->
+
+  	<mt-cell title="运费" value="包邮"></mt-cell>
+  	<mt-cell title="税费" value="包税"></mt-cell>
+
   	<dl>
 	  	<dt class="number-title">数量</dt>
 	  	<dd class="select-amount">

@@ -28,8 +28,12 @@
 	<div class="red-color">￥{{ goods_all_price }}</div>
 </mt-cell>
 <mt-cell title="运费">
-	<div class="red-color">￥{{ carriage }}</div>
+	<div class="red-color">包邮<!-- ￥{{ carriage }} --></div>
 </mt-cell>
+<mt-cell title="税费">
+	<div class="red-color">包税</div>
+</mt-cell>
+
 <mt-cell>
 	<div>实付金额：<span class="red-color">￥{{ total_money }}</span></div>
 </mt-cell>

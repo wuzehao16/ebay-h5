@@ -39,6 +39,10 @@
 		<mt-cell :title="ebay.title"></mt-cell>
 		<mt-field v-model="pro_info.productNane"
       placeholder="请输入商品名称" ></mt-field>
+
+    <mt-cell title="运费" value="包邮"></mt-cell>
+    <mt-cell title="税费" value="包税"></mt-cell>
+      
 		<mt-cell>
       <div slot="title" v-if='ebay.price'>{{ ebay.price.currency + " : " + ebay.price.value}}</div>
     </mt-cell>

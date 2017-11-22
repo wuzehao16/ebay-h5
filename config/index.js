@@ -18,7 +18,7 @@ module.exports = {
     // Before setting to `true`, make sure to:
     // npm install --save-dev compression-webpack-plugin
     productionGzip: true,
-    productionGzipExtensions: ['js', 'css'],
+    productionGzipExtensions: ['js', 'css', 'json'],
     // Run the build command with an extra argument to
     // View the bundle analyzer report after build finishes:
     // `npm run build --report`
@@ -33,8 +33,8 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
         '/sell': {
-            target: 'http://192.168.9.102:8080/sell',//设置你调用的接口域名和端口号 别忘了加http
-            // target: 'http://localhost:8080/sell',
+            // target: 'http://liyou.tunnel.qydev.com/sell',//设置你调用的接口域名和端口号 别忘了加http
+            target: 'http://localhost:8080/sell',
             changeOrigin: true,
             pathRewrite: {
             '^/sell': '/'//这里理解成用‘/sell’代替target里面的地址，后面组件中我们掉接口时直接用api代替 比如我要调用'http://40.00.100.100:3002/user/add'，直接写‘/api/user/add’即可
