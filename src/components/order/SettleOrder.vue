@@ -54,7 +54,6 @@ export default {
   		payStatus: false,
   		order_info: {},
   		carriage: 0.00,
-  		orderId: '',
   		receiver_info: {
   			name: '',
   			phone: '',
@@ -94,8 +93,10 @@ export default {
 				_this.$router.push('/user/usercenter')
 			} else if (res.err_msg == 'get_brand_wcpay_request:cancel') {
 				Toast('您已取消支付')
+				_this.payStatus = false
 			} else {
 				console.log('支付失败')
+				_this.payStatus = false
 			}
 		})
   	},
@@ -121,9 +122,8 @@ export default {
 	        })
 	        return false
   		}
-
-  		if (this.orderId) {
-  			this.pay_info.orderId = this.orderId
+  		this.payStatus = true
+  		if (this.pay_info.orderId) {
 			reqPayCreate(this.pay_info).then((res) => {
 				if (res.data.code == 0) {
 					this.wechatPay(res.data.data.payResponse)
@@ -162,7 +162,7 @@ export default {
     }
   },
   activated () {
-  	this.orderId = this.$route.params.orderId
+  	this.pay_info.orderId = this.$route.params.orderId
   	this.order_info = JSON.parse(sessionStorage.getItem('order_info'))
   	if (!this.order_info) {
   		this.$router.push('/product/list')
@@ -175,7 +175,8 @@ export default {
   	}
   },
   deactivated() {
-  	this.orderId = ''
+  	this.pay_info.orderId = ''
+  	this.payStatus = false
   	if (this.$route.name != 'AddressList') {
   		sessionStorage.setItem('order_info', JSON.stringify({}))
   	}

@@ -40,8 +40,24 @@
 		<mt-field v-model="pro_info.productNane"
       placeholder="请输入商品名称" ></mt-field>
 
-    <mt-cell title="运费" value="包邮"></mt-cell>
-    <mt-cell title="税费" value="包税"></mt-cell>
+    <mt-cell title="运费">
+      <div>
+        <mt-radio class="fee-wrap" v-model="youfei" :options="['包邮', '不包邮']">
+        </mt-radio>
+      </div>
+    </mt-cell>
+    <mt-field  v-model="pro_info.youfei" v-show="youfei == '不包邮'"
+       placeholder="请输入邮费"></mt-field>
+
+
+    <mt-cell title="税费">
+      <div>
+        <mt-radio class="fee-wrap" v-model="tax_fee" :options="['包税', '不包税']">
+        </mt-radio>
+      </div>      
+    </mt-cell>
+    <mt-field  v-model="pro_info.tax_fee" v-show="tax_fee == '不包税'"
+       placeholder="请输入税费"></mt-field>    
       
 		<mt-cell>
       <div slot="title" v-if='ebay.price'>{{ ebay.price.currency + " : " + ebay.price.value}}</div>
@@ -80,6 +96,9 @@ import { Toast, Indicator } from 'mint-ui'
 export default {
   data () {
   	return {
+      tax_fee: '',
+      youfei: '',
+
   		visible: false,
   		currentValue: '',
   		flag: false,
@@ -100,7 +119,9 @@ export default {
         productIcon: '',
         items: [],
         productMemo:"",
-        productUsd: ''
+        productUsd: '',
+        youfei: '',
+        tax_fee: ''
       },
       pro_info_bak: {}
   	}
@@ -224,11 +245,18 @@ export default {
           }
         },
         deep: true
+    },
+    'pro_info': {
+      handler: function(a, b) {
+        console.log(a)
+      },
+      deep: true
     }
   },
   activated () {
     console.log(3252342)
-    this.flag = false
+    // this.flag = false
+    this.flag = true
     this.currentValue = ''
     this.else_key = []
     this.else_value = []
@@ -281,7 +309,14 @@ export default {
 }
 
 </script>
+
+<style lang="scss">
+.fee-wrap .mint-cell {
+  display: inline-block;
+}  
+</style>
 <style lang='scss' scoped>
+
 .container{
   .search{
     flex: 1 0 auto;
