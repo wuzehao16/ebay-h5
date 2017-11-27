@@ -38,7 +38,7 @@
 	<div>实付金额：<span class="red-color">￥{{ total_money }}</span></div>
 </mt-cell>
 <div class='to-wechat'>
-<mt-button size="large" @click="submitOrder">微信支付</mt-button>
+<mt-button size="large" @click="submitOrder" :disabled="payStatus">微信支付</mt-button>
 </div>
 
 </div>
@@ -51,8 +51,10 @@ import { Toast, MessageBox } from 'mint-ui'
 export default {
   data () {
   	return {
+  		payStatus: false,
   		order_info: {},
   		carriage: 0.00,
+  		orderId: '',
   		receiver_info: {
   			name: '',
   			phone: '',
@@ -119,21 +121,30 @@ export default {
 	        })
 	        return false
   		}
-  		Object.assign(this.order_info, this.receiver_info, {
-  			openid: JSON.parse( sessionStorage.getItem('ebay-app') ).userWxOpenid,
-  			carriage: this.carriage
-  		})
-  		reqBuyerOrderCreate(this.order_info).then((res) => {
-  			if(res.data.code == 0) {
-  				this.pay_info.orderId = res.data.data.orderId
-  				console.log(this.pay_info)
-  				reqPayCreate(this.pay_info).then((res) => {
-  					if (res.data.code == 0) {
-  						this.wechatPay(res.data.data.payResponse)
-  					}
-  				})
-  			}
-  		})
+
+  		if (this.orderId) {
+  			this.pay_info.orderId = this.orderId
+			reqPayCreate(this.pay_info).then((res) => {
+				if (res.data.code == 0) {
+					this.wechatPay(res.data.data.payResponse)
+				}
+			})  			
+  		} else {
+	  		Object.assign(this.order_info, this.receiver_info, {
+	  			openid: JSON.parse( sessionStorage.getItem('ebay-app') ).userWxOpenid,
+	  			carriage: this.carriage
+	  		})
+	  		reqBuyerOrderCreate(this.order_info).then((res) => {
+	  			if(res.data.code == 0) {
+	  				this.pay_info.orderId = res.data.data.orderId
+	  				reqPayCreate(this.pay_info).then((res) => {
+	  					if (res.data.code == 0) {
+	  						this.wechatPay(res.data.data.payResponse)
+	  					}
+	  				})
+	  			}
+	  		})
+  		}
   	}
   },
   computed: {
@@ -151,6 +162,7 @@ export default {
     }
   },
   activated () {
+  	this.orderId = this.$route.params.orderId
   	this.order_info = JSON.parse(sessionStorage.getItem('order_info'))
   	if (!this.order_info) {
   		this.$router.push('/product/list')
@@ -163,6 +175,7 @@ export default {
   	}
   },
   deactivated() {
+  	this.orderId = ''
   	if (this.$route.name != 'AddressList') {
   		sessionStorage.setItem('order_info', JSON.stringify({}))
   	}

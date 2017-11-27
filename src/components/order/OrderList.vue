@@ -154,7 +154,10 @@ export default {
       }
   		sessionStorage.setItem('order_info', JSON.stringify({items: this.items}))
   		this.$router.push({
-  			name: 'SettleOrder'
+  			name: 'SettleOrder',
+        params: {
+          orderId: row[0].orderDetail.orderId
+        }
   		})
     },
     showSpinner() {
