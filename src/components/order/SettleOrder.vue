@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import {reqBuyerOrderCreate, baseUrl, reqPayCreate, reqAddressList} from '../../api'
+import {reqBuyerOrderCreate, baseUrl, reqPayCreate, reqAddressList, reqCartDelete} from '../../api'
 import { Toast, MessageBox } from 'mint-ui'
 export default {
   data () {
@@ -62,7 +62,8 @@ export default {
   		pay_info: {
   			orderId: '',
 		 	returnUrl: baseUrl + '/user/usercenter'
-  		}
+  		},
+  		userId: ''
   	}
   },
   methods: {
@@ -137,6 +138,17 @@ export default {
 	  		reqBuyerOrderCreate(this.order_info).then((res) => {
 	  			if(res.data.code == 0) {
 	  				this.pay_info.orderId = res.data.data.orderId
+
+	  				//如已下单商存在于购物车中，则去掉
+					for (let i of this.order_info.items) {
+						reqCartDelete({
+							productId: i.productId, 
+							userId: this.userId
+						}).then((res) => {}).catch(err => {})			
+					}
+					this.$store.commit('changeCartAmount')
+					this.$store.commit('setCartRefresh')
+
 	  				reqPayCreate(this.pay_info).then((res) => {
 	  					if (res.data.code == 0) {
 	  						this.wechatPay(res.data.data.payResponse)
@@ -182,8 +194,9 @@ export default {
   	}
   },
   mounted() {
+  	  this.userId = JSON.parse(sessionStorage.getItem("ebay-app")).id
       let obj = {
-        userId: JSON.parse(sessionStorage.getItem("ebay-app")).id,
+        userId: this.userId,
         page: 0,
         size: 100
       }  	
