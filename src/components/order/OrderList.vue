@@ -98,7 +98,8 @@
               <div slot="title" class="goods-list" >
                 <div class="avatar" :style="{'background': 'url(' + i.productIcon + ') no-repeat center center'}"></div>
                 <div class="right">
-                  <div class="title">{{ i.orderDetail.productQuantity }}</div>
+                  <div class="title">{{ i.productNane }}</div>
+                  <div class="num">x{{i.orderDetail.productQuantity}}</div>
                 </div>
               </div>
             </mt-cell>            
