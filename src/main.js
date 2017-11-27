@@ -23,10 +23,13 @@ new Vue({
 
 Vue.prototype.goTop = function() {
   document.getElementById('app').scrollTop = 0
-  // document.body.scrollTop = 0
+}
+Vue.prototype.isIOS = function() {
+	return !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
 }
 import {reqWechatSignature} from './api'
-Vue.prototype.wxShare = function(title, desc, link, imgUrl) {
+
+Vue.prototype.wxConfig = function () {
 	let url = document.location.href
 	reqWechatSignature({url}).then((res) => {
 		if (res.data.code == 0) {
@@ -34,12 +37,14 @@ Vue.prototype.wxShare = function(title, desc, link, imgUrl) {
 				debug: false,//true会有弹框
 				jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
 			}, res.data.data)
-			wx.config(obj)		
+			store.state.wx.config(obj)
 		}
 	})
+}
 
-	wx.ready(function(){
-		wx.onMenuShareTimeline({
+Vue.prototype.wxShare = function(title, desc, link, imgUrl) {
+	store.state.wx.ready(function(){
+		store.state.wx.onMenuShareTimeline({
 		    title: title, // 分享标题
 		    link: link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
 		    imgUrl: imgUrl, // 分享图标
@@ -50,7 +55,7 @@ Vue.prototype.wxShare = function(title, desc, link, imgUrl) {
 		        // 用户取消分享后执行的回调函数
 		    }
 		})
-		wx.onMenuShareAppMessage({
+		store.state.wx.onMenuShareAppMessage({
 		    title: title, // 分享标题
 		    desc: desc, // 分享描述
 		    link: link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
@@ -59,11 +64,10 @@ Vue.prototype.wxShare = function(title, desc, link, imgUrl) {
 		    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
 		    success: function () { 
 		        // 用户确认分享后执行的回调函数
-
 		    },
 		    cancel: function () { 
 		        // 用户取消分享后执行的回调函数
-		        console.log("cancel")
+		        // console.log("cancel")
 		    }
 		})
 	})

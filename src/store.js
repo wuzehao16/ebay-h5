@@ -1,9 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import wx from 'weixin-js-sdk'
 
 Vue.use(Vuex)
 
 const state = {
+	wx: wx,
+	isConfiged: false,
+	isIOS: !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/),
 	count: 1,
 	isLogin: false,
 	showFoot: true,

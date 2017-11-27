@@ -218,9 +218,11 @@ export default {
 	  	reqProductDetail({productId}).then((res) => {
 			this.productInfo = res.data.data
 		//微信分享
+		if (!this.isIOS()) {
+			this.wxConfig()
+		}
 		let shareUrl = location.protocol + "//" + location.host 
 				+ '/product/detail/' + productId
-
 	  	this.wxShare(this.productInfo.name, this.productInfo.productMemo, shareUrl, this.productInfo.icon)
 	  	})
   	} else {

@@ -130,7 +130,7 @@ let router = new Router({
 })
 
 
-import {reqWechatUserInfo} from '../api'
+import {reqWechatUserInfo, reqWechatSignature} from '../api'
 import store from '@/store'
 import {baseUrl} from '../api'
 import { MessageBox } from 'mint-ui'
@@ -210,7 +210,24 @@ router.afterEach((to, from) => {
         store.state.showFoot = false
     } else {
         store.state.showFoot = true
-    }  
+    }
+
+    //微信分享： IOS第一次加签，之后不变
+    //如是非IOS, 每进需要分享的页面重新加签
+    if (!store.state.isConfiged && store.state.isIOS ) {
+      reqWechatSignature({url: document.location.href}).then((res) => {
+        if (res.data.code == 0) {
+          let obj = Object.assign({
+            debug: false,//true会有弹框
+            jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
+          }, res.data.data)
+          store.state.wx.config(obj)
+          store.state.isConfiged = true 
+        }
+      })    
+    }
+
+
 })
 
 export default router

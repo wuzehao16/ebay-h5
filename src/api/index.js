@@ -3,7 +3,7 @@ import axios from 'axios'
 // test
 // axios.defaults.baseURL = 'http://fks3989.tunnel.qydev.com'
 
-export const baseUrl = (process.env.NODE_ENV === 'production') ? 'http://www.wstsoftware.com' : 'http://liyou.tunnel.qydev.com'
+export const baseUrl = (process.env.NODE_ENV === 'production') ? 'http://www.wstsoftware.com' : 'http://fks3989.free.ngrok.cc'
 
 export const reqUserInfo = params => { return axios.get(`/sell/ebay/user/account/${params.id}`, params) }
 //我的钱包
