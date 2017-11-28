@@ -199,27 +199,31 @@ export default {
         userId: this.userId,
         page: 0,
         size: 100
-      }  	
-      reqAddressList(obj).then(res => {
-      	if (res.data.code == 0) {
-        	let list = res.data.data.content
-        	let cnee = {updated: 0}
-        	if (list.length > 0) {
-	        	list.forEach((v, i, a) => {
-	        		if (v.isDefaute == 'Y' && v.updated > cnee.updated) {
-	        			cnee = v
-	        		}
-	        	})
-	        	if (!cnee.id) {
-	        		cnee = list[0]
-	        	}
-		  		this.receiver_info.name = cnee.cneeName
-		  		this.receiver_info.phone = cnee.cneePhone
-		  		this.receiver_info.address = cnee.cneeAddress
-        	}
+      }
 
-      	}
-      })
+      if (!this.$route.params.receiver_info) {
+	      reqAddressList(obj).then(res => {
+	      	if (res.data.code == 0) {
+	        	let list = res.data.data.content
+	        	let cnee = {updated: 0}
+	        	if (list.length > 0) {
+		        	list.forEach((v, i, a) => {
+		        		if (v.isDefaute == 'Y' && v.updated > cnee.updated) {
+		        			cnee = v
+		        		}
+		        	})
+		        	if (!cnee.id) {
+		        		cnee = list[0]
+		        	}
+			  		this.receiver_info.name = cnee.cneeName
+			  		this.receiver_info.phone = cnee.cneePhone
+			  		this.receiver_info.address = cnee.cneeAddress
+	        	}
+
+	      	}
+	      })      	
+      }
+
   }
 }	
 </script>
@@ -248,11 +252,10 @@ export default {
 		text-align: center;
 	}
 	p {
-		margin: 15px 0 5px 10px;
+		margin: 15px 0 5px 0;
 		font-size: 16px
 	}
 	span {
-		margin-left: 10px;
 		font-size: 14px;
 		color: gray;
 	}

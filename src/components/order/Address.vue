@@ -27,7 +27,8 @@
 
 <div style="margin: 10px;">
   <mt-button type="primary" size="large" style="margin-bottom: 8px;" @click="addressSubmit">确认</mt-button>
-  <mt-button type="default" size="large" @click="deleteSubmit" v-if="isEdit">删除地址</mt-button>
+  <mt-button type="default" size="large" style="margin-bottom: 8px;" @click="setDefault" v-if="isEdit">设为默认地址</mt-button>
+  <mt-button type="danger" size="large" @click="deleteSubmit" v-if="isEdit">删除地址</mt-button>  
 </div>
 <!-- 省 -->
 <mt-popup class="popup-width"
@@ -113,8 +114,10 @@ export default {
         cneeName: "",
         cneePhone: "",
         cneeIdcard: "",
-        userId: ""
+        userId: "",
+        isDefaute: "N"
       },
+      addForm_bak: {},
       companyName: "",
       addressSlots: [
         {
@@ -224,6 +227,10 @@ export default {
       }
       return true
     },
+    setDefault () {
+      this.addForm.isDefaute = "Y"
+      this.addressSubmit()
+    },
     addressSubmit() {
       if (!this.validateForm()) {
         return;
@@ -332,6 +339,17 @@ export default {
       this.addressDetail = arr[4];
       this.isEdit = true;
     }
+  },
+  deactivated() {
+    this.addForm = Object.assign({}, this.addForm_bak)
+    this.addressProvince = ""
+    this.addressCity = ""
+    this.addressXian = ""
+    this.addressStreet = ""
+    this.addressDetail = ""    
+  },
+  mounted() {
+    this.addForm_bak = Object.assign({}, this.addForm)
   }
 };
 </script>

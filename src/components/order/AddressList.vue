@@ -1,13 +1,11 @@
 <template>
 <div class="container">
-
-<mt-cell title="收货地址：" >
-
-</mt-cell>
+<div style="margin-bottom: 50px;">
+<mt-cell title="收货地址："></mt-cell>
 <mt-cell v-for='item in addressList' class="address-cell" :key="item.id">
 	<div slot="title" class="add-list">
 		<div>
-			<input type="radio" v-model="radio_value" :value="item.cneeAddress"
+			<input type="radio" v-model="radio_value" :value="item.id"
 				 class="mint-radio-input" @change="getSelected(item)" >  
 			<span class="mint-radio-core"></span>
 		</div>
@@ -19,32 +17,25 @@
 		<i class="iconfont icon-edit" style="font-size: 24px;"></i>
 	</div>
 </mt-cell>
+</div>
 
-	<mt-tabbar :fixed="true" class="add-address">
-	  <!-- <mt-button type="default" size="large" @click="makeSure">确认选择
-	  </mt-button> -->
-	  <mt-button type="primary" size="large" @click="addNew">新增地址
-	  	<i class="iconfont icon-add"></i>
-	  </mt-button>
-	</mt-tabbar>
+<div class="add-address">
+  <mt-button type="primary" size="large" @click="addNew">新增地址
+  	<i class="iconfont icon-add"></i>
+  </mt-button>
+</div>
 
 </div>
 </template>
 <style lang="scss"scoped>
 .container {
-  margin-bottom: 44px;
+  // margin-bottom: 44px;
 }
 .address-cell {
   padding: 5px 0 0 0;
 }
-.address-cell:nth-child(2){
-	.mint-cell-title{
-		.add-list{
-			padding: 10px 0;
-		}
-	}
-}
 .add-list {
+	margin: 8px 0;
 	div{
 		display: inline;
 		position: relative;
@@ -77,8 +68,12 @@
 	}
 }
 .add-address{
+	position: fixed;
+    width: 100%;
+    bottom: 0;	
 	button{
 		height: 46px;
+		border-radius: 0;
 	}
 }
 </style>
@@ -98,10 +93,9 @@ export default {
   },
   methods: {
     getSelected(val) {
-		this.seleceted = val;
-		let that = this;
-		this.radio_value = val.cneeAddress;
-		console.log(this.seleceted)
+		this.seleceted = val
+		let that = this
+		this.radio_value = val.id
 		setTimeout(function() {
 			that.$router.push({
 				name: "SettleOrder",
