@@ -81,7 +81,7 @@
 
 <script>
 import { reqAddressList } from "../../api";
-import { Toast } from "mint-ui";
+import { Toast, Indicator } from "mint-ui";
 export default {
   data() {
     return {
@@ -106,6 +106,9 @@ export default {
 		}, 600);
     },
     addNew() {
+      Indicator.open({
+        spinnerType: 'fading-circle'
+      }) 
       this.$router.push("/order/address");
     },
     editAddress(address) {

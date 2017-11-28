@@ -328,6 +328,9 @@ export default {
     }
   },
   activated() {
+    setTimeout(() => {
+      Indicator.close()
+    }, 400)
     this.addForm.userId = JSON.parse(sessionStorage.getItem('ebay-app')).id
     if (this.$route.params.address_info) {
       this.addForm = this.$route.params.address_info;
