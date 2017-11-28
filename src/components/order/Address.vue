@@ -3,7 +3,7 @@
 
 <mt-field label="收货人" v-model="addForm.cneeName" placeholder="请输入收货人姓名" ></mt-field>
 <mt-field label="手机号" v-model="addForm.cneePhone" placeholder="请输入收货人手机号码" type="tel"></mt-field>
-
+<mt-field label="身份证号" v-model="addForm.cneeIdcard" placeholder="请输入收货人身份证号" type="tel"></mt-field>
 <mt-field label="省" placeholder="请选择省份" class="input-address" 
   v-model="addressProvince" >
   <div @click="popupVisible = true"></div>
@@ -112,7 +112,8 @@ export default {
         cneeAddress: "",
         cneeName: "",
         cneePhone: "",
-        userId: JSON.parse(sessionStorage.getItem('ebay-app')).id
+        cneeIdcard: "",
+        userId: ""
       },
       companyName: "",
       addressSlots: [
@@ -190,29 +191,36 @@ export default {
         Toast({
           message: "请输入收货人姓名",
           position: "top"
-        });
-        return false;
+        })
+        return false
       }
       if (!/^1[3|4|5|7|8]\d{9}$/.test(this.addForm.cneePhone)) {
         Toast({
           message: "请输入正确手机号",
           position: "top"
-        });
-        return false;
+        })
+        return false
+      }
+      if ( !/(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}(\d|x|X)$)/.test(this.addForm.cneeIdcard) ){
+        Toast({
+          message: "请输入正确身份证号码",
+          position: "top"
+        })
+        return false    
       }
       if (!this.addressProvince ||!this.addressCity ||!this.addressXian||!this.addressStreet||this.addressProvince.match(/^[ ]*$/)||this.addressCity.match(/^[ ]*$/)||this.addressXian.match(/^[ ]*$/)||this.addressStreet.match(/^[ ]*$/)) {
         Toast({
           message: "请输入收货人地址",
           position: "top"
-        });
-        return false;
+        })
+        return false
       }
       if (this.addressDetail.match(/^[ ]*$/)) {
         Toast({
           message: "请输入收货详细地址",
           position: "top"
-        });
-        return false;
+        })
+        return false
       }
       return true
     },
@@ -313,6 +321,7 @@ export default {
     }
   },
   activated() {
+    this.addForm.userId = JSON.parse(sessionStorage.getItem('ebay-app')).id
     if (this.$route.params.address_info) {
       this.addForm = this.$route.params.address_info;
       let arr = this.addForm.cneeAddress.split("@");

@@ -40,7 +40,7 @@
 		<mt-field v-model="pro_info.productNane"
       placeholder="请输入商品名称" ></mt-field>
 
-    <mt-cell title="运费">
+ <!--    <mt-cell title="运费">
       <div>
         <mt-radio class="fee-wrap" v-model="youfei" :options="['包邮', '不包邮']">
         </mt-radio>
@@ -57,7 +57,7 @@
       </div>      
     </mt-cell>
     <mt-field  v-model="pro_info.tax_fee" v-show="tax_fee == '不包税'"
-       placeholder="请输入税费"></mt-field>    
+       placeholder="请输入税费"></mt-field>   -->  
       
 		<mt-cell>
       <div slot="title" v-if='ebay.price'>{{ ebay.price.currency + " : " + ebay.price.value}}</div>
@@ -255,8 +255,8 @@ export default {
   },
   activated () {
     console.log(3252342)
-    // this.flag = false
-    this.flag = true
+    this.flag = false
+    // this.flag = true
     this.currentValue = ''
     this.else_key = []
     this.else_value = []

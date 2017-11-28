@@ -26,8 +26,8 @@
 			<span v-else>- {{ item.tradeOutAmount }}</span>
 		</mt-cell>		
 	</div>
-    <div class="no-data" v-if="no_data_tip">您该月份没有收入支出记录</div>
 </mt-loadmore>
+    <div class="no-data" v-if="no_data_tip">您该月份没有收入支出记录</div>
 
 <mt-datetime-picker
   v-model="pickerVisible" @confirm="handleConfirm"

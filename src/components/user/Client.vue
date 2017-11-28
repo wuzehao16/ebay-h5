@@ -17,9 +17,8 @@
 			</div>
 		</mt-cell> 
 	</div>
-    <div class="no-data" v-if="no_data_tip">您该月没有客户</div>
-
 </mt-loadmore>
+    <div class="no-data" v-if="no_data_tip">您该月没有客户</div>
 
 
 <mt-datetime-picker
