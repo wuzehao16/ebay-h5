@@ -9,9 +9,8 @@
   :bottom-method="getProductList" 
 	:bottom-all-loaded="allLoaded" 
   ref="loadmore" 
-  class="main-wrapper" 
-  style="margin:42px 0;">
-  <div style="margin-bottom: 50px;"> 
+  class="main-wrapper">
+  <div style="margin-top: 42px"> 
     <mt-cell class='set-shadow' v-for="d in pro_list" :key="d.created" >
       <div slot="title" class="goodss-list" @click="goDetail(d.id)">
         <div class="avatar" :style="{'background': 'url(' + d.productIcon + ') no-repeat center center'}"></div>
