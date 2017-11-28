@@ -10,7 +10,8 @@
 	:bottom-all-loaded="allLoaded" 
   ref="loadmore" 
   class="main-wrapper">
-  <div style="margin-top: 42px"> 
+  <div>
+    <div style="height: 42px;"></div>
     <mt-cell class='set-shadow' v-for="d in pro_list" :key="d.created" >
       <div slot="title" class="goodss-list" @click="goDetail(d.id)">
         <div class="avatar" :style="{'background': 'url(' + d.productIcon + ') no-repeat center center'}"></div>
@@ -21,6 +22,7 @@
         </div>
       </div>
     </mt-cell>
+    <div style="height: 50px;"></div>
 	</div>
 </mt-loadmore>
 
