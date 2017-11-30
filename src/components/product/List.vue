@@ -164,7 +164,7 @@ export default {
     }
   },
   beforeRouteLeave (to, from, next) {
-    if (this.popupVisible) {
+    if (this.popupVisible && to.name != 'PorductDetail') {
       this.popupVisible = false
       next(false)
     } else {
@@ -173,7 +173,6 @@ export default {
   }
 }
 </script>
-
 <style lang="scss" >
 $ebay-blue :#0099f7;
 $shadow-color: #ececec;
