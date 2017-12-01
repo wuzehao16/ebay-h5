@@ -197,6 +197,9 @@ export default {
   		//重置购物车状态
 		this.$store.commit('resetCartStatus')
   	}
+  },
+  deactivated() {
+  	this.check_all = []
   }
 }
 </script>

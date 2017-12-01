@@ -12,7 +12,7 @@
     <mt-tab-container-item id="all_orders">
   		<mt-loadmore :auto-fill="false" :top-method="getAllList" :bottom-method="getAllList" 
   			:bottom-all-loaded="allLoaded" ref="loadmore">	  
-        <div v-for="(d, index) in all_list" :key="d.orderNo" class='cell-margin'>
+        <div v-for="(d, index) in all_list" :key="d.orderNo" class='cell-margin' @click="goDetail(d)">
           <mt-cell>
             <div slot="title" class="order-des">
               <div><label>状态：</label><span style="color: #ef4f4f;">
@@ -28,7 +28,7 @@
               <div><label>总价：</label><span>￥{{d.orderAmount}}</span></div>
             </div>
             <div v-if="d.orderStatus == '1'">
-              <mt-button type="primary" size="small" class="pay-b" @click="goPay(d.productList)">去支付</mt-button>
+              <mt-button type="primary" size="small" class="pay-b" @click.stop="goPay(d.productList)">去支付</mt-button>
             </div>
           </mt-cell>
           <template v-for='i in d.productList'>
@@ -51,14 +51,14 @@
 	  <mt-tab-container-item id="to_pay">
   		<mt-loadmore :auto-fill="false" :top-method="getToPayList" :bottom-method="getToPayList" 
   			:bottom-all-loaded="allLoaded_2" ref="loadmore2">
-        <div v-for="(d,index) in to_pay_list" :key="d.orderNo" class='cell-margin'>
+        <div v-for="(d,index) in to_pay_list" :key="d.orderNo" class='cell-margin'  @click="goDetail(d)">
           <mt-cell>
             <div slot="title" class="order-des">
               <div><label>状态：</label><span style="color: #ef4f4f;">待支付</span></div>
               <div><label>总价：</label><span>￥{{d.orderAmount}}</span></div>
             </div>
             <div>
-              <mt-button type="primary" size="small" class="pay-b" @click="goPay(d.productList)">去支付</mt-button>
+              <mt-button type="primary" size="small" class="pay-b" @click.stop="goPay(d.productList)">去支付</mt-button>
             </div>
           </mt-cell>
           <template v-for='i in d.productList'>
@@ -142,16 +142,28 @@ export default {
   	}
   },
   methods: {
+    goDetail(order) {
+      this.$router.push({
+        name: 'OrderDetail',
+        params: {
+          order: order
+        }
+      })
+    },
     goPay(row){
+      console.log(row)
       this.items = []
       for (let d of row) {
-        this.items.push({
-          productId: d.orderDetail.id,
-          productName: d.orderDetail.productName,
-          productPrice: d.orderDetail.productPrice,
-          productQuantity: d.orderDetail.productQuantity,
-          productIcon: d.orderDetail.productIcon
-        })        
+        // this.items.push({
+        //   id: d.orderDetail.id,
+
+        //   productId: d.orderDetail.id,
+        //   productName: d.orderDetail.productName,
+        //   productPrice: d.orderDetail.productPrice,
+        //   productQuantity: d.orderDetail.productQuantity,
+        //   productIcon: d.orderDetail.productIcon
+        // })    
+        this.items.push(d.orderDetail)    
       }
   		sessionStorage.setItem('order_info', JSON.stringify({items: this.items}))
   		this.$router.push({

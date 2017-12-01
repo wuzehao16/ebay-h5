@@ -16,7 +16,7 @@
 <mt-cell v-for="(order, index) in order_info.items" :key="index" style="margin-bottom: 10px;">
 	<div slot="title" class="order-container" :style="{'background': 
 		'url(' + order.productIcon + ') left center no-repeat'}">
-		<h3>{{ order.productName }}L</h3>
+		<h3>{{ order.productName }}</h3>
 		<!-- <p>{{ order_info.des }}</p> -->
 		<div><span class="price">￥{{ order.productPrice }}</span>
 		<span class="amount">x{{ order.productQuantity }}</span></div>
@@ -46,7 +46,8 @@
 </template>
 
 <script>
-import {reqBuyerOrderCreate, baseUrl, reqPayCreate, reqAddressList, reqCartDelete} from '../../api'
+import {reqBuyerOrderCreate, baseUrl, reqPayCreate, reqBuyerOrderEdit,
+	reqAddressList, reqCartDelete, reqBuyerOrderDetail} from '../../api'
 import { Toast, MessageBox } from 'mint-ui'
 export default {
   data () {
@@ -124,17 +125,23 @@ export default {
 	        return false
   		}
   		this.payStatus = true
-  		if (this.pay_info.orderId) {
-			reqPayCreate(this.pay_info).then((res) => {
-				if (res.data.code == 0) {
-					this.wechatPay(res.data.data.payResponse)
-				}
-			})  			
-  		} else {
-	  		Object.assign(this.order_info, this.receiver_info, {
-	  			openid: JSON.parse( sessionStorage.getItem('ebay-app') ).userWxOpenid,
-	  			carriage: this.carriage
-	  		})
+
+  		Object.assign(this.order_info, this.receiver_info, {
+  			openid: this.ebay_app.userWxOpenid,
+  			carriage: this.carriage
+  		})  		
+  		if (this.pay_info.orderId) {//已建订单
+  			Object.assign(this.order_info, {orderMasterId: this.orderMasterId})
+  			reqBuyerOrderEdit(this.order_info).then((res) => {
+  				if (res.data.code == 0) {
+					reqPayCreate(this.pay_info).then((res) => {
+						if (res.data.code == 0) {
+							this.wechatPay(res.data.data.payResponse)
+						}
+					})    					
+  				}
+  			})
+  		} else {//未建订单
 	  		reqBuyerOrderCreate(this.order_info).then((res) => {
 	  			if(res.data.code == 0) {
 	  				this.pay_info.orderId = res.data.data.orderId
@@ -173,8 +180,30 @@ export default {
       return (Number.parseFloat(this.goods_all_price) + this.carriage ).toFixed(2)
     }
   },
+  beforeRouteEnter(to, from, next) {
+  	if (from.name) {
+  		console.log(from)
+  		next(vm => {
+	  		if (from.name == 'OrderList') {
+			  	vm.pay_info.orderId = vm.$route.params.orderId
+				reqBuyerOrderDetail({
+					openid: vm.ebay_app.userWxOpenid,
+					orderId: vm.pay_info.orderId
+				}).then((res) => {
+					if (res.data.code == 0) {
+						vm.orderMasterId = res.data.data.id
+					} else {
+						Toast('找不到订单ID')
+						vm.$router.push('/order/list')
+					}
+				})
+	  		}  			
+  		})
+  	} else {
+  		next('/order/list')
+  	}
+  },
   activated () {
-  	this.pay_info.orderId = this.$route.params.orderId
   	this.order_info = JSON.parse(sessionStorage.getItem('order_info'))
   	if (!this.order_info) {
   		this.$router.push('/product/list')
@@ -187,14 +216,15 @@ export default {
   	}
   },
   deactivated() {
-  	this.pay_info.orderId = ''
   	this.payStatus = false
   	if (this.$route.name != 'AddressList') {
+  		this.pay_info.orderId = ''
   		sessionStorage.setItem('order_info', JSON.stringify({}))
   	}
   },
   mounted() {
-  	  this.userId = JSON.parse(sessionStorage.getItem("ebay-app")).id
+  	  this.ebay_app = JSON.parse(sessionStorage.getItem("ebay-app"))
+  	  this.userId = this.ebay_app.id
       let obj = {
         userId: this.userId,
         page: 0,
@@ -277,36 +307,5 @@ $red-color: #ef4f4f;
 }
 .c2 {
     margin-bottom: 60px;
-}
-.order-container {
-    padding: 10px 0 10px 80px;
-    background-size: 70px auto!important;
-    height: 80px;
-    line-height: 34px;
-	h3, p {
-		margin: 0;
-	    overflow: hidden;
-	    text-overflow: ellipsis;
-	    display: -webkit-box;
-	    -webkit-line-clamp: 2;
-	    -webkit-box-orient: vertical;
-	    word-wrap: break-word;	
-	    word-break: break-all;	
-	} 
-	h3 {
-		margin-top: -6px;
-	}
-	p {
-		-webkit-line-clamp: 1;
-		color: gray;
-	}
-	.price {
-		color: #0099f7;
-	}
-	.amount {
-		float: right;
-		font-size: 14px;
-		color: gray;
-	}
 }
 </style>
