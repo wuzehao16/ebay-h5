@@ -5,6 +5,10 @@ import axios from 'axios'
 
 export const baseUrl = (process.env.NODE_ENV === 'production') ? 'http://www.wstsoftware.com' : 'http://fks3989.free.ngrok.cc'
 
+export const reqAddressJson = params => { return axios.get(`/static/address4.json`) }
+
+export const reqLogistics = params => { return axios.get(`/sell/oso-api/oso/api/order/getTracking/${params.orderNo}`)}
+
 export const reqUserInfo = params => { return axios.get(`/sell/ebay/user/account/${params.id}`, params) }
 //我的钱包
 export const reqMyWallet = params => { return axios.get(`/sell/ebay/user/user/myWallet`, {params: params}) }

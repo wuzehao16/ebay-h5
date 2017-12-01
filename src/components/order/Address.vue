@@ -97,13 +97,14 @@
 </style>
 
 <script>
-import s from "@/assets/address4.json";
-import { reqAddressCreate, reqAddressDelete } from "../../api";
+// import s from "@/assets/address4.json";
+import { reqAddressCreate, reqAddressDelete, reqAddressJson } from "../../api";
 import { Toast, Indicator } from "mint-ui";
 export default {
   name: "address",
   data() {
     return {
+      addrJson: {},
       isEdit: false,
       popupVisible: false,
       popupVisible2: false,
@@ -122,7 +123,8 @@ export default {
       addressSlots: [
         {
           flex: 1,
-          values: Object.keys(s),
+          // values: Object.keys(s),
+          values: [],
           className: "slot1",
           textAlign: "center"
         }
@@ -155,7 +157,8 @@ export default {
       addressCity: "",
       addressXian: "",
       addressStreet: "",
-      addressDetail: ""
+      addressDetail: "",
+      initFlag: 0
     };
   },
   methods: {
@@ -270,14 +273,16 @@ export default {
       })
     },
     onProvinceChange(picker, values) {
-      this.addressProvince = values[0];
-      this.addressCity = "";
-      this.addressXian = "";
-      this.addressStreet = "";
+      if (this.initFlag++ > 1) {
+        this.addressProvince = values[0]
+      }
+      this.addressCity = ""
+      this.addressXian = ""
+      this.addressStreet = ""
     },
     touchCity() {
       if (this.addressProvince) {
-        this.citySlots[0].values = Object.keys(s[this.addressProvince]);
+        this.citySlots[0].values = Object.keys(this.addrJson[this.addressProvince]);
         this.popupVisible2 = true;
       } else {
         Toast({
@@ -289,7 +294,7 @@ export default {
     },
     touchXian() {
       if (this.addressCity) {
-        let xianObj = s[this.addressProvince][this.addressCity];
+        let xianObj = this.addrJson[this.addressProvince][this.addressCity];
         this.xianSlots[0].values = Object.keys(xianObj);
         this.popupVisible3 = true;
       } else {
@@ -303,7 +308,7 @@ export default {
     touchStreet() {
       if (this.addressXian) {
         let streetObj =
-          s[this.addressProvince][this.addressCity][this.addressXian];
+          this.addrJson[this.addressProvince][this.addressCity][this.addressXian];
         this.streetSlots[0].values = streetObj;
         this.popupVisible4 = true;
       } else {
@@ -353,6 +358,11 @@ export default {
   },
   mounted() {
     this.addForm_bak = Object.assign({}, this.addForm)
+
+    reqAddressJson().then((res) => {
+      this.addrJson = res.data
+      this.addressSlots[0].values = Object.keys(res.data)
+    }).catch(err => {})
   }
 };
 </script>
