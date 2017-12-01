@@ -20,6 +20,9 @@
     </div>
 </div>
 
+<input type="text" name="dfdf" v-focus='hideKeyboard'
+   @blur="hideKeyboard = false" readonly class="input-null">
+
 <div class="goods-container" v-if="flag">
 	<mt-swipe :auto="5000" :speed="0" class="pre-banner">
 	  <mt-swipe-item v-for="i in pro_info.productPic.split('@')" :key="i"> 
@@ -72,12 +75,15 @@
 			<mt-cell :title=" item.value" style="font-size:14px"></mt-cell>
 			<mt-field v-model="else_value[index]" :placeholder="'请输入译文' " 
 				style="margin-bottom: 10px;font-size:12px"></mt-field>
-		</template>				
-    		<div v-html="ebay.description" class="desc-wrap">
+		</template>
 
-        </div>
-        <mt-cell title=" 商品介绍 " style="font-size:14px;margin-top:10px;"></mt-cell>
-          <textarea v-model="pro_info.productMemo" cols="30" rows="10" style="width:98%"></textarea>
+    <iframe :srcdoc="ebay.description" seamless class="desc-wrap"></iframe>
+		<!-- <div v-html="ebay.description" class="desc-wrap"></div> -->
+
+
+    <mt-cell title=" 商品介绍 " style="font-size:14px;margin-top:10px;"></mt-cell>
+    <textarea v-model="pro_info.productMemo" cols="30" rows="10" style="width:98%">
+    </textarea>
         
 	</form>
 
@@ -98,6 +104,7 @@ export default {
   	return {
       tax_fee: '',
       youfei: '',
+      hideKeyboard: false,
 
   		visible: false,
   		currentValue: '',
@@ -125,6 +132,15 @@ export default {
       },
       pro_info_bak: {}
   	}
+  },
+  directives: {
+      focus: {
+          update: function (el, {value}) {
+              if (value) {
+                  el.focus();
+              }
+          }
+      }
   },
   methods: {
     proSubmit () {
@@ -190,6 +206,7 @@ export default {
       if (this.currentValue.match(/^[ ]*$/)) {
         Toast("请输入Ebay商品ID")
       } else {
+        this.hideKeyboard = true
         Indicator.open({
           spinnerType: 'fading-circle'
         })        
@@ -323,9 +340,9 @@ export default {
   }
 }
 .desc-wrap {
-  table, img {
-    width: 100%!important;
-  }
+  width: 100%;
+  border: 0;
+  height: 50vh;
 }
 .no-product{
     padding-top: 20px;
@@ -354,7 +371,10 @@ export default {
     background-size: contain!important;
   }
 }
-.desc-wrap {
-  overflow-x: scroll;
+.input-null {
+    z-index: -1;
+    position: absolute;
+    top: 0;
+    left: 0;  
 }
 </style>
