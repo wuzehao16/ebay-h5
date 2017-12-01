@@ -146,5 +146,35 @@ h3 {
   text-align: center;
   color: #999;
 }  
-
+.order-container {
+    padding: 10px 0 10px 80px;
+    background-size: 70px auto!important;
+    height: 80px;
+    line-height: 34px;
+  h3, p {
+    margin: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      word-wrap: break-word;  
+      word-break: break-all;  
+  } 
+  h3 {
+    margin-top: -6px;
+  }
+  p {
+    -webkit-line-clamp: 1;
+    color: gray;
+  }
+  .price {
+    color: #0099f7;
+  }
+  .amount {
+    float: right;
+    font-size: 14px;
+    color: gray;
+  }
+}
 </style>

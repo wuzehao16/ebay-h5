@@ -8,6 +8,7 @@ import Mint from 'mint-ui'
 import 'mint-ui/lib/style.css'
 import '@/assets/fonts/iconfont.css'
 import wx from 'weixin-js-sdk'
+import util from './api/util'
 Vue.use(Mint)
 
 Vue.config.productionTip = false
@@ -21,6 +22,13 @@ new Vue({
   components: { App }
 })
 
+Vue.prototype.formatTime = function (date, pattern) {
+	if (date) {
+		return util.formatDate.format(new Date(date), pattern)
+	} else {
+		return '--'
+	}
+}
 Vue.prototype.goTop = function() {
   document.getElementById('app').scrollTop = 0
 }
