@@ -5,7 +5,9 @@ import axios from 'axios'
 
 export const baseUrl = (process.env.NODE_ENV === 'production') ? 'http://www.wstsoftware.com' : 'http://fks3989.free.ngrok.cc'
 
-export const reqAddressJson = params => { return axios.get(`/static/address4.json`) }
+let staticBase = (process.env.NODE_ENV === 'production') ? '' : '/static'
+
+export const reqAddressJson = params => { return axios.get(`${staticBase}/address4.json`) }
 
 export const reqLogistics = params => { return axios.get(`/sell/oso-api/oso/api/order/getTracking/${params.orderNo}`)}
 
