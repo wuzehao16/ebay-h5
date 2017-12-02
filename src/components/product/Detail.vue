@@ -59,8 +59,8 @@
 	  	</dd>
   	</dl> -->
 <div class="fee-wrap">
-  	<mt-cell title="运费" value="包邮"></mt-cell>
-  	<mt-cell title="税费" value="包税"></mt-cell>
+  	<mt-cell title="运费" :value="carriageFee"></mt-cell>
+  	<mt-cell title="税费" :value="taxFee"></mt-cell>
 </div>
 
   	<dl>
@@ -120,6 +120,8 @@ export default {
   		items: [],
   		isPreview: false,
   		pro_in_cart: 0,
+  		carriageFee: '',
+  		taxFee: '',
 
   		country: 'us',
   		isoCountry: {}
@@ -191,7 +193,9 @@ export default {
   			productName: this.productInfo.name,
   			productPrice: this.productInfo.price,
   			productQuantity: this.amount,
-  			productIcon: this.productInfo.icon
+  			productIcon: this.productInfo.icon,
+  			carriageFee: this.productInfo.carriageFee,
+  			taxFee: this.productInfo.taxFee
   		})
   		let order_info = {
   			items: this.items
@@ -238,6 +242,19 @@ export default {
   		let productId = this.$route.params.id || this.$route.query.pc_preview
 	  	reqProductDetail({productId}).then((res) => {
 			this.productInfo = res.data.data
+
+			if (this.productInfo.carriageFee) {
+				this.carriageFee = '￥' + this.productInfo.carriageFee
+			} else {
+				this.carriageFee = '包邮'
+			}
+			if (this.productInfo.taxFee) {
+				this.taxFee = '￥' + this.productInfo.taxFee
+			} else {
+				this.taxFee = '包税'
+			}			
+
+
 		//微信分享
 		if (!this.isIOS()) {
 			this.wxConfig()

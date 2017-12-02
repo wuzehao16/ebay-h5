@@ -15,6 +15,7 @@ const Withdraw = r => require.ensure([], () => r(require('@/components/user/with
 
 
 const OrderList = r => require.ensure([], () => r(require('@/components/order/orderlist')), 'OrderList')
+const OrderDetail = r => require.ensure([], () => r(require('@/components/order/orderdetail')), 'OrderDetail')
 
 const LogisticsInfo = r => require.ensure([], () => r(require('@/components/order/logisticsinfo')), 'LogisticsInfo')
 const ProductList = r => require.ensure([], () => r(require('@/components/product/list')), 'ProductList')
@@ -92,6 +93,11 @@ let router = new Router({
       component: OrderList
     },
     {
+      path: '/order/detail',
+      name: 'OrderDetail',
+      component: OrderDetail
+    },
+    {
       path: '/order/logistics',
       name: 'LogisticsInfo',
       component: LogisticsInfo
@@ -135,7 +141,7 @@ import store from '@/store'
 import {baseUrl} from '../api'
 import { MessageBox } from 'mint-ui'
 router.beforeEach((to, from, next) => {
-
+/*
   if (to.name == 'PcPreviewGoods') {
     next()
   } else {
@@ -145,15 +151,12 @@ router.beforeEach((to, from, next) => {
     if (!user && !openid) {//未申请授权
       let returnUrl = location.protocol + "//" + location.host
             + (to.path || '/product/list')
-      console.log('returnUrl:', returnUrl)
       returnUrl = window.encodeURIComponent(returnUrl)
       let aa = baseUrl + '/sell/wechat/authorize?returnUrl=' + returnUrl 
       window.location.href = aa
 
     } else if (!user && openid) {//已完成授权但未从后台获取已授权用户的信息
-      console.log(22222)
       reqWechatUserInfo({openid}).then((res) => {
-          console.log(res)
         if (res.data.code == 0) {
           let obj = res.data.data
           sessionStorage.setItem('ebay-app', JSON.stringify(obj))
@@ -177,15 +180,18 @@ router.beforeEach((to, from, next) => {
         next()
       }
     }    
-  }
+  }*/
 
-/*  let user = {
+  let user = {
     id: '20',
     userWxOpenid: 'oyNDcwRQUAv0Oahba6SUlXLwobgw',
-    userCtype: '1'
+    userCtype: '1',
+    userPhone: '13877887788',
+    userAddr: 'xxx省uu市fddkjflkj',
+    userWxName: 'Cons.Van'
   }
   sessionStorage.setItem('ebay-app', JSON.stringify(user))
-next()*/
+next()
  /* let user = JSON.parse( sessionStorage.getItem('ebay-app') )
 
   if (user.userCtype == '2' && store.state.authPage.includes(to.name)) {
@@ -205,8 +211,8 @@ next()*/
 
 router.afterEach((to, from) => {
   //特定页面不显示底部
-    if (['PopularizeList', 'AddGoods', 'AddressList', 'Address',
-       'PorductDetail', 'SettleOrder', 'Withdraw', 'Register' ].includes(to.name)) {
+    if (['PopularizeList', 'AddGoods', 'AddressList', 'Address', 'OrderDetail',
+       'PorductDetail', 'SettleOrder', 'Withdraw', 'Register', 'LogisticsInfo' ].includes(to.name)) {
         store.state.showFoot = false
     } else {
         store.state.showFoot = true
@@ -226,8 +232,6 @@ router.afterEach((to, from) => {
         }
       })    
     }
-
-
 })
 
 export default router

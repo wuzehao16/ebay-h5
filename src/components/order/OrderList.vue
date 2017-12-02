@@ -28,7 +28,7 @@
               <div><label>总价：</label><span>￥{{d.orderAmount}}</span></div>
             </div>
             <div v-if="d.orderStatus == '1'">
-              <mt-button type="primary" size="small" class="pay-b" @click.stop="goPay(d.productList)">去支付</mt-button>
+              <mt-button type="primary" size="small" class="pay-b" @click.stop="goPay(d)">去支付</mt-button>
             </div>
           </mt-cell>
           <template v-for='i in d.productList'>
@@ -58,7 +58,7 @@
               <div><label>总价：</label><span>￥{{d.orderAmount}}</span></div>
             </div>
             <div>
-              <mt-button type="primary" size="small" class="pay-b" @click.stop="goPay(d.productList)">去支付</mt-button>
+              <mt-button type="primary" size="small" class="pay-b" @click.stop="goPay(d)">去支付</mt-button>
             </div>
           </mt-cell>
           <template v-for='i in d.productList'>
@@ -138,7 +138,7 @@ export default {
 
       tip_flag: false,
       tip_text: '',
-      items:[]
+      // items:[]
   	}
   },
   methods: {
@@ -150,27 +150,29 @@ export default {
         }
       })
     },
-    goPay(row){
+    goPay(d){
+      console.log("d:", d)
+      let row = d.productList
       console.log(row)
-      this.items = []
-      for (let d of row) {
-        // this.items.push({
-        //   id: d.orderDetail.id,
-
-        //   productId: d.orderDetail.id,
-        //   productName: d.orderDetail.productName,
-        //   productPrice: d.orderDetail.productPrice,
-        //   productQuantity: d.orderDetail.productQuantity,
-        //   productIcon: d.orderDetail.productIcon
-        // })    
-        this.items.push(d.orderDetail)    
+      let items = []
+      for (let r of row) {
+        items.push(Object.assign(r.orderDetail, {
+            carriageFee: r.carriageFee,
+            taxFee: r.taxFee
+        }))  
       }
-  		sessionStorage.setItem('order_info', JSON.stringify({items: this.items}))
+  		sessionStorage.setItem('order_info', JSON.stringify({
+          items,
+          orderMasterId: d.id,
+          orderId: d.orderNo
+        })
+      )
   		this.$router.push({
   			name: 'SettleOrder',
-        params: {
-          orderId: row[0].orderDetail.orderId
-        }
+        // params: {
+        //   orderId: row[0].orderDetail.orderId,
+        //   orderMasterId: d.id
+        // }
   		})
     },
     showSpinner() {

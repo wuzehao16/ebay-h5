@@ -25,17 +25,17 @@
 </div>
 
 <mt-cell title="商品金额">
-	<div class="red-color">￥{{ goods_all_price }}</div>
+	<div class="red-color">￥{{ total.price }}</div>
 </mt-cell>
 <mt-cell title="运费">
-	<div class="red-color">包邮<!-- ￥{{ carriage }} --></div>
+	<div class="red-color">￥{{ total.carriageFee }}</div>
 </mt-cell>
 <mt-cell title="税费">
-	<div class="red-color">包税</div>
+	<div class="red-color">￥{{ total.taxFee }}</div>
 </mt-cell>
 
 <mt-cell>
-	<div>实付金额：<span class="red-color">￥{{ total_money }}</span></div>
+	<div>实付金额：<span class="red-color">￥{{ total.money }}</span></div>
 </mt-cell>
 <div class='to-wechat'>
 <mt-button size="large" @click="submitOrder" :disabled="payStatus">微信支付</mt-button>
@@ -47,14 +47,13 @@
 
 <script>
 import {reqBuyerOrderCreate, baseUrl, reqPayCreate, reqBuyerOrderEdit,
-	reqAddressList, reqCartDelete, reqBuyerOrderDetail} from '../../api'
+	reqAddressList, reqCartDelete} from '../../api'
 import { Toast, MessageBox } from 'mint-ui'
 export default {
   data () {
   	return {
   		payStatus: false,
   		order_info: {},
-  		carriage: 0.00,
   		receiver_info: {
   			cneeName: '',//收货人
   			cneePhone: '',
@@ -130,13 +129,12 @@ export default {
   		this.payStatus = true
 
   		Object.assign(this.order_info, this.receiver_info, {
-  			openid: this.ebay_app.userWxOpenid,
-  			carriage: this.carriage
+  			openid: this.ebay_app.userWxOpenid
   		})  		
-  		if (this.pay_info.orderId) {//已建订单
-  			Object.assign(this.order_info, {orderMasterId: this.orderMasterId})
+  		if (this.order_info.orderId) {//已建订单
   			reqBuyerOrderEdit(this.order_info).then((res) => {
   				if (res.data.code == 0) {
+  					this.pay_info.orderId = this.order_info.orderId
 					reqPayCreate(this.pay_info).then((res) => {
 						if (res.data.code == 0) {
 							this.wechatPay(res.data.data.payResponse)
@@ -148,7 +146,6 @@ export default {
 	  		reqBuyerOrderCreate(this.order_info).then((res) => {
 	  			if(res.data.code == 0) {
 	  				this.pay_info.orderId = res.data.data.orderId
-
 	  				//如已下单商存在于购物车中，则去掉
 					for (let i of this.order_info.items) {
 						reqCartDelete({
@@ -170,40 +167,19 @@ export default {
   	}
   },
   computed: {
-  	goods_all_price() {
-  		let all_price = 0
+  	total() {
+  		let c = 0, t = 0, p = 0, m = 0
   		if(this.order_info.items) {
 	  		for (let i of this.order_info.items) {
-	  			all_price += i.productPrice * i.productQuantity
+	  			let carriage = i.carriageFee || 0
+	  			let tax = i.taxFee || 0
+	  			p += i.productPrice * i.productQuantity
+	  			c += carriage
+	  			t += tax
 	  		}
   		}
-  		return all_price
-  	},
-    total_money() {
-      return (Number.parseFloat(this.goods_all_price) + this.carriage ).toFixed(2)
-    }
-  },
-  beforeRouteEnter(to, from, next) {
-  	if (from.name) {
-  		console.log(from)
-  		next(vm => {
-	  		if (from.name == 'OrderList') {
-			  	vm.pay_info.orderId = vm.$route.params.orderId
-				reqBuyerOrderDetail({
-					openid: vm.ebay_app.userWxOpenid,
-					orderId: vm.pay_info.orderId
-				}).then((res) => {
-					if (res.data.code == 0) {
-						vm.orderMasterId = res.data.data.id
-					} else {
-						Toast('找不到订单ID')
-						vm.$router.push('/order/list')
-					}
-				})
-	  		}  			
-  		})
-  	} else {
-  		next('/order/list')
+  		m = c + t + p
+  		return {carriageFee: c, taxFee: t, price: p, money: m}
   	}
   },
   activated () {
@@ -216,7 +192,7 @@ export default {
   		this.receiver_info.cneeName = a.cneeName
   		this.receiver_info.cneePhone = a.cneePhone
   		this.receiver_info.cneeAddress = a.cneeAddress
-  	}
+  	}	
   },
   deactivated() {
   	this.payStatus = false
