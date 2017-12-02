@@ -127,6 +127,7 @@ export default {
         items: [],
         productMemo:"",
         productUsd: '',
+        productCountry: '',
         youfei: '',
         tax_fee: ''
       },
@@ -218,11 +219,9 @@ export default {
           } else if (res.data.itemId) {
             this.ebay = res.data
             this.flag = true
-            // console.log('ebay', Object.assign({} ,this.ebay))
-
-
             this.pro_info.productIcon = this.ebay.image.imageUrl
             this.pro_info.productUsd = this.ebay.price.value
+            this.pro_info.productCountry = this.ebay.itemLocation.country
             let imgArr = []
             imgArr.push(this.pro_info.productIcon)
             for (let i of this.ebay.additionalImages) {

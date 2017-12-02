@@ -30,7 +30,16 @@
 	  <span class="love-it" @click="collected = !collected"><i class="iconfont" :class="{'icon-collect': !collected, 'icon-collect-color': collected}"></i><br/>收藏</span>
 	</mt-cell>
 	<div class="price">￥{{productInfo.price}}</div>
-	
+	<mt-cell>
+		<div slot='title' class='country-wrap'>
+			<img :src="staticBase + '/resource/flags_24/' + country + '.png' ">
+			<span>{{ EN_To_CN }}品牌</span>
+		</div>
+		<div class='country-wrap'>
+			<i class="iconfont icon-plane"></i>
+			<span>跨境运输</span>
+		</div>
+	</mt-cell>
 <!--   	<dl>
 	  	<dt>尺寸</dt>
 	  	<dd>
@@ -49,9 +58,10 @@
 	  	</ul>
 	  	</dd>
   	</dl> -->
-
+<div class="fee-wrap">
   	<mt-cell title="运费" value="包邮"></mt-cell>
   	<mt-cell title="税费" value="包税"></mt-cell>
+</div>
 
   	<dl>
 	  	<dt class="number-title">数量</dt>
@@ -93,13 +103,13 @@
 </template>
 
 <script>
-import {reqProductDetail, reqAddToShoppingCart, reqWechatUrl,
-	reqShoppingCartList, reqWechatUserInfo} from '../../api'
+import {reqProductDetail, reqAddToShoppingCart, reqWechatUrl, reqIsoCountryJson,
+	reqShoppingCartList, reqWechatUserInfo, staticBase} from '../../api'
 import {Toast} from 'mint-ui'
-import util from '../../api/util'
 export default {
   data () {
   	return {
+  		staticBase: staticBase,
   		productInfo: {},
   		active: 'tab-container1',
   		selected: '1',
@@ -109,7 +119,10 @@ export default {
   		collected: false,
   		items: [],
   		isPreview: false,
-  		pro_in_cart: 0
+  		pro_in_cart: 0,
+
+  		country: 'us',
+  		isoCountry: {}
   	}
   },
   beforeRouteEnter (to, from, next) {
@@ -126,7 +139,6 @@ export default {
 		}).catch((err) => {next('/product/list')})
 	  } else if (!user && openid) {
 	    reqWechatUserInfo({openid}).then((res) => {
-	        console.log(res)
 	      if (res.data.code == 0) {
 	        let obj = res.data.data
 	        sessionStorage.setItem('ebay-app', JSON.stringify(obj))
@@ -139,10 +151,15 @@ export default {
 	  	next()
 	  }
   },
+  computed: {
+  	EN_To_CN() {
+  		let c = this.country.toUpperCase()
+  		return this.isoCountry[c]
+  	}
+  },
   methods: {
   	addToCart() {
   		let userId = JSON.parse( sessionStorage.getItem('ebay-app') ).id
-  		// userWxOpenid
   		let goodCarForm = {
   			productId: this.productInfo.id,
   			productName: this.productInfo.name,
@@ -205,6 +222,10 @@ export default {
   },
   mounted() {
   	this.getCartAmount()
+
+  	reqIsoCountryJson().then((res) => {
+  		this.isoCountry = res.data
+  	})
   },
   activated() {
   	if (this.$route.query.pc_preview) {
@@ -239,6 +260,13 @@ export default {
 }
 </script>
 
+<style lang="scss">
+.fee-wrap {
+	span {
+		font-size: 14px;
+	}
+}	
+</style>
 <style lang='scss' scoped>
 $bg-red : #f23030;
 .mint-swipe{
@@ -307,6 +335,13 @@ $bg-red : #f23030;
 		color:#0099f7;
 		padding-bottom: 10px;	
   }
+}
+.country-wrap {
+	font-size: 14px;
+	color: #888;
+	img {
+		height: 20px;
+	}
 }
 .love-it {
 	text-align: center;
@@ -480,4 +515,5 @@ dl {
 		}
 	}
 }
+
 </style>

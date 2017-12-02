@@ -97,7 +97,6 @@
 </style>
 
 <script>
-// import s from "@/assets/address4.json";
 import { reqAddressCreate, reqAddressDelete, reqAddressJson } from "../../api";
 import { Toast, Indicator } from "mint-ui";
 export default {
