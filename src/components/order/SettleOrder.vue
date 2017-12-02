@@ -3,11 +3,11 @@
 <div class="c2">
 <mt-cell class="address" >
 	<div slot="title" @click="chooseAddress" class="receiver">
-		<template v-if="receiver_info.name">
-			<p>{{ receiver_info.name }} {{ receiver_info.phone }}</p>
-			<span>{{ receiver_info.address.replace(/@/g, "") }}</span>
+		<template v-if="receiver_info.cneeName">
+			<p>{{ receiver_info.cneeName }} {{ receiver_info.cneePhone }}</p>
+			<span>{{ receiver_info.cneeAddress.replace(/@/g, "") }}</span>
 		</template>
-		<template v-if="!receiver_info.name">
+		<template v-if="!receiver_info.cneeName">
 			<div class="choose">请选择地址<i class="iconfont icon-add"></i></div>
 		</template>
 	</div>
@@ -56,7 +56,10 @@ export default {
   		order_info: {},
   		carriage: 0.00,
   		receiver_info: {
-  			name: '',
+  			cneeName: '',//收货人
+  			cneePhone: '',
+  			cneeAddress: '',
+  			name: '',//买家
   			phone: '',
   			address: ''
   		},
@@ -117,7 +120,7 @@ export default {
 		}
   	},
   	submitOrder() {
-  		if(!this.receiver_info.name) {
+  		if(!this.receiver_info.cneeName) {
 	        Toast({
 	          message: '请选择地址',
 	          position: 'top'
@@ -210,9 +213,9 @@ export default {
   	}
   	let a = this.$route.params.receiver_info
   	if (a) {
-  		this.receiver_info.name = a.cneeName
-  		this.receiver_info.phone = a.cneePhone
-  		this.receiver_info.address = a.cneeAddress
+  		this.receiver_info.cneeName = a.cneeName
+  		this.receiver_info.cneePhone = a.cneePhone
+  		this.receiver_info.cneeAddress = a.cneeAddress
   	}
   },
   deactivated() {
@@ -224,6 +227,10 @@ export default {
   },
   mounted() {
   	  this.ebay_app = JSON.parse(sessionStorage.getItem("ebay-app"))
+  	  this.receiver_info.name = this.ebay_app.userWxName
+  	  this.receiver_info.phone = this.ebay_app.userPhone
+  	  this.receiver_info.address = this.ebay_app.userAddr
+
   	  this.userId = this.ebay_app.id
       let obj = {
         userId: this.userId,
@@ -245,9 +252,9 @@ export default {
 		        	if (!cnee.id) {
 		        		cnee = list[0]
 		        	}
-			  		this.receiver_info.name = cnee.cneeName
-			  		this.receiver_info.phone = cnee.cneePhone
-			  		this.receiver_info.address = cnee.cneeAddress
+			  		this.receiver_info.cneeName = cnee.cneeName
+			  		this.receiver_info.cneePhone = cnee.cneePhone
+			  		this.receiver_info.cneeAddress = cnee.cneeAddress
 	        	}
 
 	      	}
