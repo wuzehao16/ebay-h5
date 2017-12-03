@@ -32,7 +32,7 @@
 	<div class="price">￥{{productInfo.price}}</div>
 	<mt-cell>
 		<div slot='title' class='country-wrap'>
-			<img :src="staticBase + '/resource/flags_24/' + country + '.png' ">
+			<img :src="staticBase + '/resource/flags_24/' + productInfo.productCountry + '.png' ">
 			<span>{{ EN_To_CN }}品牌</span>
 		</div>
 		<div class='country-wrap'>
@@ -123,7 +123,6 @@ export default {
   		carriageFee: '',
   		taxFee: '',
 
-  		country: 'us',
   		isoCountry: {}
   	}
   },
@@ -155,7 +154,7 @@ export default {
   },
   computed: {
   	EN_To_CN() {
-  		let c = this.country.toUpperCase()
+  		let c = this.productInfo.productCountry
   		return this.isoCountry[c]
   	}
   },
