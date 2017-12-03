@@ -130,7 +130,7 @@ export default {
 
   		Object.assign(this.order_info, this.receiver_info, {
   			openid: this.ebay_app.userWxOpenid
-  		})  		
+  		})
   		if (this.order_info.orderId) {//已建订单
   			reqBuyerOrderEdit(this.order_info).then((res) => {
   				if (res.data.code == 0) {
@@ -139,13 +139,16 @@ export default {
 						if (res.data.code == 0) {
 							this.wechatPay(res.data.data.payResponse)
 						}
-					})    					
+					})
   				}
   			})
   		} else {//未建订单
 	  		reqBuyerOrderCreate(this.order_info).then((res) => {
 	  			if(res.data.code == 0) {
 	  				this.pay_info.orderId = res.data.data.orderId
+
+	  				this.order_info.orderId = res.data.data.orderId
+
 	  				//如已下单商存在于购物车中，则去掉
 					for (let i of this.order_info.items) {
 						reqCartDelete({

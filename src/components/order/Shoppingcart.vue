@@ -126,8 +126,8 @@ export default {
   	goSettle() {
   		let items = []
   		for (let i of this.cart_list) {
-  			console.log(i)
   			if (this.checked_pro.includes(i.productId)) {
+  				i.carriageFee = i.carriage
   				items.push(i)
   			}
   		}

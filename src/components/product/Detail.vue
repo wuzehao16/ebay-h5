@@ -154,7 +154,7 @@ export default {
   },
   computed: {
   	EN_To_CN() {
-  		let c = this.productInfo.productCountry
+  		let c = this.productInfo.productCountry.toUpperCase()
   		return this.isoCountry[c]
   	}
   },
@@ -166,7 +166,9 @@ export default {
   			productName: this.productInfo.name,
   			productPrice: this.productInfo.price,
   			productQuantity: this.amount,
-  			productIcon: this.productInfo.icon  			
+  			productIcon: this.productInfo.icon,
+  			carriage: this.productInfo.carriageFee,
+  			taxFee: this.productInfo.taxFee
   		}
   		reqAddToShoppingCart({userId, goodCarForm}).then((res) => {
 			if (res.data.code == 0 && res.data.msg == '成功') {
