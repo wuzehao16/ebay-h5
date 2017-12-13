@@ -211,7 +211,7 @@ next()
 
 router.afterEach((to, from) => {
   //特定页面不显示底部
-    if (['PopularizeList', 'AddGoods', 'AddressList', 'Address', 'OrderDetail',
+    if ([ 'AddressList', 'Address', 'OrderDetail',
        'PorductDetail', 'SettleOrder', 'Withdraw', 'Register', 'LogisticsInfo' ].includes(to.name)) {
         store.state.showFoot = false
     } else {

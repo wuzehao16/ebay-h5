@@ -219,9 +219,6 @@ $shadow-color: #ececec;
     border-bottom: 2px solid #0099f7;
     margin-bottom: -2px;
 }
-.mtc {
-	margin: 54px 0 42px 0;
-}
 .to-top {
     position: fixed;
     width: 32px;
