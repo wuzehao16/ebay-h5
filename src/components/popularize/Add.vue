@@ -20,11 +20,10 @@
         </mt-swipe-item>
       </mt-swipe>
       <form>
-        <mt-cell :title="ebay.title || ebay.commonDescriptions.title"></mt-cell>
+        <mt-cell :title="ebay.title"></mt-cell>
         <mt-field v-model="pro_info.productNane" placeholder="请输入商品名称"></mt-field>
         <mt-cell>
           <div slot="title" v-if='ebay.price'>{{ ebay.price.currency + " : " + ebay.price.value}}</div>
-          <div slot="title" v-if='ebay.commonDescriptions'>{{ ebay.commonDescriptions.price.currency + " : " + ebay.commonDescriptions.price.value}}</div>
         </mt-cell>
         <mt-field v-model="pro_info.productPrice" placeholder="请输入商品价格" label="￥" style="margin-bottom: 10px;"></mt-field>
         <mt-cell title="运费">
@@ -57,7 +56,7 @@
             <mt-field v-model="else_value[index]" :placeholder="'请输入译文' "></mt-field>
           </div>
         </template>
-        <iframe :srcdoc="ebay.description || ebay.commonDescriptions.description" seamless class="desc-wrap"></iframe>
+        <iframe :srcdoc="ebay.description" seamless class="desc-wrap"></iframe>
         <!-- <div v-html="ebay.description" class="desc-wrap"></div> -->
         <mt-cell title=" 商品介绍 " style="font-size:14px;margin-top:10px;"></mt-cell>
         <textarea v-model="pro_info.productMemo" cols="30" rows="10" style="width:98%">
@@ -211,27 +210,23 @@ export default {
               this.flag = true
               this.pro_info.ebayItemid = this.ebay.itemId
 
-              if (res.data.itemType == 2) { //单个商品
-                this.pro_info.productIcon = this.ebay.image.imageUrl
-                this.pro_info.productCountry = this.ebay.itemLocation.country
-                //返回可能缺少：
-                this.pro_info.productUsd = this.ebay.price.value
-                //返回缺少：
-                let imgArr = []
-                imgArr.push(this.pro_info.productIcon)
+              this.pro_info.productIcon = this.ebay.image.imageUrl
+              this.pro_info.productCountry = this.ebay.itemLocation.country
+              this.pro_info.productUsd = this.ebay.price.value
+
+              if (res.data.itemType == 1) { //组合商品
+
+              }
+              let imgArr = []
+              imgArr.push(this.pro_info.productIcon)
+              if (this.ebay.additionalImages) {
                 for (let i of this.ebay.additionalImages) {
                   imgArr.push(i.imageUrl)
                 }
                 this.pro_info.productPic = imgArr.join("@")
               } else {
-                this.pro_info.productIcon = this.ebay.commonDescriptions.imageUrl
-                this.pro_info.productCountry = this.ebay.commonDescriptions.itemLocation.country
-                this.pro_info.productUsd = this.ebay.commonDescriptions.price.value
-
-                //产品图片
-                //...
+                this.pro_info.productPic = imgArr.join("")
               }
-
 
             }
             Indicator.close()
