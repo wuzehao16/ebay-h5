@@ -4,23 +4,46 @@
 <mt-cell class="logi-title">
 	<div slot="title">
 		<span>订单编号：</span>
-		<span>65415463615464</span>
+		<span>{{ $route.params.orderNo }}</span>
 	</div>
 </mt-cell>
 
 <div>
-	<mt-cell v-for="i in 10" :key="i">
-		<div slot="title" class="logi-info" :class="{'height-light': i == 1 }">
-			<div>您的订单已进入第三方卖家库房，等待发货</div>
-			<div >2017-12-12 12:12:12</div>
+	<mt-cell v-for="(a, index) in $route.params.logistics" :key="index">
+		<div slot="title" class="logi-info" :class="{'height-light': index == 0 }">
+			<div>{{ a.trackingMessage }}</div>
+			<div>{{ a.trackingTime }}</div>
 		</div>
-		<div slot="icon" class="logi-circle" :class="{'first-circle': i == 1 }"></div>
+		<div slot="icon" class="logi-circle" :class="{'first-circle': index == 0 }"></div>
 	</mt-cell>
 </div>
 
 
 </div>
 </template>
+
+<script>
+export default {
+  data() {
+  	return {
+  		orderNo: '',
+  		logistics: []
+  	}
+  },
+  beforeRouteEnter(to, from, next) {
+  	if (from.name != 'OrderDetail') {
+  		next('/order/list')
+  	} else {
+  		next()
+  	}
+  },
+  activated() {
+  	console.log(this.$route)
+  	this.orderNo = this.$route.params.orderNo
+  	this.logistics = this.$route.params.logistics
+  }
+}
+</script>
 
 <style lang="scss" scoped>
 $red: red;
@@ -49,7 +72,7 @@ $red: red;
 	    padding: 2px;		
 	}
 	.logi-info {
-		margin: 10px 20px;
+		margin: 10px 0 10px 20px;
 		line-height: 20px;
 		div:nth-child(2) {
 			margin-top: 10px;

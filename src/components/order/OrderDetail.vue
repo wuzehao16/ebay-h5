@@ -1,9 +1,11 @@
 <template>
 <div class="container">
 
-<mt-cell title='三少爷的剑啊已收到，感谢使用天速物流！' label='2017-11-30 23:59:59'
-	 is-link :to='{name: "LogisticsInfo"}'>
+<template v-if='logistics[0]'>
+<mt-cell :title='logistics[0].trackingMessage' :label='logistics[0].trackingTime'
+	 is-link @click.native='goLogi' style="padding-top: 10px;">
 </mt-cell>
+</template>
 <mt-cell>
 	<ul slot='title' class="wrap-one">
 		<li><i>状态：</i><span>
@@ -23,7 +25,7 @@
 
 <mt-cell>
 	<ul slot='title' class="wrap-one">
-		<li><i>商品金额：</i><span>￥{{ order.orderAmount }}（微信支付）</span></li>
+		<li><i>商品金额：</i><span>￥{{ goodsMoney }}</span></li>
 		<li><i>收货地址：</i><span>{{ order.cneeAddress ? order.cneeAddress.replace(/@/g, '') : '' }}</span></li>
 		<li><i>收货人：</i><span>{{ order.cneeName }}&nbsp;&nbsp;{{ order.cneePhone }}</span></li>
 	</ul>
@@ -44,14 +46,14 @@
 <mt-cell>
 	<ul slot='title' class="wrap-one just-spe">
 		<li><i>商品金额：</i>
-			<span class="high-light">￥{{ order.orderAmount }}</span></li>
+			<span class="high-light">￥{{ goodsMoney }}</span></li>
 		<li><i>税费：</i><span class="high-light">￥{{ order.carriageFee }}</span></li>
 		<li><i>运费：</i><span class="high-light">￥{{ order.taxFee }}</span></li>
 	</ul>
 </mt-cell>
 
 <mt-cell>
-	<div>实付金额：<span class="high-light font-b">￥{{ totalMoney }}</span></div>
+	<div>实付金额：<span class="high-light font-b">￥{{ order.orderAmount }}</span></div>
 </mt-cell>
 
 </div>	
@@ -62,7 +64,8 @@ import {reqLogistics, reqBuyerOrderDetail} from '../../api'
 export default {
   data() {
   	return {
-  		order: {}
+  		order: {},
+  		logistics: []
   	}
   },
   beforeRouteEnter (to, from, next) {
@@ -72,7 +75,22 @@ export default {
 		  	console.log(vm.order)
 		  	reqLogistics({orderNo: vm.order.orderNo}).then((res) => {
 
-		  	}).catch(err => {})
+		  	}).catch(err => {
+
+		  		//正式接入物流接口后移到上面
+		  		vm.logistics = [
+		            {
+		                "trackingTime":"2017-11-17 00:40:57",
+		                "trackingMessage":"由【浙江温州海城公司】发往【浙江温州航空部】【浙江温州航空部】【浙江温州航空部】",
+		                "carrierNo":"810018551209"
+		            },
+		            {
+		                "trackingTime":"2017-11-17 00:40:57",
+		                "trackingMessage":"订单 (1768673044) 已创建",
+		                "carrierNo":""
+		            }
+		        ]		  		
+		  	})
   		})
   	} else if (from.name == 'LogisticsInfo') {
   		next()
@@ -81,8 +99,19 @@ export default {
   	}
   },
   computed: {
-  	totalMoney() {
-  		return this.order.orderAmount + this.order.carriageFee + this.order.taxFee
+  	goodsMoney() {
+  		return (this.order.orderAmount - this.order.carriageFee - this.order.taxFee).toFixed(2)
+  	}
+  },
+  methods: {
+  	goLogi() {
+  		this.$router.push({
+  			name: "LogisticsInfo", 
+  			params: {
+  				logistics: this.logistics, 
+  				orderNo: this.order.orderNo
+  			}
+  		})
   	}
   },
   mounted() {
