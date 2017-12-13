@@ -8,7 +8,6 @@
 		') no-repeat,url(' + require('../../assets/test.png') + ') no-repeat'}" class="head-pic"></div>
 	<div class="head-r">
 		<h3>你好，{{ user.userWxName }}</h3>
-		<p>会员ID：{{ user.userWxOpenid }}</p>
 	</div>
 </template>
 </div>
@@ -33,7 +32,7 @@
 	<i slot="icon" class="iconfont icon-wallet" style="color: #ff9800;"></i>
 </mt-cell>
 
-
+<!-- 
 <template v-if="user.userCtype == '1'">
 	<mt-cell class="no-bg">
 		<div slot="title" >
@@ -50,10 +49,10 @@
 	<mt-cell title="我要提现" is-link to="/user/withdraw">
 		<i slot="icon" class="iconfont icon-withdraw" style="color:#ff9800;"></i>
 	</mt-cell>
-<!-- 	<mt-cell title="我要推广" is-link to="/popularize/list">
+	<mt-cell title="我要推广" is-link to="/popularize/list">
 		<i slot="icon" class="iconfont icon-popularize" style="color:#4caf50;font-size: 10px;margin-left: -3px;"></i>
-	</mt-cell> -->	
-</template>
+	</mt-cell>	
+</template> -->
 <!-- <mt-cell title="我要下单" is-link to="/product/list">
 	<i slot="icon" class="iconfont icon-go-buy" style="color:#2196f3;"></i>
 </mt-cell> -->
