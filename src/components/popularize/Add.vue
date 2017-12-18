@@ -40,12 +40,12 @@
           </div>
         </mt-cell>
         <mt-field v-model.number="pro_info.taxFee" v-show="taxFeeType == '不包税'" placeholder="请输入税费" type="number"></mt-field>
-        <template v-if="ebay.optionAttr" v-for="(value, key) in ebay.optionAttr">
+        <template v-if="ebay.optionAttr" v-for="(val, k, index) in ebay.optionAttr">
           <div class="params-wrap">
-            <mt-cell :title='key'></mt-cell>
-            <mt-field :placeholder=" '请输入' + key + '译文'"></mt-field>
-            <mt-cell :title=" '请输入' + key + '选项的译文'"></mt-cell>
-            <mt-field v-for="v in value" :label="v + '：'" :placeholder=" '请输入' + v + '译文'"></mt-field>
+            <mt-cell :title='k'></mt-cell>
+            <mt-field :placeholder=" '请输入' + k + '译文' " v-model='optionAttr.key[k]'></mt-field>
+            <mt-cell :title=" '请输入' + k + '选项的译文'"></mt-cell>
+            <mt-field v-for="(v, i) in val" :label="v + '：'" v-model="optionAttr.value[k + '_sube_' + i + '_sney_' + v]" :placeholder=" '请输入' + v + '译文'"></mt-field>
           </div>
         </template>
         <template v-for="(item, index) in ebay.localizedAspects">
@@ -83,8 +83,14 @@ export default {
       currentValue: '',
       flag: false,
       show_tip: false,
-      else_key: [],
+      else_key: [], //单属性
       else_value: [],
+      optionAttr: {
+        key: {}, //选择属性
+        value: {},
+      },
+      itemIds: [],
+
       isEdit: false,
       productId: '',
       ebay: {},
@@ -118,52 +124,71 @@ export default {
   },
   methods: {
     proSubmit() {
-      console.log("hehe:", this.pro_info)
-      if (this.pro_info.productNane.match(/^[ ]*$/)) {
-        Toast('请输入商品名称')
-        return false
-      }
-      if (this.pro_info.productPrice == "") {
-        Toast('请输入商品价格')
-        return false
-      }
-      if (this.carriageFeeType == '不包邮' &&
-        !/^[0-9]+([.]{1}[0-9]{1,2})?$/.test(this.pro_info.carriageFee)) {
-        Toast('请输入最多两位小数的数字格式的运费')
-        return false
-      }
-      if (this.taxFeeType == '不包税' &&
-        !/^[0-9]+([.]{1}[0-9]{1,2})?$/.test(this.pro_info.taxFee)) {
-        Toast('请输入最多两位小数的数字格式的运费')
-        return false
-      }
-      if (this.ebay.localizedAspects) {
-        let a = this.ebay.localizedAspects.every((v, i) => {
-          console.log(v, i)
-          if (!this.else_key[i] || this.else_key[i].match(/^[ ]*$/)) {
-            Toast('请输入  ' + v.name + '  译文')
-            return false
-          }
-          if (!this.else_value[i] || this.else_value[i].match(/^[ ]*$/)) {
-            Toast('请输入  ' + v.value + '  译文')
-            return false
-          }
-          return true
-        })
-        if (!a) return false
-      }
+      /*      if (this.pro_info.productNane.match(/^[ ]*$/)) {
+              Toast('请输入商品名称')
+              return false
+            }
+            if (this.pro_info.productPrice == "") {
+              Toast('请输入商品价格')
+              return false
+            }
+            if (this.carriageFeeType == '不包邮' &&
+              !/^[0-9]+([.]{1}[0-9]{1,2})?$/.test(this.pro_info.carriageFee)) {
+              Toast('请输入最多两位小数的数字格式的运费')
+              return false
+            }
+            if (this.taxFeeType == '不包税' &&
+              !/^[0-9]+([.]{1}[0-9]{1,2})?$/.test(this.pro_info.taxFee)) {
+              Toast('请输入最多两位小数的数字格式的运费')
+              return false
+            }
+            if (this.ebay.localizedAspects) {
+              let a = this.ebay.localizedAspects.every((v, i) => {
+                if (!this.else_key[i] || this.else_key[i].match(/^[ ]*$/)) {
+                  Toast('请输入  ' + v.name + '  译文')
+                  return false
+                }
+                if (!this.else_value[i] || this.else_value[i].match(/^[ ]*$/)) {
+                  Toast('请输入  ' + v.value + '  译文')
+                  return false
+                }
+                return true
+              })
+              if (!a) return false
+            }*/
+
+
+
       this.loading = true
+      //把商品规格单属性放进items
       for (let i in this.else_key) {
-        if (!this.isEdit) {
-          this.pro_info.items.push({
-            attrName: this.else_key[i],
-            attrValue: this.else_value[i]
-          })
-        } else {
-          this.pro_info.items[i].attrName = this.else_key[i]
-          this.pro_info.items[i].attrValue = this.else_value[i]
-        }
+        this.pro_info.items.push({
+          attrCname: this.else_key[i],
+          attrCvalue: this.else_value[i],
+          attrType: '2',
+          id: this.itemIds[0],
+          productId: this.productId
+        })
+        this.itemIds.splice(0, 1)
       }
+
+      //组合商品：把商品选择属性放进items
+      let b = Object.entries(this.optionAttr.value)
+      for (let j of b) {
+        let ename = j[0].substring(0, j[0].lastIndexOf('_sube_'))
+        let evalue = j[0].substr( (j[0].indexOf('_sney_') + 6) )
+        this.pro_info.items.push({
+          attrCname: this.optionAttr.key[ename],
+          attrCvalue: j[1],
+          attrEname: ename,
+          attrEvalue: evalue,//英文原文
+          attrType: '1',
+          id: this.itemIds[0],
+          productId: this.productId
+        })
+        this.itemIds.splice(0, 1)
+      }
+
       this.pro_info.productPrice = Number.parseFloat(this.pro_info.productPrice)
       this.isEdit ? this.pro_info.productId = this.productId : ''
       this.pro_info.productUsd = Number.parseFloat(this.pro_info.productUsd)
@@ -176,6 +201,7 @@ export default {
           let instance = Toast('提审成功')
           setTimeout(() => {
             instance.close()
+            this.loading = false
             this.$router.push({
               name: 'PopularizeList',
               params: {
@@ -202,7 +228,6 @@ export default {
         })
         let itemId = this.currentValue
         reqEbayGoods({ itemId }).then((res) => {
-            console.log(res)
             if (res.data.errors) {
               this.show_tip = true
             } else if (res.data.itemId) {
@@ -274,7 +299,6 @@ export default {
   },
   activated() {
     this.flag = false
-    // this.flag = true
     this.currentValue = ''
     this.else_key = []
     this.else_value = []
@@ -295,7 +319,7 @@ export default {
           productPic: (p.pic ? p.pic.join('@') : ''),
           productPrice: p.price,
           productIcon: p.icon,
-          items: p.productAttr,
+          items: [],
           productMemo: p.productMemo,
           productUsd: p.productUsd,
           carriageFee: p.carriageFee,
@@ -303,10 +327,27 @@ export default {
         }
         p.carriageFee ? this.carriageFeeType = '不包邮' : this.carriageFeeType = '包邮'
         p.taxFee ? this.taxFeeType = '不包税' : this.taxFeeType = '包税'
-        for (let i in p.productAttr) {
-          this.else_key[i] = p.productAttr[i].attrName
-          this.else_value[i] = p.productAttr[i].attrValue
+
+        let j = 0
+        for (let [i, item] of new Map(p.productAttr.map((item, i) => [i, item]))) {
+          this.itemIds.push(item.id)
+          if (item.attrType == '2') {
+            this.else_key.push(item.attrCname)
+            this.else_value.push(item.attrCvalue)
+          } else if (item.attrType == '1') {
+            if (this.optionAttr.key[item.attrEname]) {
+              j++
+            } else {
+              j = 0
+            }
+            this.optionAttr.key[item.attrEname] = item.attrCname
+            this.optionAttr.value[item.attrEname + "_sube_" + j + "_sney_" + item.attrEvalue] = item.attrCvalue
+
+          }
         }
+        console.log('optionAttr: ', this.optionAttr)
+
+
       })
     }
   },

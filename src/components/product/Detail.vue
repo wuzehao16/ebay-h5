@@ -4,7 +4,7 @@
       <mt-swipe-item v-for="(url,index) in productInfo.pic" :key="index">
         <div :style="{'background-image': 'url(' + url + ')'}" class="wrapper">
           <span v-if="productInfo.pic && productInfo.pic.length> 0" class="page-nub">
-			<span class="num1">{{index+1}}</span>
+      <span class="num1">{{index+1}}</span>
           <span class="bg">/</span>
           <span class="num2">{{productInfo.pic.length}}</span>
           </span>
@@ -24,13 +24,13 @@
       <mt-button v-if="isPreview" type="primary" size="large" @click="backList">返回我的发布</mt-button>
     </mt-tabbar>
     <mt-cell>
-    <div slot='title' class="pro-title">
-    	<img :src="staticBase + '/resource/flags_24/us.png'">
-    	<img :src="staticBase + '/resource/ebay-logo.png'">
-    	<span>{{ productInfo.name }}</span>
-    </div>
+      <div slot='title' class="pro-title">
+        <img :src="staticBase + '/resource/flags_24/us.png'">
+        <img :src="staticBase + '/resource/ebay-logo.png'">
+        <span>{{ productInfo.name }}</span>
+      </div>
       <span class="love-it" @click="collected = !collected">
-	  <i class="iconfont" :class="{'icon-collect': !collected, 'icon-collect-color': collected}"></i><br/>收藏</span>
+    <i class="iconfont" :class="{'icon-collect': !collected, 'icon-collect-color': collected}"></i><br/>收藏</span>
     </mt-cell>
     <div class="price">￥{{productInfo.price}}</div>
     <mt-cell>
@@ -43,24 +43,19 @@
         <span>跨境运输</span>
       </div>
     </mt-cell>
-    <!--   	<dl>
-	  	<dt>尺寸</dt>
-	  	<dd>
-	  	<ul>
-	  		<li v-for="o in 10" :key="o" :class="{'height-light' : activeSize == o }"  
-	  			@click='selectSize(o)'>dfda{{ o }}</li>
-	  	</ul>
-	  	</dd>
-  	</dl>  	
-  	<dl>
-	  	<dt>颜色</dt>
-	  	<dd>
-	  	<ul>
-	  		<li v-for="o in 10"  :class="{'height-light' : activeColor == o }"  
-	  			@click='selectColor(o)'>{{ o }}色</li>
-	  	</ul>
-	  	</dd>
-  	</dl> -->
+    <template v-for="(v, k,  i) in option_list">
+      <dl>
+        <dt>{{ k }}</dt>
+        <dd>
+          <ul>
+            <li :class="{'height-light': selectedAttr[i] == c}"  
+              @click="selectedAttr[i] = c" v-for="(c, index) in v" :key="index + c + i">
+              {{ c }}
+            </li>
+          </ul>
+        </dd>
+      </dl>
+    </template>
     <div class="fee-wrap">
       <mt-cell title="运费" :value="carriageFee"></mt-cell>
       <mt-cell title="税费" :value="taxFee"></mt-cell>
@@ -90,9 +85,11 @@
         <div class="detail" id="wareStandard" style="display: block;margin-bottom:50px;">
           <table class="table-border" width="100%">
             <tbody>
-              <tr v-for="d in productInfo.productAttr" :key="d.created">
-                <td>{{d.attrName}}</td>
-                <td>{{d.attrValue}}</td>
+              <tr v-for="d in productInfo.productAttr" :key="d.id">
+                <template v-if='d.attrType == "2"'>
+                  <td>{{d.attrCname}}</td>
+                  <td>{{d.attrCvalue}}</td>
+                </template>
               </tr>
             </tbody>
           </table>
@@ -119,8 +116,16 @@ export default {
       productInfo: {},
       active: 'tab-container1',
       selected: '1',
-      activeSize: '',
-      activeColor: '',
+
+      selectedAttr: {
+        0: '',
+        1: '',
+        2: '',
+        3: '',
+        4: ''
+      },
+      option_list: {},
+
       amount: 1,
       collected: false,
       items: [],
@@ -165,6 +170,21 @@ export default {
     }
   },
   methods: {
+    getOptions() {
+      let obj = {}
+      if (this.productInfo.productAttr) {
+        let h = ''
+        for (let i of this.productInfo.productAttr) {
+          if (i.attrType == '1' && i.attrCname != h) {
+            obj[i.attrCname] = [i.attrCvalue]
+          } else if (i.attrType == '1' && i.attrCname == h) {
+            obj[i.attrCname].push(i.attrCvalue)
+          }
+          h = i.attrCname
+        }
+      }
+      this.option_list = obj
+    },
     addToCart() {
       let userId = JSON.parse(sessionStorage.getItem('ebay-app')).id
       let goodCarForm = {
@@ -250,6 +270,8 @@ export default {
       reqProductDetail({ productId }).then((res) => {
         this.productInfo = res.data.data
 
+        this.getOptions()
+
         if (this.productInfo.carriageFee) {
           this.carriageFee = '￥' + this.productInfo.carriageFee
         } else {
@@ -297,13 +319,15 @@ $bg-red: #f23030;
 .mint-swipe {
   background: #fff;
 }
+
 .pro-title {
-	line-height: 22px;
-	padding: 10px 10px 0 0;
-	img {
-		height: 16px;
-	}
+  line-height: 22px;
+  padding: 10px 10px 0 0;
+  img {
+    height: 16px;
+  }
 }
+
 .mint-swipe-indicator.is-active {
   background: red;
 }
@@ -366,7 +390,7 @@ $bg-red: #f23030;
     font-size: 23px;
     background-color: #fff;
     color: #0099f7;
-    padding:0 0 10px 10px;
+    padding: 0 0 10px 10px;
   }
 }
 
@@ -515,6 +539,9 @@ dl {
     color: #fff;
   }
 }
+
+
+
 
 
 /*商品介绍 商品规格*/
