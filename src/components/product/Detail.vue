@@ -49,7 +49,7 @@
         <dd>
           <ul>
             <li :class="{'height-light': selectedAttr[i] == c}"  
-              @click="selectedAttr[i] = c" v-for="(c, index) in v" :key="index + c + i">
+              @click="$set(selectedAttr, i, c)" v-for="(c, index) in v" :key="index + c + i">
               {{ c }}
             </li>
           </ul>
@@ -117,13 +117,7 @@ export default {
       active: 'tab-container1',
       selected: '1',
 
-      selectedAttr: {
-        0: '',
-        1: '',
-        2: '',
-        3: '',
-        4: ''
-      },
+      selectedAttr: [],
       option_list: {},
 
       amount: 1,
@@ -185,7 +179,21 @@ export default {
       }
       this.option_list = obj
     },
+    checkOption() {
+      let arr = Object.keys(this.option_list)
+      for (let i of Object.keys(arr)) {
+        if (!this.selectedAttr[i]) {
+          Toast('请选择' + arr[i])
+          return false
+        }
+      }
+      return true
+    },
     addToCart() {
+      if (!this.checkOption()) {
+        return false
+      }
+
       let userId = JSON.parse(sessionStorage.getItem('ebay-app')).id
       let goodCarForm = {
         productId: this.productInfo.id,
@@ -214,6 +222,9 @@ export default {
       this.activeColor = o
     },
     buyIt() {
+      if (!this.checkOption()) {
+        return false
+      }
       this.items = []
       this.items.push({
         productId: this.productInfo.id,
