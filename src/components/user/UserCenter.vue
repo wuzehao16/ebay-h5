@@ -28,12 +28,16 @@
 		</ul>
 	</div>
 </mt-cell>
-<mt-cell is-link title="我的钱包" to="/user/wallet" style="z-index: 100;">
-	<i slot="icon" class="iconfont icon-wallet" style="color: #ff9800;"></i>
-</mt-cell>
 
+
+<mt-cell title="我是分销商" is-link to="/user/distributor" v-if="user.userCtype == '1'">
+	<i slot="icon" class="iconfont icon-client" style="color:#009688;"></i>
+</mt-cell>
 <!-- 
 <template v-if="user.userCtype == '1'">
+	<mt-cell is-link title="我的钱包" to="/user/wallet" style="z-index: 100;">
+		<i slot="icon" class="iconfont icon-wallet" style="color: #ff9800;"></i>
+	</mt-cell>
 	<mt-cell class="no-bg">
 		<div slot="title" >
 			<ul class="order-type clearfix">
@@ -60,13 +64,12 @@
 </template>
 
 <script>
-import {reqUserInfo, reqMyCusCount, reqWechatAuth, baseUrl} from '../../api'
+import {reqUserInfo} from '../../api'
 import { Indicator, Toast } from "mint-ui"
 export default {
   data () {
   	return {
-  		user: {},
-  		count: ''
+  		user: {}
   	}
   },
   methods: {
@@ -92,13 +95,6 @@ export default {
   			this.user = res.data.data
 			//update
 			sessionStorage.setItem('ebay-app', JSON.stringify(this.user))
-  			if (this.user.userCtype == '1') {
-			  	reqMyCusCount(this.user).then((res) => {
-			  		if (res.data.data) {
-			  			this.count = res.data.data
-			  		}
-			  	})  				
-  			}
   		} else {
   			Toast(res.data.msg)
   		}
@@ -107,35 +103,11 @@ export default {
   }
 }
 </script>
-<style lang="scss">
-.no-bg {
-	z-index: 101;
-	margin-top: -10px;
-	margin-bottom: 10px;
-	.mint-cell-wrapper {
-		background-size: 0;
-	}
-}
-.mint-cell-allow-right::after {
-	border-top-width: 1px;
-	border-right-width: 1px;
-	width: 8px;
-	height: 8px;
-}
-.mint-cell-text {
-	color: #666;
-	font-size: 14px;
-}
-</style>
 <style lang="scss" scoped>
 .iconfont {
 	vertical-align: middle;
 	font-size: 18px;
 }
-/* .container {
-	background: #eee;
-	height: 100%;
-} */
 .order-type {
     list-style-type: none;
     padding: 0px 0;

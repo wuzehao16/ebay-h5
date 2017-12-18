@@ -146,6 +146,24 @@ h3 {
   text-align: center;
   color: #999;
 }  
+.no-bg {
+  z-index: 101;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  .mint-cell-wrapper {
+    background-size: 0;
+  }
+}
+.mint-cell-allow-right::after {
+  border-top-width: 1px;
+  border-right-width: 1px;
+  width: 8px;
+  height: 8px;
+}
+.mint-cell-text {
+  color: #666;
+  font-size: 14px;
+}
 .order-container {
     padding: 10px 0 10px 80px;
     background-size: 70px auto!important;
