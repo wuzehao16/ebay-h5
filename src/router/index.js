@@ -8,11 +8,12 @@ const AddressList = r => require.ensure([], () => r(require('@/components/order/
 const SettleOrder = r => require.ensure([], () => r(require('@/components/order/settleorder')), 'SettleOrder')
 
 const UserCenter = r => require.ensure([], () => r(require('@/components/user/usercenter')), 'UserCenter')
-
+const Distributor = r => require.ensure([], () => r(require('@/components/user/distributor')), 'Distributor')
 const Wallet = r => require.ensure([], () => r(require('@/components/user/wallet')), 'Wallet')
 const Client = r => require.ensure([], () => r(require('@/components/user/client')), 'Client')
 const Withdraw = r => require.ensure([], () => r(require('@/components/user/withdraw')), 'Withdraw')
 
+const DistriOrderList = r => require.ensure([], () => r(require('@/components/order/distriorderlist')), 'DistriOrderList')
 
 const OrderList = r => require.ensure([], () => r(require('@/components/order/orderlist')), 'OrderList')
 const OrderDetail = r => require.ensure([], () => r(require('@/components/order/orderdetail')), 'OrderDetail')
@@ -73,6 +74,11 @@ let router = new Router({
       component: UserCenter
     },
     {
+      path: '/user/distributor',
+      name: 'Distributor',
+      component: Distributor
+    },
+    {
       path: '/user/wallet',
       name: 'Wallet',
       component: Wallet
@@ -91,6 +97,11 @@ let router = new Router({
       path: '/order/list',
       name: 'OrderList',
       component: OrderList
+    },
+    {
+      path: '/order/distrilist',
+      name: 'DistriOrderList',
+      component: DistriOrderList
     },
     {
       path: '/order/detail',

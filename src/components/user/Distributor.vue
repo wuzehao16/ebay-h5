@@ -23,7 +23,7 @@
 			<i slot="icon" class="iconfont icon-popularize" style="color:#4caf50;font-size: 10px;margin-left: -3px;"></i>
 		</mt-cell>	
 		<!-- 分销商订单 -->
-		<mt-cell title="分销商订单" is-link >
+		<mt-cell title="分销商订单" is-link to="/order/distrilist">
 			<i slot="icon" class="iconfont icon-order" style="color: #26a2ff;"></i>
 		</mt-cell>
 	</div>

@@ -22,9 +22,9 @@
       <li>
         <router-link class="col" :to="{name: 'UserCenter'}" >
           <i class="iconfont icon-user"></i>
-        <span class="nd-p"> 会员中心</span>
+        <span class="nd-p">会员中心</span>
         </router-link>
-      </li>
+      </li>  
     </ul>
       
 </div>
