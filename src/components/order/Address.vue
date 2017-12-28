@@ -122,7 +122,6 @@ export default {
       addressSlots: [
         {
           flex: 1,
-          // values: Object.keys(s),
           values: [],
           className: "slot1",
           textAlign: "center"

@@ -10,8 +10,8 @@
       </a>
       </div>
     </div>
-    <input type="text" v-focus='hideKeyboard' @blur="hideKeyboard = false" readonly class="input-null">
-    <div class="goods-container" v-if="flag">
+    <input type="text" v-focus='hideKeyboard' @blur="hideKeyboard = false" readonly class="input-null">    
+    <div class="goods-container" v-if="showAll">
       <mt-swipe :auto="5000" :speed="0" class="pre-banner">
         <mt-swipe-item v-for="i in pro_info.productPic.split('@')" :key="i">
           <div style="text-align:center;">
@@ -26,6 +26,27 @@
           <div slot="title" v-if='ebay.price'>{{ ebay.price.currency + " : " + ebay.price.value}}</div>
         </mt-cell>
         <mt-field v-model="pro_info.productPrice" placeholder="请输入商品价格" label="￥" style="margin-bottom: 10px;"></mt-field>
+
+
+<mt-cell v-if="ebay.itemsAttr" class="params-wrap">
+<div slot="title">
+
+    <mt-picker :slots="itemsAttrSlots" @change="changeAttr"></mt-picker>
+    <div v-for="(v, k, i) in chosenItem.value">
+      <div v-if="Object.keys(ebay.optionAttr).includes(k) || k == 'price'">
+        {{ k }}:&nbsp;&nbsp;{{ v }}
+      </div>
+    </div>
+    <template v-for='(v, i) in itemsAttrSlots[0].values'>
+      <mt-field label="价格（￥）：" v-show="v == chosenItem.key"
+      v-model="ebay.itemsAttr[v].attrCvalue"
+       :placeholder="'请输入第 ' + (i + 1) + ' 组合的价格'"></mt-field>
+    </template>
+</div>
+</mt-cell>
+
+
+
         <mt-cell title="运费">
           <div>
             <mt-radio class="fee-wrapper" v-model="carriageFeeType" :options="['包邮', '不包邮']">
@@ -67,6 +88,7 @@
       </div>
     </div>
     <div class="no-product" v-if="show_tip">没有该商品或该商品不能在本平台翻译</div>
+
   </div>
 </template>
 <script>
@@ -75,13 +97,23 @@ import { Toast, Indicator } from 'mint-ui'
 export default {
   data() {
     return {
+      chosenItem: {
+        key: '',
+        value: {}
+      },
+      itemsAttrSlots: [{
+        flex: 1,
+        values: [],
+        textAlign: 'center'
+      }],
+
       loading: false,
-      carriageFeeType: '',
-      taxFeeType: '',
+      carriageFeeType: '不包邮',
+      taxFeeType: '不包税',
       hideKeyboard: false,
       visible: false,
       currentValue: '',
-      flag: false,
+      showAll: false,
       show_tip: false,
       else_key: [], //单属性
       else_value: [],
@@ -123,41 +155,59 @@ export default {
     }
   },
   methods: {
+    changeAttr(p, v) {
+      this.chosenItem.key = v[0]
+      this.chosenItem.value = this.ebay.itemsAttr[v[0]]
+    },
+    validate() {
+      if (this.pro_info.productNane.match(/^[ ]*$/)) {
+        Toast('请输入商品名称')
+        return false
+      }
+      if (this.pro_info.productPrice == "") {
+        Toast('请输入商品价格')
+        return false
+      }
+      if (this.ebay.itemsAttr) {
+        for (let b of Object.entries(this.ebay.itemsAttr)) {
+          console.log('b:', b[1].attrCvalue)
+          if (!b[1].attrCvalue || b[1].attrCvalue.match(/^[ ]*$/)) {
+            Toast('您还有具体价格未填写')
+            return false
+          }
+        }
+      }      
+      if (this.carriageFeeType == '不包邮' &&
+        !/^[0-9]+([.]{1}[0-9]{1,2})?$/.test(this.pro_info.carriageFee)) {
+        Toast('请输入最多两位小数的数字格式的运费')
+        return false
+      }
+      if (this.taxFeeType == '不包税' &&
+        !/^[0-9]+([.]{1}[0-9]{1,2})?$/.test(this.pro_info.taxFee)) {
+        Toast('请输入最多两位小数的数字格式的运费')
+        return false
+      }
+      if (this.ebay.localizedAspects) {
+        let a = this.ebay.localizedAspects.every((v, i) => {
+          if (!this.else_key[i] || this.else_key[i].match(/^[ ]*$/)) {
+            Toast('请输入  ' + v.name + '  译文')
+            return false
+          }
+          if (!this.else_value[i] || this.else_value[i].match(/^[ ]*$/)) {
+            Toast('请输入  ' + v.value + '  译文')
+            return false
+          }
+          return true
+        })
+        if (!a) return false
+      }
+      return true
+
+    },
     proSubmit() {
-      /*      if (this.pro_info.productNane.match(/^[ ]*$/)) {
-              Toast('请输入商品名称')
-              return false
-            }
-            if (this.pro_info.productPrice == "") {
-              Toast('请输入商品价格')
-              return false
-            }
-            if (this.carriageFeeType == '不包邮' &&
-              !/^[0-9]+([.]{1}[0-9]{1,2})?$/.test(this.pro_info.carriageFee)) {
-              Toast('请输入最多两位小数的数字格式的运费')
-              return false
-            }
-            if (this.taxFeeType == '不包税' &&
-              !/^[0-9]+([.]{1}[0-9]{1,2})?$/.test(this.pro_info.taxFee)) {
-              Toast('请输入最多两位小数的数字格式的运费')
-              return false
-            }
-            if (this.ebay.localizedAspects) {
-              let a = this.ebay.localizedAspects.every((v, i) => {
-                if (!this.else_key[i] || this.else_key[i].match(/^[ ]*$/)) {
-                  Toast('请输入  ' + v.name + '  译文')
-                  return false
-                }
-                if (!this.else_value[i] || this.else_value[i].match(/^[ ]*$/)) {
-                  Toast('请输入  ' + v.value + '  译文')
-                  return false
-                }
-                return true
-              })
-              if (!a) return false
-            }*/
-
-
+      if (!this.validate()) {
+        return false
+      }
 
       this.loading = true
       //把商品规格单属性放进items
@@ -174,17 +224,42 @@ export default {
 
       //组合商品：把商品选择属性放进items
       let b = Object.entries(this.optionAttr.value)
+      let aItems = Object.entries(this.ebay.itemsAttr)
       for (let j of b) {
         let ename = j[0].substring(0, j[0].lastIndexOf('_sube_'))
-        let evalue = j[0].substr( (j[0].indexOf('_sney_') + 6) )
+        let evalue = j[0].substr((j[0].indexOf('_sney_') + 6))
+        let itemid = []
+        for (let i of aItems) {
+          if (i[1][ename] == evalue) {
+            itemid.push(i[0])
+          }
+        }
+        console.log(itemid)
+
         this.pro_info.items.push({
           attrCname: this.optionAttr.key[ename],
           attrCvalue: j[1],
           attrEname: ename,
-          attrEvalue: evalue,//英文原文
+          attrEvalue: evalue, //英文原文
           attrType: '1',
+          itemId: itemid.join('@'),
           id: this.itemIds[0],
           productId: this.productId
+        })
+        this.itemIds.splice(0, 1)
+      }
+
+      //price也要逐个翻译
+      for (let i of aItems) {
+        this.pro_info.items.push({
+          attrEname: 'price',
+          attrEvalue: i[1].price,
+          attrType: '1',
+          itemId: i[0],
+          attrCname: i[1].stock,//无stock字段，暂用attrCvalue充当
+          attrCvalue: i[1].attrCvalue,
+          productId: this.productId,
+          id: this.itemIds[0]
         })
         this.itemIds.splice(0, 1)
       }
@@ -213,6 +288,9 @@ export default {
           Toast(res.data.msg)
           this.loading = false
         }
+      }).catch(err => {
+        Indicator.close()
+        Toast(err)
       })
     },
     backList() {
@@ -232,16 +310,13 @@ export default {
               this.show_tip = true
             } else if (res.data.itemId) {
               this.ebay = res.data
-              this.flag = true
+              this.showAll = true
               this.pro_info.ebayItemid = this.ebay.itemId
 
               this.pro_info.productIcon = this.ebay.image.imageUrl
               this.pro_info.productCountry = this.ebay.itemLocation.country
               this.pro_info.productUsd = this.ebay.price.value
 
-              if (res.data.itemType == 1) { //组合商品
-
-              }
               let imgArr = []
               imgArr.push(this.pro_info.productIcon)
               if (this.ebay.additionalImages) {
@@ -251,6 +326,10 @@ export default {
                 this.pro_info.productPic = imgArr.join("@")
               } else {
                 this.pro_info.productPic = imgArr.join("")
+              }
+
+              if (this.ebay.itemsAttr) {
+                this.itemsAttrSlots[0].values = Object.keys(this.ebay.itemsAttr)
               }
 
             }
@@ -264,7 +343,7 @@ export default {
   watch: {
     currentValue(a) {
       this.show_tip = false
-      a == '' ? this.flag = false : ''
+      a == '' ? this.showAll = false : ''
     },
     'pro_info.productPrice': {
       handler: function(a, b) {
@@ -298,7 +377,10 @@ export default {
     }
   },
   activated() {
-    this.flag = false
+    //test
+/*    this.currentValue = '152705485563'
+    this.getEbayGoods()*/
+    this.showAll = false
     this.currentValue = ''
     this.else_key = []
     this.else_value = []
@@ -345,13 +427,11 @@ export default {
 
           }
         }
-        console.log('optionAttr: ', this.optionAttr)
-
-
       })
     }
   },
   mounted() {
+
     this.pro_info_bak = Object.assign({}, this.pro_info)
 
     //获取页面高度

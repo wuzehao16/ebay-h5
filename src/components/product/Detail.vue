@@ -32,7 +32,9 @@
       <span class="love-it" @click="collected = !collected">
     <i class="iconfont" :class="{'icon-collect': !collected, 'icon-collect-color': collected}"></i><br/>收藏</span>
     </mt-cell>
-    <div class="price">￥{{productInfo.price}}</div>
+    <div class="price">
+        ￥{{ selectedPrice || productInfo.price}}
+    </div>
     <mt-cell>
       <div slot='title' class='country-wrap' v-if="productInfo.productCountry">
         <img :src="staticBase + '/resource/flags_24/' + productInfo.productCountry + '.png' ">
@@ -43,14 +45,13 @@
         <span>跨境运输</span>
       </div>
     </mt-cell>
-    <template v-for="(v, k,  i) in option_list">
+    <template v-for="(v, k,  i) in option_list" >
       <dl>
         <dt>{{ k }}</dt>
         <dd>
           <ul>
-            <li :class="{'height-light': selectedAttr[i] == c}"  
-              @click="$set(selectedAttr, i, c)" v-for="(c, index) in v" :key="index + c + i">
-              {{ c }}
+            <li :class="{'height-light': selectedAttr[i] == c}" @click="setSelected(i, c)" v-for="(c, index) in v" :key="index + c + i">
+              {{ c.value }}
             </li>
           </ul>
         </dd>
@@ -118,8 +119,11 @@ export default {
       selected: '1',
 
       selectedAttr: [],
+      selectedPrice: null,
       option_list: {},
+      definite_itemid: [],
 
+      ebayItemid: null,
       amount: 1,
       collected: false,
       items: [],
@@ -164,20 +168,57 @@ export default {
     }
   },
   methods: {
-    getOptions() {
-      let obj = {}
-      if (this.productInfo.productAttr) {
-        let h = ''
-        for (let i of this.productInfo.productAttr) {
-          if (i.attrType == '1' && i.attrCname != h) {
-            obj[i.attrCname] = [i.attrCvalue]
-          } else if (i.attrType == '1' && i.attrCname == h) {
-            obj[i.attrCname].push(i.attrCvalue)
-          }
-          h = i.attrCname
+    setSelected(i, c) {
+      if (this.selectedAttr[i] == c) {
+        this.$set(this.selectedAttr, i, '')
+      } else {
+        this.$set(this.selectedAttr, i, c)
+      }
+      let len = Object.keys(this.option_list).length
+      let str = ''
+      for (let i of this.selectedAttr) {
+        if (i) {
+          str += i.itemid
         }
       }
-      this.option_list = obj
+      for (let j of this.definite_itemid) {
+        if (str.split(j.itemId).length - 1 == len) {
+          console.log('haha1', j.itemId, j.attrEvalue) //此为选中的itemid及其价格
+          this.selectedPrice = j.attrCvalue
+          this.ebayItemid = j.itemId
+          break
+        } else if (str.indexOf(j.itemId) > 0) {
+          this.selectedPrice = j.attrCvalue
+        }
+      }
+    },
+    getOptions() {
+      if (this.productInfo.productAttr) {
+        let h = '',
+          j = 0
+        for (let i of this.productInfo.productAttr) {
+          if (i.attrType == '1' && i.attrCname != h && i.attrEname != 'price') {
+            // this.option_list[i.attrCname] = [i.attrCvalue]
+            this.option_list[i.attrCname] = [{
+              key: i.attrCname,
+              value: i.attrCvalue,
+              itemid: i.itemId
+            }]
+          } else if (i.attrType == '1' && i.attrCname == h && i.attrEname != 'price') {
+            // this.option_list[i.attrCname].push(i.attrCvalue)
+            this.option_list[i.attrCname].push({
+              key: i.attrCname,
+              value: i.attrCvalue,
+              itemid: i.itemId
+            })
+          }
+          h = i.attrCname
+          if (i.attrEname == 'price') {
+            this.definite_itemid.push(i)
+          }
+        }
+      }
+      console.log(this.definite_itemid)
     },
     checkOption() {
       let arr = Object.keys(this.option_list)
@@ -198,11 +239,12 @@ export default {
       let goodCarForm = {
         productId: this.productInfo.id,
         productName: this.productInfo.name,
-        productPrice: this.productInfo.price,
+        productPrice: this.selectedPrice || this.productInfo.price,
         productQuantity: this.amount,
         productIcon: this.productInfo.icon,
         carriage: this.productInfo.carriageFee,
-        taxFee: this.productInfo.taxFee
+        taxFee: this.productInfo.taxFee,
+        itemId: this.ebayItemid
       }
       reqAddToShoppingCart({ userId, goodCarForm }).then((res) => {
         if (res.data.code == 0 && res.data.msg == '成功') {
@@ -221,22 +263,25 @@ export default {
     selectColor(o) {
       this.activeColor = o
     },
+    getItemObj() {
+      return {
+        productId: this.productInfo.id,
+        productName: this.productInfo.name,
+        productPrice: this.selectedPrice || this.productInfo.price,
+        productQuantity: this.amount,
+        productIcon: this.productInfo.icon,
+        carriageFee: this.productInfo.carriageFee || 0,
+        taxFee: this.productInfo.taxFee || 0,
+        itemId: this.ebayItemid,
+        productAttr: JSON.stringify(this.selectedAttr)     
+      }
+    },
     buyIt() {
       if (!this.checkOption()) {
         return false
       }
-      this.items = []
-      this.items.push({
-        productId: this.productInfo.id,
-        productName: this.productInfo.name,
-        productPrice: this.productInfo.price,
-        productQuantity: this.amount,
-        productIcon: this.productInfo.icon,
-        carriageFee: this.productInfo.carriageFee,
-        taxFee: this.productInfo.taxFee
-      })
       let order_info = {
-        items: this.items
+        items: [this.getItemObj()]
       }
       sessionStorage.setItem('order_info', JSON.stringify(order_info))
       this.$router.push({
@@ -270,6 +315,9 @@ export default {
     })
   },
   activated() {
+    this.selectedAttr = []
+    this.option_list = {}
+    this.ebayItemid = null
     if (this.$route.query.pc_preview) {
       this.isPreview = true
     } else {
@@ -302,6 +350,9 @@ export default {
         let shareUrl = location.protocol + "//" + location.host +
           '/product/detail/' + productId
         this.wxShare(this.productInfo.name, this.productInfo.productMemo, shareUrl, this.productInfo.icon)
+      }).catch(err => {
+        // this.$router.push('/product/list')
+        console.log(err)
       })
     } else {
       this.$router.push('/product/list')
@@ -550,6 +601,7 @@ dl {
     color: #fff;
   }
 }
+
 
 
 
