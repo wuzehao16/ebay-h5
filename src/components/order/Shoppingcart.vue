@@ -1,14 +1,14 @@
 <template>
   <div class="container">
     <div>
-      <mt-cell-swipe v-for="c in cart_list" :key="c.createTime" :right="[{
+      <mt-cell-swipe v-for="c in cart_list" :key="Math.random()" :right="[{
 	content: '删除',
 	style: {background:'red', color: '#fff', display: 'flex', 'align-items': 'center'}, 
-	handler: () => deletePro(c.productId)
+	handler: () => deletePro(c)
 	}]" class="cart-cell">
         <div slot="title" class='shop-cart'>
           <div class="check-box">
-            <mt-checklist v-model="checked_pro" :options="Array.of(c.productId)">
+            <mt-checklist v-model="checked_pro" :options="Array.of(getFlag(c))">
             </mt-checklist>
           </div>
           <div slot="title" class="shop-cart-list" :style="{'background': 'url(' + c.productIcon + ') no-repeat left center'}">
@@ -89,7 +89,7 @@ export default {
         sumPrice = 0
 
       for (let i of this.cart_list) {
-        if (this.checked_pro.includes(i.productId)) {
+        if (this.checked_pro.includes(this.getFlag(i))) {
           sumAmount += i.productQuantity
           sumPrice += i.productPrice * i.productQuantity
         }
@@ -99,13 +99,17 @@ export default {
     }
   },
   methods: {
-    deletePro(val) {
-      console.log(3434343)
+  	getFlag(i) {
+  		return i.productId + (i.itemId || '')
+  	},
+    deletePro(c) {
       MessageBox.confirm('确定删除此商品吗?').then(action => {
-        console.log('kdkdk')
-        let productId = val + '' //string
-        reqCartDelete({ productId, userId: this.userId }).then((res) => {
-          console.log(res)
+        let params = {
+        	productId: c.productId + '', //string
+        	userId: this.userId,
+        	itemId: c.itemId ? encodeURIComponent(c.itemId) : ''
+        }
+        reqCartDelete(params).then((res) => {
           if (res.data.msg == '成功') {
             this.getList()
             this.$store.commit('changeCartAmount')
@@ -117,14 +121,14 @@ export default {
     },
     increase(c) {
       c.productQuantity++
-        if (!this.checked_pro.includes(c.productId)) {
-          this.checked_pro.push(c.productId)
+        if ( !this.checked_pro.includes(this.getFlag(c)) ) {
+          this.checked_pro.push(this.getFlag(c))
         }
     },
     goSettle() {
       let items = []
       for (let i of this.cart_list) {
-        if (this.checked_pro.includes(i.productId)) {
+        if (this.checked_pro.includes(this.getFlag(i))) {
           i.carriageFee = i.carriage
           items.push(i)
         }
@@ -139,7 +143,7 @@ export default {
         this.cart_list = res.data.data
         this.all_pro = []
         for (let i of res.data.data) {
-          this.all_pro.push(i.productId)
+          this.all_pro.push(this.getFlag(i))
         }
         if (this.all_pro.length == 0) {
           this.tip_flag = true
@@ -189,11 +193,6 @@ export default {
     if (this.userId) {
       this.getList()
     }
-    /*  	if (this.$store.state.cartNeedRefresh == 'need') {
-      		this.getList()
-      		//重置购物车状态
-    		this.$store.commit('resetCartStatus')
-      	}*/
   },
   deactivated() {
     this.check_all = []
