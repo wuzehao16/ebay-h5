@@ -153,14 +153,13 @@ export default {
         reqBuyerOrderCreate(this.order_info).then((res) => {
           if (res.data.code == 0) {
             this.pay_info.orderGroupNo = res.data.data.orderId
-
             this.order_info.orderId = res.data.data.orderId
-
             //如已下单商存在于购物车中，则去掉
             for (let i of this.order_info.items) {
               reqCartDelete({
                 productId: i.productId,
-                userId: this.userId
+                userId: this.userId,
+                itemId: i.itemId ? encodeURIComponent(i.itemId) : ''
               }).then((res) => {}).catch(err => {})
             }
             this.$store.commit('changeCartAmount')

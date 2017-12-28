@@ -10,7 +10,7 @@
       </a>
       </div>
     </div>
-    <input type="text" v-focus='hideKeyboard' @blur="hideKeyboard = false" readonly class="input-null">    
+    <input type="text" v-focus='hideKeyboard' @blur="hideKeyboard = false" readonly class="input-null">
     <div class="goods-container" v-if="showAll">
       <mt-swipe :auto="5000" :speed="0" class="pre-banner">
         <mt-swipe-item v-for="i in pro_info.productPic.split('@')" :key="i">
@@ -26,27 +26,19 @@
           <div slot="title" v-if='ebay.price'>{{ ebay.price.currency + " : " + ebay.price.value}}</div>
         </mt-cell>
         <mt-field v-model="pro_info.productPrice" placeholder="请输入商品价格" label="￥" style="margin-bottom: 10px;"></mt-field>
-
-
-<mt-cell v-if="ebay.itemsAttr" class="params-wrap">
-<div slot="title">
-
-    <mt-picker :slots="itemsAttrSlots" @change="changeAttr"></mt-picker>
-    <div v-for="(v, k, i) in chosenItem.value">
-      <div v-if="Object.keys(ebay.optionAttr).includes(k) || k == 'price'">
-        {{ k }}:&nbsp;&nbsp;{{ v }}
-      </div>
-    </div>
-    <template v-for='(v, i) in itemsAttrSlots[0].values'>
-      <mt-field label="价格（￥）：" v-show="v == chosenItem.key"
-      v-model="ebay.itemsAttr[v].attrCvalue"
-       :placeholder="'请输入第 ' + (i + 1) + ' 组合的价格'"></mt-field>
-    </template>
-</div>
-</mt-cell>
-
-
-
+        <mt-cell v-if="ebay.itemsAttr" class="params-wrap">
+          <div slot="title">
+            <mt-picker :slots="itemsAttrSlots" @change="changeAttr"></mt-picker>
+            <div v-for="(v, k, i) in chosenItem.value">
+              <div v-if="Object.keys(ebay.optionAttr).includes(k) || k == 'price'">
+                {{ k }}:&nbsp;&nbsp;{{ v }}
+              </div>
+            </div>
+            <template v-for='(v, i) in itemsAttrSlots[0].values'>
+              <mt-field label="价格（￥）：" v-show="v == chosenItem.key" v-model="ebay.itemsAttr[v].attrCvalue" :placeholder="'请输入第 ' + (i + 1) + ' 组合的价格'"></mt-field>
+            </template>
+          </div>
+        </mt-cell>
         <mt-cell title="运费">
           <div>
             <mt-radio class="fee-wrapper" v-model="carriageFeeType" :options="['包邮', '不包邮']">
@@ -66,7 +58,9 @@
             <mt-cell :title='k'></mt-cell>
             <mt-field :placeholder=" '请输入' + k + '译文' " v-model='optionAttr.key[k]'></mt-field>
             <mt-cell :title=" '请输入' + k + '选项的译文'"></mt-cell>
-            <mt-field v-for="(v, i) in val" :label="v + '：'" v-model="optionAttr.value[k + '_sube_' + i + '_sney_' + v]" :placeholder=" '请输入' + v + '译文'"></mt-field>
+            <mt-field v-for="(v, i) in val" :key="v" :label="v + '：'"
+               v-model="optionAttr.value[k + '_sube_' + i + '_sney_' + v]"
+                :placeholder=" '请输入' + v + '译文'"></mt-field>
           </div>
         </template>
         <template v-for="(item, index) in ebay.localizedAspects">
@@ -88,7 +82,6 @@
       </div>
     </div>
     <div class="no-product" v-if="show_tip">没有该商品或该商品不能在本平台翻译</div>
-
   </div>
 </template>
 <script>
@@ -176,7 +169,7 @@ export default {
             return false
           }
         }
-      }      
+      }
       if (this.carriageFeeType == '不包邮' &&
         !/^[0-9]+([.]{1}[0-9]{1,2})?$/.test(this.pro_info.carriageFee)) {
         Toast('请输入最多两位小数的数字格式的运费')
@@ -256,7 +249,7 @@ export default {
           attrEvalue: i[1].price,
           attrType: '1',
           itemId: i[0],
-          attrCname: i[1].stock,//无stock字段，暂用attrCvalue充当
+          attrCname: i[1].stock, //无stock字段，暂用attrCvalue充当
           attrCvalue: i[1].attrCvalue,
           productId: this.productId,
           id: this.itemIds[0]
@@ -337,7 +330,6 @@ export default {
           })
           .catch(err => { Indicator.close() })
       }
-
     }
   },
   watch: {
@@ -378,8 +370,8 @@ export default {
   },
   activated() {
     //test
-/*    this.currentValue = '152705485563'
-    this.getEbayGoods()*/
+    /*    this.currentValue = '152705485563'
+        this.getEbayGoods()*/
     this.showAll = false
     this.currentValue = ''
     this.else_key = []
