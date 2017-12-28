@@ -236,16 +236,8 @@ export default {
       }
 
       let userId = JSON.parse(sessionStorage.getItem('ebay-app')).id
-      let goodCarForm = {
-        productId: this.productInfo.id,
-        productName: this.productInfo.name,
-        productPrice: this.selectedPrice || this.productInfo.price,
-        productQuantity: this.amount,
-        productIcon: this.productInfo.icon,
-        carriage: this.productInfo.carriageFee,
-        taxFee: this.productInfo.taxFee,
-        itemId: this.ebayItemid
-      }
+      let goodCarForm = this.getItemObj()
+
       reqAddToShoppingCart({ userId, goodCarForm }).then((res) => {
         if (res.data.code == 0 && res.data.msg == '成功') {
           Toast('已加入购物车')
@@ -270,7 +262,8 @@ export default {
         productPrice: this.selectedPrice || this.productInfo.price,
         productQuantity: this.amount,
         productIcon: this.productInfo.icon,
-        carriageFee: this.productInfo.carriageFee || 0,
+        carriageFee: this.productInfo.carriageFee || 0,//下单用
+        carriage: this.productInfo.carriageFee || 0,//购物车用
         taxFee: this.productInfo.taxFee || 0,
         itemId: this.ebayItemid,
         productAttr: JSON.stringify(this.selectedAttr)     

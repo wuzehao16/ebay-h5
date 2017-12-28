@@ -37,10 +37,19 @@
                 <div class="avatar" :style="{'background': 'url(' + i.productIcon + ') no-repeat center center'}"></div>
                 <div class="right">
                   <div class="title">{{ i.productNane }}</div>
+
+            <small class="small-desc" v-if="i.orderDetail.productAttr">
+              <template v-for="(v, i) in JSON.parse(i.orderDetail.productAttr)"
+                 v-if="v.key">
+                <span>{{ v.key }}:{{ v.value }}</span>
+              </template>
+            </small>  
+
                   <div class="num">x{{i.orderDetail.productQuantity}}</div>
+
                 </div>
               </div>
-            </mt-cell>            
+            </mt-cell>    
           </template>
         </div>
         <!-- <div class="no-data" v-if="!all_list.length">您没有订单</div> -->

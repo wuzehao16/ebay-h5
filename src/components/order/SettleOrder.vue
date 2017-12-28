@@ -18,10 +18,10 @@
 		'url(' + order.productIcon + ') left center no-repeat'}">
             <h3>{{ order.productName }}</h3>
             <small class="small-desc" v-if="order.productAttr">
-			<template v-for="(v, i) in JSON.parse(order.productAttr)">
-				<span>{{ v.key }}:{{ v.value }}</span>
-			</template>
-		</small>
+				<template v-for="(v, i) in JSON.parse(order.productAttr)">
+					<span>{{ v.key }}:{{ v.value }}</span>
+				</template>
+			</small>
             <div><span class="price">￥{{ order.productPrice }}</span>
               <span class="amount">x{{ order.productQuantity }}</span></div>
           </div>
@@ -271,15 +271,6 @@ export default {
   background-size: 50px 4px;
   .mint-cell-wrapper {
     background-image: none;
-  }
-}
-
-.small-desc {
-  color: gray;
-  display: block;
-  line-height: 18px;
-  span {
-    margin-right: 10px;
   }
 }
 

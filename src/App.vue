@@ -43,7 +43,15 @@ $ebay-blue :#0099f7;
 .fade-enter, .fade-leave {
   opacity: 0;
 }
-
+.small-desc {
+  color: gray;
+  display: block;
+  line-height: 18px;
+  margin-top: 6px;
+  span {
+    margin-right: 10px;
+  }
+}
 .child-view {
   // position: absolute;
   width: 100vw;
