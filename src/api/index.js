@@ -28,11 +28,13 @@ export const reqBuyerOrderList = params => { return axios.get(`/sell/ebay/user/u
 export const reqBuyerOrderDetail = params => { return axios.get(`/sell/buyer/order/detail/${params.openid}/${params.orderId}`) }
 export const reqBuyerOrderCreate = params => { return axios.post(`/sell/buyer/order/create`, params) }
 export const reqBuyerOrderEdit = params => { return axios.put(`/sell/buyer/order/save`, params) }
+//分销商订单
+
 
 //购物车
 export const reqAddToShoppingCart = params => { return axios.post(`/sell/buyer/goodcar/add/${params.userId}`, params.goodCarForm) }
 export const reqShoppingCartList = params => { return axios.get(`/sell/buyer/goodcar/list/${params.userId}/0/1000`) }
-export const reqCartDelete = params => { return axios.delete(`/sell/buyer/goodcar/delete/${params.productId}/${params.userId}`) }
+export const reqCartDelete = params => { return axios.delete(`/sell/buyer/goodcar/delete/${params.productId}/${params.userId}?itemId=${params.itemId}`) }
 
 export const reqSellerProList = params => { return axios.get(`/sell/seller/product/list`, {params: params}) }
 

@@ -26,19 +26,22 @@
           <div slot="title" v-if='ebay.price'>{{ ebay.price.currency + " : " + ebay.price.value}}</div>
         </mt-cell>
         <mt-field v-model="pro_info.productPrice" placeholder="请输入商品价格" label="￥" style="margin-bottom: 10px;"></mt-field>
+
         <mt-cell v-if="ebay.itemsAttr" class="params-wrap">
           <div slot="title">
             <mt-picker :slots="itemsAttrSlots" @change="changeAttr"></mt-picker>
-            <div v-for="(v, k, i) in chosenItem.value">
-              <div v-if="Object.keys(ebay.optionAttr).includes(k) || k == 'price'">
+            <div class="attr-wrap">
+              <p v-if="Object.keys(ebay.optionAttr).includes(k) || k == 'price'"
+              v-for="(v, k, i) in chosenItem.value">
                 {{ k }}:&nbsp;&nbsp;{{ v }}
-              </div>
+              </p>
             </div>
             <template v-for='(v, i) in itemsAttrSlots[0].values'>
               <mt-field label="价格（￥）：" v-show="v == chosenItem.key" v-model="ebay.itemsAttr[v].attrCvalue" :placeholder="'请输入第 ' + (i + 1) + ' 组合的价格'"></mt-field>
             </template>
           </div>
         </mt-cell>
+
         <mt-cell title="运费">
           <div>
             <mt-radio class="fee-wrapper" v-model="carriageFeeType" :options="['包邮', '不包邮']">
@@ -423,13 +426,11 @@ export default {
     }
   },
   mounted() {
-
     this.pro_info_bak = Object.assign({}, this.pro_info)
-
     //获取页面高度
-    var clientHeight = document.body.clientHeight;
+    let clientHeight = document.body.clientHeight;
     //设置监听聚焦事件
-    var focusElem
+    let focusElem
     document.body.addEventListener("focus", function(e) {
       focusElem = e.target
     }, true)
@@ -437,7 +438,8 @@ export default {
     window.addEventListener("resize", function() {
       if (focusElem && document.body.clientHeight < clientHeight) {
         //使用scrollIntoView方法来控制输入框
-        focusElem.scrollIntoView(false);
+        focusElem.scrollIntoView(false)
+        document.getElementById('app').scrollTop += 100
       }
     })
   }
@@ -447,6 +449,9 @@ export default {
 <style lang="scss">
 .fee-wrapper .mint-cell {
   display: inline-block;
+  .mint-cell-wrapper {
+    background: none;
+  }
 }
 
 </style>
