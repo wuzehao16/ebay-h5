@@ -69,9 +69,7 @@ export default {
         address: ''
       },
       pay_info: {
-        /*
-          			orderId: '',
-        		 	returnUrl: baseUrl + '/user/usercenter'*/
+        returnUrl: baseUrl + '/user/usercenter'
       },
       userId: ''
     }
@@ -215,9 +213,9 @@ export default {
   },
   mounted() {
     this.ebay_app = JSON.parse(sessionStorage.getItem("ebay-app"))
-    this.receiver_info.name = this.ebay_app.userWxName
-    this.receiver_info.phone = this.ebay_app.userPhone
-    this.receiver_info.address = this.ebay_app.userAddr
+    this.receiver_info.name = this.ebay_app.userWxName || ''
+    this.receiver_info.phone = this.ebay_app.userPhone || ''
+    this.receiver_info.address = this.ebay_app.userAddr || ''
 
     this.userId = this.ebay_app.id
     let obj = {

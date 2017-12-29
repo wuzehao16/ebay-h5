@@ -85,7 +85,8 @@ export default {
         })
         reqUserInfo({id: this.editForm.id}).then((res) => {
           Indicator.close()
-          if (res.data.code == 0 && res.data.data.userCtype == '1') {
+          if (res.data.code == 0 && res.data.data.userCtype
+             && res.data.data.userCtype == '1') {
               let instance = Toast({
                 message: '您已是会员，系统为您跳转首页！',
                 position: 'bottom'

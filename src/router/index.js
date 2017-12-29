@@ -152,7 +152,7 @@ import store from '@/store'
 import {baseUrl} from '../api'
 import { MessageBox } from 'mint-ui'
 router.beforeEach((to, from, next) => {
-/*
+
   if (to.name == 'PcPreviewGoods') {
     next()
   } else {
@@ -177,7 +177,8 @@ router.beforeEach((to, from, next) => {
         }
       }).catch((err) => {})    
     } else {
-      if (user.userCtype == '2' && store.state.authPage.includes(to.name)) {
+      if (user.userCtype && user.userCtype == '2' 
+        && store.state.authPage.includes(to.name)) {
         MessageBox.confirm('分销商才有权限进入，去注册成为分销商?').then(action => {
           next('/user/register')
         }).catch(err => {
@@ -191,9 +192,9 @@ router.beforeEach((to, from, next) => {
         next()
       }
     }    
-  }*/
+  }
 
-  let user = {
+/*  let user = {
     id: '20',
     userWxOpenid: 'oyNDcwRQUAv0Oahba6SUlXLwobgw',
     userCtype: '1',
@@ -202,11 +203,13 @@ router.beforeEach((to, from, next) => {
     userWxName: 'Cons.Van'
   }
   sessionStorage.setItem('ebay-app', JSON.stringify(user))
-next()
- /* let user = JSON.parse( sessionStorage.getItem('ebay-app') )
+next()*/
 
-  if (user.userCtype == '2' && store.state.authPage.includes(to.name)) {
-    console.log(9374937)
+
+/*  let user = JSON.parse( sessionStorage.getItem('ebay-app') )
+
+  if (user.userCtype && user.userCtype == '2'
+     && store.state.authPage.includes(to.name)) {
     MessageBox.confirm('分销商才有权限进入，去注册成为分销商?').then(action => {
       next('/user/register')
     }).catch(err => {
