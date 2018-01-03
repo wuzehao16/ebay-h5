@@ -30,7 +30,8 @@
 </mt-cell>
 
 
-<mt-cell title="我是分销商" is-link to="/user/distributor" v-if="user.userCtype == '1'">
+<mt-cell title="我是分销商" is-link to="/user/distributor"
+	 v-if="user.userCtype && user.userCtype == '1'">
 	<i slot="icon" class="iconfont icon-client" style="color:#009688;"></i>
 </mt-cell>
 <!-- 

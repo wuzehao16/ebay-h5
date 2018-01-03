@@ -173,7 +173,8 @@ export default {
   		sessionStorage.setItem('order_info', JSON.stringify({
           items,
           orderMasterId: d.id,
-          orderId: d.orderNo
+          orderId: d.orderNo,
+          orderGroupNo: d.orderGroupNo
         })
       )
   		this.$router.push({

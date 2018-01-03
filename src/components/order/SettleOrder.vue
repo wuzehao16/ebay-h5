@@ -139,7 +139,7 @@ export default {
       if (this.order_info.orderId) { //已建订单
         reqBuyerOrderEdit(this.order_info).then((res) => {
           if (res.data.code == 0) {
-            this.pay_info.orderGroupNo = this.order_info.orderId
+            this.pay_info.orderGroupNo = this.order_info.orderGroupNo
             reqPayCreate(this.pay_info).then((res) => {
               if (res.data.code == 0) {
                 this.wechatPay(res.data.data.payResponse)
