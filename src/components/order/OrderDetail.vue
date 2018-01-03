@@ -1,9 +1,13 @@
 <template>
 <div class="container">
+<template v-if=' Number.parseInt(order.orderStatus) >= 3 '>
+<mt-cell :title='logistics[0].trackingMessage'
+	 v-if="logistics[0] && logistics[0].trackingMessage"
+	 :label='logistics[0].trackingTime'
+	 :is-link="true" @click.native='goLogi' style="padding-top: 10px;">
+</mt-cell>
+<mt-cell v-else title="尚无物流配送信息。">
 
-<template v-if='logistics[0]'>
-<mt-cell :title='logistics[0].trackingMessage' :label='logistics[0].trackingTime'
-	 is-link @click.native='goLogi' style="padding-top: 10px;">
 </mt-cell>
 </template>
 <mt-cell>
@@ -74,11 +78,10 @@ export default {
 		  	vm.order = to.params.order
 		  	console.log(vm.order)
 		  	reqLogistics({orderNo: vm.order.orderNo}).then((res) => {
-
+		  		vm.logistics = res.data
 		  	}).catch(err => {
-
 		  		//正式接入物流接口后移到上面
-		  		vm.logistics = [
+	/*	  		vm.logistics = [
 		            {
 		                "trackingTime":"2017-11-17 00:40:57",
 		                "trackingMessage":"由【浙江温州海城公司】发往【浙江温州航空部】【浙江温州航空部】【浙江温州航空部】",
@@ -89,7 +92,7 @@ export default {
 		                "trackingMessage":"订单 (1768673044) 已创建",
 		                "carrierNo":""
 		            }
-		        ]		  		
+		        ]	*/
 		  	})
   		})
   	} else if (from.name == 'LogisticsInfo') {
