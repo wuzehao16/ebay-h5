@@ -12,16 +12,15 @@
       </mt-swipe-item>
     </mt-swipe>
     <mt-tabbar :fixed="true" class="addCart">
-      <template v-if="!isPreview">
+      <template v-if="!isPreview && productInfo.auditStatus == '1' ">
         <div class="cart">
           <i class="iconfont icon-cart" @click="toCart" style="font-size: 30px;"></i>
-          <!-- <mt-badge type="danger" size="small" class="num">10</mt-badge> -->
           <span class="num">{{ pro_in_cart < 100 ? pro_in_cart : '99+' }}</span>
         </div>
         <mt-button type="danger" @click="addToCart">加入购物车</mt-button>
         <mt-button type="primary" @click="buyIt">立即购买</mt-button>
       </template>
-      <mt-button v-if="isPreview" type="primary" size="large" @click="backList">返回我的发布</mt-button>
+      <mt-button v-else type="primary" size="large" @click="backList">返回我的发布</mt-button>
     </mt-tabbar>
     <mt-cell>
       <div slot='title' class="pro-title">
