@@ -230,7 +230,6 @@ export default {
             itemid.push(i[0])
           }
         }
-        console.log(itemid)
 
         this.pro_info.items.push({
           attrCname: this.optionAttr.key[ename],

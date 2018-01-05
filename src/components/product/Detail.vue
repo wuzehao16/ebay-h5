@@ -32,7 +32,7 @@
     <i class="iconfont" :class="{'icon-collect': !collected, 'icon-collect-color': collected}"></i><br/>收藏</span>
     </mt-cell>
     <div class="price">
-        ￥{{ selectedPrice || productInfo.price}}
+      ￥{{ selectedPrice || productInfo.price}}
     </div>
     <mt-cell>
       <div slot='title' class='country-wrap' v-if="productInfo.productCountry">
@@ -45,12 +45,13 @@
         <span>跨境运输</span>
       </div>
     </mt-cell>
-    <template v-for="(v, k,  i) in option_list" >
+    <template v-for="(v, k,  i) in option_list">
       <dl>
         <dt>{{ k }}</dt>
         <dd>
           <ul>
-            <li :class="{'height-light': selectedAttr[i] == c}" @click="setSelected(i, c)" v-for="(c, index) in v" :key="index + c + i">
+            <li :class="{'height-light': selectedAttr[i] == c,
+               unable: c.click_unabled}" @click="setSelected(i, c)" v-for="(c, index) in v" :key="index + c + i">
               {{ c.value }}
             </li>
           </ul>
@@ -169,25 +170,50 @@ export default {
   },
   methods: {
     setSelected(i, c) {
+      if (c.click_unabled) {
+        return
+      }
+
       if (this.selectedAttr[i] == c) {
         this.$set(this.selectedAttr, i, '')
       } else {
         this.$set(this.selectedAttr, i, c)
       }
+
       let len = Object.keys(this.option_list).length
       let str = ''
       for (let i of this.selectedAttr) {
         if (i) {
-          str += i.itemid
+          str += '@' + i.itemid
         }
       }
+
+      //使其它不包含所选中项的选项置灰  click_unabled = false
+      //包含的置为 true
+      let arr1 = [...new Set(str.split('@'))]
+      let selectedFlag = (this.selectedAttr[i] == '')
+      for (let i of Object.entries(this.option_list)) {
+        if (c.key != i[0]) {
+          for (let j of i[1]) {
+            let arr2 = [...new Set(j.itemid.split('@'))]
+            let aLen = arr2.push(...arr1)
+            let bLen = [...new Set(arr2)].length
+            if (aLen != bLen || selectedFlag) { //有重复 或 未选
+              j.click_unabled = false
+            } else { //无重复
+              j.click_unabled = true
+            }
+          }
+        }
+      }
+
       for (let j of this.definite_itemid) {
         if (str.split(j.itemId).length - 1 == len) {
-          console.log('haha1', j.itemId, j.attrEvalue) //此为选中的itemid及其价格
+          //console.log('haha1', j.itemId, j.attrEvalue) //此为选中的itemid及其价格
           this.selectedPrice = j.attrCvalue
           this.ebayItemid = j.itemId
           break
-        } else if (str.indexOf(j.itemId) > 0) {
+        } else if (str.indexOf(j.itemId) >= 0) {
           this.selectedPrice = j.attrCvalue
         }
       }
@@ -198,18 +224,18 @@ export default {
           j = 0
         for (let i of this.productInfo.productAttr) {
           if (i.attrType == '1' && i.attrCname != h && i.attrEname != 'price') {
-            // this.option_list[i.attrCname] = [i.attrCvalue]
             this.option_list[i.attrCname] = [{
               key: i.attrCname,
               value: i.attrCvalue,
-              itemid: i.itemId
+              itemid: i.itemId,
+              click_unabled: false
             }]
           } else if (i.attrType == '1' && i.attrCname == h && i.attrEname != 'price') {
-            // this.option_list[i.attrCname].push(i.attrCvalue)
             this.option_list[i.attrCname].push({
               key: i.attrCname,
               value: i.attrCvalue,
-              itemid: i.itemId
+              itemid: i.itemId,
+              click_unabled: false
             })
           }
           h = i.attrCname
@@ -218,7 +244,6 @@ export default {
           }
         }
       }
-      console.log(this.definite_itemid)
     },
     checkOption() {
       let arr = Object.keys(this.option_list)
@@ -262,11 +287,11 @@ export default {
         productPrice: this.selectedPrice || this.productInfo.price,
         productQuantity: this.amount,
         productIcon: this.productInfo.icon,
-        carriageFee: this.productInfo.carriageFee || 0,//下单用
-        carriage: this.productInfo.carriageFee || 0,//购物车用
+        carriageFee: this.productInfo.carriageFee || 0, //下单用
+        carriage: this.productInfo.carriageFee || 0, //购物车用
         taxFee: this.productInfo.taxFee || 0,
         itemId: this.ebayItemid,
-        productAttr: JSON.stringify(this.selectedAttr)     
+        productAttr: JSON.stringify(this.selectedAttr)
       }
     },
     buyIt() {
@@ -402,6 +427,11 @@ $bg-red: #f23030;
     background-repeat: no-repeat;
     background-position: center;
   }
+}
+
+.unable {
+  background: #e2e1e1;
+  color: #fff;
 }
 
 .container {
@@ -594,6 +624,8 @@ dl {
     color: #fff;
   }
 }
+
+
 
 
 
