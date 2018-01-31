@@ -136,10 +136,13 @@ export default {
       Object.assign(this.order_info, this.receiver_info, {
         openid: this.ebay_app.userWxOpenid
       })
-      if (this.order_info.orderId) { //已建订单
+      //一个订单多商品保存接口未完善，所以该类情况下先不保存，以重新创建订单处理
+      if (this.order_info.orderId && this.order_info.items.length == 1) { //已建订单
         reqBuyerOrderEdit(this.order_info).then((res) => {
           if (res.data.code == 0) {
-            this.pay_info.orderGroupNo = this.order_info.orderGroupNo
+            if (this.order_info.orderGroupNo) {
+              this.pay_info.orderGroupNo = this.order_info.orderId
+            }
             reqPayCreate(this.pay_info).then((res) => {
               if (res.data.code == 0) {
                 this.wechatPay(res.data.data.payResponse)
@@ -150,10 +153,17 @@ export default {
       } else { //未建订单
         reqBuyerOrderCreate(this.order_info).then((res) => {
           if (res.data.code == 0) {
-            this.pay_info.orderGroupNo = res.data.data.orderId
-            this.order_info.orderId = res.data.data.orderId
+            let r = res.data.data
+            this.pay_info.orderGroupNo = r.orderGroupNo
+            this.order_info.orderId = r.orderGroupNo
+            //一个订单多商品保存接口未完善，所以该类情况下先不保存，以重新创建订单处理
+            // this.order_info.orderMasterId = r.orderMasterId
             //如已下单商存在于购物车中，则去掉
+            let orderIdArr = r.orderId.split(',')
+            let j = 0
             for (let i of this.order_info.items) {
+              i.orderId = orderIdArr[j]
+              j++
               reqCartDelete({
                 productId: i.productId,
                 userId: this.userId,

@@ -160,9 +160,7 @@ export default {
       })
     },
     goPay(d){
-      console.log("d:", d)
       let row = d.productList
-      console.log(row)
       let items = []
       for (let r of row) {
         items.push(Object.assign(r.orderDetail, {
@@ -178,11 +176,7 @@ export default {
         })
       )
   		this.$router.push({
-  			name: 'SettleOrder',
-        // params: {
-        //   orderId: row[0].orderDetail.orderId,
-        //   orderMasterId: d.id
-        // }
+  			name: 'SettleOrder'
   		})
     },
     showSpinner() {

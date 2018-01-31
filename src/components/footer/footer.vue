@@ -1,16 +1,16 @@
 <template>
-  <div  class="footer">
+  <div class="footer">
     <ul class="tab3">
       <li>
         <router-link class="col" :to="{name: 'ProductList'}">
           <i class="iconfont icon-home"></i>
-        <span class="nd-p">首页</span>
+          <span class="nd-p">首页</span>
         </router-link>
       </li>
       <li>
-        <router-link class="col" :to="{name: 'Shoppingcart'}" >
+        <router-link class="col" :to="{name: 'Shoppingcart'}">
           <i class="iconfont icon-cart"></i>
-        <span class="nd-p"> 购物车</span>
+          <span class="nd-p"> 购物车</span>
         </router-link>
       </li>
       <li>
@@ -20,30 +20,25 @@
         </router-link>
       </li>
       <li>
-        <router-link class="col" :to="{name: 'UserCenter'}" >
+        <router-link class="col" :to="{name: 'UserCenter'}">
           <i class="iconfont icon-user"></i>
-        <span class="nd-p">会员中心</span>
+          <span class="nd-p">会员中心</span>
         </router-link>
-      </li>  
+      </li>
     </ul>
-      
-</div>
-
-
+  </div>
 </template>
-
 <script>
-
 export default {
   props: ['name'],
-  data () {
+  data() {
     return {
       showAddsdMenu: false,
       showMenuWrap: false
     }
   },
   watch: {
-    showAddsdMenu (val) {
+    showAddsdMenu(val) {
       if (val) {
         this.showMenuWrap = true
       } else {
@@ -54,50 +49,53 @@ export default {
     }
   },
   methods: {
-    toAddSd () {
+    toAddSd() {
       this.$router.push('')
     },
-    i () {
+    i() {
       this.showAddsdMenu = false
     }
   }
 }
+
 </script>
 <style scoped lang="scss">
-
-.footer{
+.footer {
   position: fixed;
   bottom: 0;
   height: 50px;
-  width:100%;
+  width: 100%;
   background-color: #fff;
-/*     box-shadow: 0 0 10PX 0 rgba(155,143,143,0.6);
+  /*     box-shadow: 0 0 10PX 0 rgba(155,143,143,0.6);
   -webkit-box-shadow: 0 0 10PX 0 rgba(155,143,143,0.6); */
   z-index: 1000;
 }
-.tab3{
+
+.tab3 {
   width: 100%;
   position: relative;
   background-color: #fff;
   display: flex;
 }
-.tab3 li{
+
+.tab3 li {
   font-size: 18px;
-    list-style-type: none;
-    text-align: center;
-    flex: 1;
-    margin-top: 10px;
-    a{
-      position: relative;
-      color: #999;
-      .nd-p{
-        font-size: 12px;
-        display: block;
-        margin-top: -4px;
-      }
+  list-style-type: none;
+  text-align: center;
+  flex: 1;
+  margin-top: 10px;
+  a {
+    position: relative;
+    color: #999;
+    .nd-p {
+      font-size: 12px;
+      display: block;
+      margin-top: -4px;
     }
-    a.router-link-active{
-      color: #0099f7;
-    }
+  }
+  a.router-link-active {
+    color: #0099f7;
+  }
 }
+
 </style>

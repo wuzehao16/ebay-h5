@@ -1,11 +1,8 @@
 <template>
   <div id="app">
-    <!-- <img src="./assets/logo.png"> -->
-    <!-- <transition name="fade"> -->
-      <keep-alive>
-        <router-view class="child-view"></router-view>
-      </keep-alive>
-    <!-- </transition> -->
+    <keep-alive>
+      <router-view class="child-view"></router-view>
+    </keep-alive>
     <foot v-if="$store.state.showFoot"></foot>
   </div>
 </template>
