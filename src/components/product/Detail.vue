@@ -175,7 +175,7 @@ export default {
       }
 
       if (this.selectedAttr[i] == c) {
-        this.$set(this.selectedAttr, i, '')
+        this.$set(this.selectedAttr, i, c.key)
       } else {
         this.$set(this.selectedAttr, i, c)
       }
@@ -183,27 +183,27 @@ export default {
       let len = Object.keys(this.option_list).length
       let str = ''
       for (let i of this.selectedAttr) {
-        if (i) {
+        if (i && str == '') {
+          str = i.itemid
+        } else if (i && str != '') {
           str += '@' + i.itemid
         }
       }
+      str = str || ''
 
-      //使其它不包含所选中项的选项置灰  click_unabled = false
-      //包含的置为 true
-      let arr1 = [...new Set(str.split('@'))]
-      let selectedFlag = (this.selectedAttr[i] == '')
-      for (let i of Object.entries(this.option_list)) {
-        if (c.key != i[0]) {
-          for (let j of i[1]) {
-            let arr2 = [...new Set(j.itemid.split('@'))]
-            let aLen = arr2.push(...arr1)
-            let bLen = [...new Set(arr2)].length
-            if (aLen != bLen || selectedFlag) { //有重复 或 未选
-              j.click_unabled = false
-            } else { //无重复
-              j.click_unabled = true
+      //选项可不可选原则：当前属性itemid与其它项被选中的itemid都有交集
+      for (let m of Object.entries(this.option_list)) {
+        for (let j of m[1]) {
+          let flag = true
+          for (let n of this.selectedAttr) {
+            if (n.key && n.key != m[0]) {
+              let jArr = j.itemid.split('@')
+              let nArr = n.itemid.split('@')
+              let n_flag = jArr.some(x =>  nArr.includes(x))
+              flag = flag && n_flag
             }
           }
+          j.click_unabled = !flag
         }
       }
 
