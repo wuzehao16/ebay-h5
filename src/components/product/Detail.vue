@@ -196,7 +196,7 @@ export default {
         for (let j of m[1]) {
           let flag = true
           for (let n of this.selectedAttr) {
-            if (n.key && n.key != m[0]) {
+            if (n && n.key && n.key != m[0]) {
               let jArr = j.itemid.split('@')
               let nArr = n.itemid.split('@')
               let n_flag = jArr.some(x =>  nArr.includes(x))
