@@ -26,6 +26,7 @@ $ebay-blue :#0099f7;
   background-color: #EEEEEE;
   overflow: scroll;
   -webkit-overflow-scrolling: touch;
+  margin-right: -15px;
 /*   position: absolute;
   width: 100%; */
 }

@@ -195,8 +195,8 @@ router.beforeEach((to, from, next) => {
   }
 
 /*  let user = {
-    id: '20',
-    userWxOpenid: 'oyNDcwRQUAv0Oahba6SUlXLwobgw',
+    id: '2',
+    userWxOpenid: 'oysbMwWmqbfiGO1YXqQamT6LvP30',
     userCtype: '1',
     userPhone: '13877887788',
     userAddr: 'xxx省uu市fddkjflkj',
@@ -225,7 +225,7 @@ next()*/
 
 router.afterEach((to, from) => {
   //特定页面不显示底部
-    if ([ 'AddressList', 'Address', 'OrderDetail',
+    if ([ 'AddressList', 'Address', 'OrderDetail', 'PcPreviewGoods',
        'PorductDetail', 'SettleOrder', 'Withdraw', 'Register', 'LogisticsInfo' ].includes(to.name)) {
         store.state.showFoot = false
     } else {
