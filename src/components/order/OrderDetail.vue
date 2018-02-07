@@ -77,23 +77,13 @@ export default {
   		next(vm => {
 		  	vm.order = to.params.order
 		  	console.log(vm.order)
-		  	reqLogistics({orderNo: vm.order.orderNo}).then((res) => {
-		  		vm.logistics = res.data
-		  	}).catch(err => {
-		  		//正式接入物流接口后移到上面
-	/*	  		vm.logistics = [
-		            {
-		                "trackingTime":"2017-11-17 00:40:57",
-		                "trackingMessage":"由【浙江温州海城公司】发往【浙江温州航空部】【浙江温州航空部】【浙江温州航空部】",
-		                "carrierNo":"810018551209"
-		            },
-		            {
-		                "trackingTime":"2017-11-17 00:40:57",
-		                "trackingMessage":"订单 (1768673044) 已创建",
-		                "carrierNo":""
-		            }
-		        ]	*/
-		  	})
+		  	//   '17091924161'
+		  	reqLogistics({logisticsNo: vm.order.logisticsNo}).then((res) => {
+		  		let r = res.data.data
+		  		if (typeof r == 'object') {
+		  			vm.logistics = r
+		  		}
+		  	}).catch(err => {})
   		})
   	} else if (from.name == 'LogisticsInfo') {
   		next()

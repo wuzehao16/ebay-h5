@@ -11,7 +11,7 @@ export const reqAddressJson = params => { return axios.get(`${staticBase}/resour
 export const reqIsoCountryJson = params => { return axios.get(`${staticBase}/resource/isoCountry.json`) }
 
 
-export const reqLogistics = params => { return axios.get(`/sell/oso-api/oso/api/order/getTracking/${params.orderNo}`)}
+export const reqLogistics = params => { return axios.get(`/sell/ebay/logistics/order/getTracking/${params.logisticsNo}`)}
 
 export const reqUserInfo = params => { return axios.get(`/sell/ebay/user/account/${params.id}`, params) }
 //我的钱包
@@ -28,6 +28,7 @@ export const reqBuyerOrderList = params => { return axios.get(`/sell/ebay/user/u
 export const reqBuyerOrderDetail = params => { return axios.get(`/sell/buyer/order/detail/${params.openid}/${params.orderId}`) }
 export const reqBuyerOrderCreate = params => { return axios.post(`/sell/buyer/order/create`, params) }
 export const reqBuyerOrderEdit = params => { return axios.put(`/sell/buyer/order/save`, params) }
+export const reqBuyerOrderCancel = params => { return axios.post(`/sell/buyer/order/cancel/${params.openid}/${params.orderId}`, params) }
 //分销商订单
 
 

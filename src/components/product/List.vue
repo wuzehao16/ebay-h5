@@ -237,7 +237,7 @@ $shadow-color: #ececec;
 .goodss-list {
     padding: 5px ;
     height: 110px;
-    width: 110px;
+    // width: 110px;
     line-height: 26px;
     display: flex;
   .avatar{
@@ -245,14 +245,14 @@ $shadow-color: #ececec;
     background-size: 100px auto!important;
   }
   .right{
-    flex: 1 0 auto;
+    // flex: 1 0 auto;
     padding-left: 20px;
     padding-top: 6px;
     .title {
         overflow: hidden;
         font-size: 16px;
         line-height: 20px;
-        width: 220px;
+        // width: 220px;
         text-overflow: ellipsis;
         display: -webkit-box;
         -webkit-line-clamp: 2;
