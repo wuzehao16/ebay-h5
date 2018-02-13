@@ -87,8 +87,9 @@
         <div class="detail" id="wareStandard" style="display: block;margin-bottom:50px;">
           <table class="table-border" width="100%">
             <tbody>
-              <tr v-for="d in productInfo.productAttr" :key="d.id">
-                <template v-if='d.attrType == "2"'>
+              <tr v-for="(d, index) in productInfo.productAttr" :key="d.id"
+                 v-if='d.attrType == "2"' >
+                <template>
                   <td>{{d.attrCname}}</td>
                   <td>{{d.attrCvalue}}</td>
                 </template>
@@ -173,7 +174,6 @@ export default {
       if (c.click_unabled) {
         return
       }
-
       if (this.selectedAttr[i] == c) {
         this.$set(this.selectedAttr, i, c.key)
       } else {
@@ -190,7 +190,6 @@ export default {
         }
       }
       str = str || ''
-
       //选项可不可选原则：当前属性itemid与其它项被选中的itemid都有交集
       for (let m of Object.entries(this.option_list)) {
         for (let j of m[1]) {

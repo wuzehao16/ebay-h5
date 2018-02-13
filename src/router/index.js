@@ -146,13 +146,11 @@ let router = new Router({
   ]
 })
 
-
 import {reqWechatUserInfo, reqWechatSignature} from '../api'
 import store from '@/store'
 import {baseUrl} from '../api'
 import { MessageBox } from 'mint-ui'
 router.beforeEach((to, from, next) => {
-
   if (to.name == 'PcPreviewGoods') {
     next()
   } else {

@@ -30,7 +30,7 @@ export const reqBuyerOrderCreate = params => { return axios.post(`/sell/buyer/or
 export const reqBuyerOrderEdit = params => { return axios.put(`/sell/buyer/order/save`, params) }
 export const reqBuyerOrderCancel = params => { return axios.post(`/sell/buyer/order/cancel/${params.openid}/${params.orderId}`, params) }
 //分销商订单
-
+export const reqDistriOrderList = params => { return axios.get(`/sell/buyer/order/list/${params.userWxOpenid}/${params.isContainDistributor}/${params.page}/${params.size}`)}
 
 //购物车
 export const reqAddToShoppingCart = params => { return axios.post(`/sell/buyer/goodcar/add/${params.userId}`, params.goodCarForm) }
