@@ -207,6 +207,9 @@ export default {
     if (!this.order_info) {
       this.$router.push('/product/list')
     }
+    for (let i of this.order_info.items) {
+      i.productName = i.productName.substr(0, 64)
+    }
     let a = this.$route.params.receiver_info
     if (a) {
       this.receiver_info.cneeName = a.cneeName
