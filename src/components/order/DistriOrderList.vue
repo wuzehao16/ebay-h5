@@ -27,19 +27,19 @@
                   <label>总价：</label><span>￥{{d.orderAmount}}</span></div>
               </div>
             </mt-cell>
-            <template v-for='i in d.productList'>
+            <template v-for='i in d.orderDetailList'>
               <mt-cell style="padding-bottom: 10px;">
                 <div slot="title" class="goods-list">
                   <div class="avatar" :style="{'background': 'url(' + i.productIcon + ') no-repeat center center'}"></div>
                   <div class="right">
-                    <div class="title">{{ i.productNane }}</div>
-                    <small class="small-desc" v-if="i.orderDetail.productAttr">
-                      <template v-for="(v, i) in JSON.parse(i.orderDetail.productAttr)"
+                    <div class="title">{{ i.productName }}</div>
+                    <small class="small-desc" v-if="i.productAttr">
+                      <template v-for="(v, i) in JSON.parse(i.productAttr)"
                          v-if="v.key">
                         <span>{{ v.key }}:{{ v.value }}</span>
                       </template>
                     </small>
-                    <div class="num">x{{i.orderDetail.productQuantity}}</div>
+                    <div class="num">x{{i.productQuantity}}</div>
                   </div>
                 </div>
               </mt-cell>

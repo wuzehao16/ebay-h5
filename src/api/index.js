@@ -19,7 +19,7 @@ export const reqMyWallet = params => { return axios.get(`/sell/ebay/user/user/my
 export const reqMyWalletCount = params => { return axios.get(`/sell/ebay/user/user/myWallet/count`, {params: params}) }
 
 //提现
-export const reqWithdrawCreate = params => { return axios.post(`/sell/user/account/withdraw/create`, params) }
+export const reqWithdrawCreate = params => { return axios.post(`/sell/user/account/withdraw/create?userId=${params.userId}&drawAmount=${params.drawAmount}`, params) }
 //微信支付
 export const reqPayCreate = params => { return axios.get(`/sell/pay/create`, {params: params}) }
 

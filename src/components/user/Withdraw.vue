@@ -48,7 +48,7 @@ export default {
   			})
   			return false
   		}
-  		if(Number.parseInt(this.amount) > Number.parseFloat(this.user.userBalance)) {
+  		if(Number.parseFloat(this.amount) > Number.parseFloat(this.user.userBalance)) {
 			Toast({
 			  message: '提现金额不能大于余额！',
 			  position: 'bottom'
@@ -59,7 +59,7 @@ export default {
 	    Indicator.open({
 	      spinnerType: "fading-circle"
 	    })
-  		reqWithdrawCreate({
+  		reqWithdrawCreate({ 
   			userId: this.user.id,
   			drawAmount: Number.parseFloat(this.amount)
   		}).then((res) => {
@@ -69,6 +69,12 @@ export default {
 				  message: '已发起提现',
 				  position: 'bottom'
 				})
+				/*this.user.userBalance = (this.user.userBalance * 1000 -
+				Number.parseFloat(this.amount) * 1000) / 1000*/
+
+				this.user.userBalance = this.floatSub(this.user.userBalance, Number.parseFloat(this.amount))
+
+				this.amount = ''
   			} else {
   				Toast(res.data.msg)
   			}
@@ -76,6 +82,15 @@ export default {
   			Indicator.close()
   		})
   	},
+  	floatSub(arg1,arg2){    
+	    var r1,r2,m,n;    
+	    try{r1=arg1.toString().split(".")[1].length}catch(e){r1=0}    
+	    try{r2=arg2.toString().split(".")[1].length}catch(e){r2=0}    
+	    m=Math.pow(10,Math.max(r1,r2));    
+	    //动态控制精度长度    
+	    n=(r1>=r2)?r1:r2;    
+	    return ((arg1*m-arg2*m)/m).toFixed(n);    
+	},
   	getNewInfo (id) {
 	  	reqUserInfo({id}).then((res) => {
 	  		if (res.data.code == 0) {
