@@ -279,7 +279,7 @@ export default {
 
 .show-label {
   .mint-checkbox-label {
-    display: inline!important;
+    display: inline-block!important;
     font-size: 14px;
   }
 }

@@ -219,6 +219,9 @@ export default {
       }
 
       //组合商品：把商品选择属性放进items
+      if (this.ebay.optionAttr) {
+
+
       let b = Object.entries(this.optionAttr.value)
       let aItems = Object.entries(this.ebay.itemsAttr)
       for (let j of b) {
@@ -258,7 +261,7 @@ export default {
         })
         this.itemIds.splice(0, 1)
       }
-
+      }
       this.pro_info.productPrice = Number.parseFloat(this.pro_info.productPrice)
       this.isEdit ? this.pro_info.productId = this.productId : ''
       this.pro_info.productUsd = Number.parseFloat(this.pro_info.productUsd)
