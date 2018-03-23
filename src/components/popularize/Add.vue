@@ -14,8 +14,7 @@
     <div class="goods-container" v-if="showAll">
       <mt-swipe :auto="5000" :speed="0" class="pre-banner">
         <mt-swipe-item v-for="i in pro_info.productPic.split('@')" :key="i">
-          <div style="text-align:center;">
-            <img :src="i" style="max-height:281.25px;">
+          <div :style="{'background-image': 'url(' + i + ')'}" class="wrapper-fff">
           </div>
         </mt-swipe-item>
       </mt-swipe>
@@ -498,7 +497,8 @@ export default {
 }
 
 .pre-banner {
-  height: 281.25px;
+  height: 280px;
+  width: 100%;
   background-color: #fff;
   li {
     height: 100%;
@@ -506,6 +506,15 @@ export default {
     list-style-type: none;
     background-size: contain!important;
   }
+  .wrapper-fff {
+    height: 100%;
+    margin: 0 auto;
+    background-size: auto 190px;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+
 }
 
 .input-null {
