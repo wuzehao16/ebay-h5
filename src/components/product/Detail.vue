@@ -420,7 +420,7 @@ $bg-red: #f23030;
   }
   .wrapper {
     height: 205px;
-    width: 200px;
+    // width: 200px;
     margin: 0 auto;
     background-size: auto 190px;
     background-repeat: no-repeat;
