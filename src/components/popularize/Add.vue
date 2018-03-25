@@ -27,6 +27,7 @@
         <mt-field v-model="pro_info.productPrice" placeholder="请输入商品价格" label="￥" style="margin-bottom: 10px;"></mt-field>
         <mt-cell v-if="ebay.itemsAttr" class="params-wrap">
           <div slot="title">
+            <mt-field label="美元USD/人民币CNY" placeholder="请输入美元USD/人民币CNY" type="number" v-model="exchaneRate" class="w50"></mt-field>
             <mt-picker :slots="itemsAttrSlots" @change="changeAttr"></mt-picker>
             <div class="attr-wrap">
               <p v-if="Object.keys(ebay.optionAttr).includes(k) || k == 'price'" v-for="(v, k, i) in chosenItem.value">
@@ -87,6 +88,7 @@ import { Toast, Indicator } from 'mint-ui'
 export default {
   data() {
     return {
+      exchaneRate: 6.66,
       chosenItem: {
         key: '',
         value: {}
@@ -160,7 +162,6 @@ export default {
       }
       if (this.ebay.itemsAttr) {
         for (let b of Object.entries(this.ebay.itemsAttr)) {
-          console.log('b:', b[1].attrCvalue)
           if (!b[1].attrCvalue || b[1].attrCvalue.match(/^[ ]*$/)) {
             Toast('您还有具体价格未填写')
             return false
@@ -321,6 +322,7 @@ export default {
               }
 
               if (this.ebay.itemsAttr) {
+                this.getCNY()
                 this.itemsAttrSlots[0].values = Object.keys(this.ebay.itemsAttr)
               }
 
@@ -329,9 +331,18 @@ export default {
           })
           .catch(err => { Indicator.close() })
       }
+    },
+
+    getCNY() {
+      for (let i of Object.values(this.ebay.itemsAttr)) {
+        i.attrCvalue = (Number.parseFloat(i.price) * this.exchaneRate).toFixed(2)
+      }
     }
   },
   watch: {
+    exchaneRate(a) {
+      this.getCNY()
+    },
     currentValue(a) {
       this.show_tip = false
       a == '' ? this.showAll = false : ''
@@ -368,9 +379,6 @@ export default {
     }
   },
   activated() {
-    //test
-    /*    this.currentValue = '152705485563'
-        this.getEbayGoods()*/
     this.showAll = false
     this.currentValue = ''
     this.else_key = []
@@ -448,6 +456,10 @@ export default {
   .mint-cell-wrapper {
     background: none;
   }
+}
+
+.w50 .mint-cell-title {
+  width: 50%;
 }
 
 </style>
