@@ -322,10 +322,11 @@ export default {
               }
 
               if (this.ebay.itemsAttr) {
-                this.getCNY()
+                if (!this.isEdit) {
+                  this.getCNY()
+                }
                 this.itemsAttrSlots[0].values = Object.keys(this.ebay.itemsAttr)
               }
-
             }
             Indicator.close()
           })
