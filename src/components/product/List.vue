@@ -3,15 +3,33 @@
 <div>
 <mt-search v-model="filters.productName"></mt-search>  
 </div>
+<mt-swipe :auto="0" class="index-banner">
+  <mt-swipe-item>
+  <div :style="{'background-image': 'url(' + staticBase + '/resource/banner/1.png)'}"></div>
+  </mt-swipe-item>
+  <mt-swipe-item>
+  <div :style="{'background-image': 'url(' + staticBase + '/resource/banner/2.png)'}"></div>
+  </mt-swipe-item>
+    <mt-swipe-item>
+  <div :style="{'background-image': 'url(' + staticBase + '/resource/banner/3.png)'}"></div>
+  </mt-swipe-item>
+    <mt-swipe-item>
+  <div :style="{'background-image': 'url(' + staticBase + '/resource/banner/4.png)'}"></div>
+  </mt-swipe-item>
+    <mt-swipe-item>
+  <div :style="{'background-image': 'url(' + staticBase + '/resource/banner/5.png)'}"></div>
+  </mt-swipe-item>
+</mt-swipe>
+
+<!-- :top-method="getProductList"  -->
 <mt-loadmore 
   :auto-fill="false"
-  :top-method="getProductList" 
   :bottom-method="getProductList" 
 	:bottom-all-loaded="allLoaded" 
   ref="loadmore" 
   class="main-wrapper">
   <div>
-    <div style="height: 42px;"></div>
+    <!-- <div style="height: 42px;"></div> -->
     <mt-cell class='set-shadow' v-for="d in pro_list" :key="d.created" >
       <div slot="title" class="goodss-list" @click="goDetail(d.id)">
         <div class="avatar" :style="{'background': 'url(' + d.productIcon + ') no-repeat center center'}"></div>
@@ -51,12 +69,13 @@
 </template>
 
 <script>
-import {reqProductList} from '../../api'
+import {reqProductList, staticBase} from '../../api'
 import {Indicator, Popup, Toast } from 'mint-ui'
 import debounce from 'lodash/debounce'
 export default {
   data () {
   	return {
+      staticBase: staticBase,
   		allLoaded: false,
       filters: {
         page: 0,
@@ -176,6 +195,17 @@ export default {
 <style lang="scss" >
 $ebay-blue :#0099f7;
 $shadow-color: #ececec;
+.index-banner {
+  height: 46vw;
+  background: pink;
+  margin-top: 42px;
+  .mint-swipe-item{
+    > div {
+      background-size: cover;
+      height: 100%;
+    }
+  }
+}
 .mint-searchbar{
   background-color: $ebay-blue;
   height: 42px;
