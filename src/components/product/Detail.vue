@@ -45,6 +45,17 @@
         <span>跨境运输</span>
       </div>
     </mt-cell>
+    <mt-cell>
+      <div slot='title' style="color: #888;font-size: 14px;">
+        <p>
+          <i class="iconfont icon-duigou" style="color: #d4237a;"></i>
+          <span>保证原产地发货</span>
+          <i class="iconfont icon-duigou" style="color: #d4237a;"></i>
+          <span>万邑通物流</span>
+        </p>
+        <p>美国转运&nbsp;&nbsp;税率11.9%&nbsp;&nbsp;不支持退换货</p>
+      </div>
+    </mt-cell>
     <template v-for="(v, k,  i) in option_list">
       <dl>
         <dt>{{ k }}</dt>
@@ -87,8 +98,7 @@
         <div class="detail" id="wareStandard" style="display: block;margin-bottom:50px;">
           <table class="table-border" width="100%">
             <tbody>
-              <tr v-for="(d, index) in productInfo.productAttr" :key="d.id"
-                 v-if='d.attrType == "2"' >
+              <tr v-for="(d, index) in productInfo.productAttr" :key="d.id" v-if='d.attrType == "2"'>
                 <template>
                   <td>{{d.attrCname}}</td>
                   <td>{{d.attrCvalue}}</td>
@@ -198,7 +208,7 @@ export default {
             if (n && n.key && n.key != m[0]) {
               let jArr = j.itemid.split('@')
               let nArr = n.itemid.split('@')
-              let n_flag = jArr.some(x =>  nArr.includes(x))
+              let n_flag = jArr.some(x => nArr.includes(x))
               flag = flag && n_flag
             }
           }
@@ -419,8 +429,7 @@ $bg-red: #f23030;
     background: #fff;
   }
   .wrapper {
-    height: 205px;
-    // width: 200px;
+    height: 205px; // width: 200px;
     margin: 0 auto;
     background-size: auto 190px;
     background-repeat: no-repeat;
@@ -623,6 +632,7 @@ dl {
     color: #fff;
   }
 }
+
 
 
 
