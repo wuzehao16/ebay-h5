@@ -25,6 +25,8 @@ const PorductDetail = r => require.ensure([], () => r(require('@/components/prod
 const AuthWechat = r => require.ensure([], () => r(require('@/components/auth/Auth')), 'AuthWechat')
 const Shoppingcart = r => require.ensure([], () => r(require('@/components/order/Shoppingcart')), 'Shoppingcart')
 const PcPreviewGoods = r => require.ensure([], () => r(require('@/components/popularize/PreviewGoods')), 'PcPreviewGoods')
+const IndexType = r => require.ensure([], () => r(require('@/components/product/IndexType')), 'IndexType')
+
 
 Vue.use(Router)
 
@@ -119,6 +121,11 @@ let router = new Router({
       component: ProductList
     },
     {
+      path: '/product/index/:index',
+      name: 'IndexType',
+      component: IndexType
+    },    
+    {
       path: '/product/detail/:id',
       name: 'PorductDetail',
       component: PorductDetail
@@ -191,10 +198,10 @@ router.beforeEach((to, from, next) => {
       }
     }    
   }
-
-/*  let user = {
-    id: '2',
-    userWxOpenid: 'oysbMwWmqbfiGO1YXqQamT6LvP30',
+/*
+  let user = {
+    id: '4',
+    userWxOpenid: 'oyNDcwRQUAv0Oahba6SUlXLwobgw',
     userCtype: '1',
     userPhone: '13877887788',
     userAddr: 'xxx省uu市fddkjflkj',
