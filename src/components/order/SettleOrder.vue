@@ -36,6 +36,9 @@
       <mt-cell title="税费">
         <div class="red-color">￥{{ total.taxFee }}</div>
       </mt-cell>
+      <mt-cell title="预计到货时间">
+        <div class="red-color">{{ formatTime((new Date().getTime() + 15*24*60*60*1000), 'yyyy-MM-dd') }}</div>
+      </mt-cell>      
       <mt-cell>
         <div>实付金额：<span class="red-color">￥{{ total.money }}</span></div>
       </mt-cell>
