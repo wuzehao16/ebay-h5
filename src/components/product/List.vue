@@ -24,13 +24,13 @@
     <mt-cell class="index-type no-bg">
       <div slot="title">
         <ul class="list-type">
-          <li @click="go_spe_list">
+          <li @click="go_spe_list(1)">
             <i class="iconfont icon-all"></i>
             <br/><span>居家</span></li>
-          <li @click="go_spe_list">
+          <li @click="go_spe_list(2)">
             <i class="iconfont icon-all"></i>
             <br/><span>餐厨</span></li>
-          <li @click="go_spe_list">
+          <li @click="go_spe_list(3)">
             <i class="iconfont icon-all"></i>
             <br/><span>服装</span></li>
           </li>
@@ -145,6 +145,14 @@ export default {
       }).catch((err) => {
         console.log(err)
         Indicator.close()
+      })
+    },
+    go_spe_list(val) {
+      this.$router.push({
+        name: 'IndexType',
+        params: {
+          index: val
+        }
       })
     },
     goDetail(val) {
