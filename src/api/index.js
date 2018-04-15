@@ -67,3 +67,4 @@ export const reqWechatSignature = params => { return axios.get(`/sell/wechat/sig
 export const reqWechatUserInfo = params => { return axios.get(`/sell/wechat/getUserInfo`, { params: params }) }
 //获取分类列表
 export const reqCategoryList = params => { return axios.get(`/sell/seller/category/list?pid=${params.pid}`, params) }
+export const reqBannerList = params => { return axios.get(`/sell/seller/banner/list`, params) }

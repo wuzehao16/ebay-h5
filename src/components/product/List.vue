@@ -4,10 +4,10 @@
       <mt-search v-model="filters.productName"></mt-search>
     </div>
     <mt-swipe :auto="0" class="index-banner">
-      <mt-swipe-item>
-        <div :style="{'background-image': 'url(' + staticBase + '/resource/banner/1.png)'}"></div>
+      <mt-swipe-item v-for="i in bannerList" :key="i.id">
+        <div :style="{'background-image': 'url(' + i.imageUrl + ')'}" @click="toUrl(i.clickUrl)"></div>
       </mt-swipe-item>
-      <mt-swipe-item>
+      <!-- <mt-swipe-item>
         <div :style="{'background-image': 'url(' + staticBase + '/resource/banner/2.png)'}"></div>
       </mt-swipe-item>
       <mt-swipe-item>
@@ -18,22 +18,19 @@
       </mt-swipe-item>
       <mt-swipe-item>
         <div :style="{'background-image': 'url(' + staticBase + '/resource/banner/5.png)'}"></div>
-      </mt-swipe-item>
+      </mt-swipe-item> -->
     </mt-swipe>
     <!-- 分类 -->
     <mt-cell class="index-type no-bg">
       <div slot="title">
         <ul class="list-type">
-          <li @click="go_spe_list(1)">
-            <i class="iconfont icon-all"></i>
-            <br/><span>居家</span></li>
-          <li @click="go_spe_list(2)">
-            <i class="iconfont icon-all"></i>
-            <br/><span>餐厨</span></li>
-          <li @click="go_spe_list(3)">
-            <i class="iconfont icon-all"></i>
-            <br/><span>服装</span></li>
-          </li>
+          <li v-for="p in categoryList" @click="go_spe_list(p.id)" :key="p.id">
+            <i>
+              <img :src=p.imageUrl alt="">
+            </i>
+            <br/><span>{{p.name}}</span></li>
+          <li  @click="go_spe_list(0)">
+            <br/><span>其他</span></li>
         </ul>
       </div>
     </mt-cell>
@@ -71,11 +68,11 @@
           </div>
         </mt-cell>
       </div>
-    </mt-popup>  
+    </mt-popup>
   </div>
 </template>
 <script>
-import { reqProductList, staticBase } from '../../api'
+import { reqProductList, staticBase, reqBannerList } from '../../api'
 import { Indicator, Popup, Toast } from 'mint-ui'
 import debounce from 'lodash/debounce'
 export default {
@@ -94,16 +91,26 @@ export default {
       tip_text: '',
       popupVisible: false,
       showSearched: false,
-      pro_search_list: []
+      pro_search_list: [],
+      categoryList:[],
+      bannerList:[]
     }
   },
   methods: {
+    toUrl(url) {
+      window.location=url;
+    },
     showSpinner() {
       this.tip_flag = false
       Indicator.open({
         text: '加载中...',
         spinnerType: 'fading-circle'
       })
+    },
+    async getBannerList() {
+       const res = (await reqBannerList()).data.data;
+       this.categoryList = res.categoryList;
+       this.bannerList = res.bannerList;
     },
     getProductList() {
       this.showSpinner()
@@ -170,7 +177,7 @@ export default {
   },
   mounted() {
     this.getProductList()
-
+    this.getBannerList()
     let _this = this
     let el = document.getElementsByClassName("mint-searchbar-core")[0]
     let el2 = document.getElementsByClassName("mint-searchbar-cancel")[0]
@@ -245,11 +252,16 @@ $shadow-color: #ececec;
     li {
       float: left;
       width: 33%;
+      margin-top: 5px;
       text-align: center;
       line-height: 20px;
       font-size: 16px;
       i {
         font-size: 26px;
+        img{
+          height: 20px;
+          width: 20px;
+        }
       }
     }
   }
