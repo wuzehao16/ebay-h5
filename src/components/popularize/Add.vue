@@ -74,6 +74,18 @@
         <mt-cell title=" 商品介绍 " style="font-size:14px;margin-top:10px;"></mt-cell>
         <textarea v-model="pro_info.productMemo" cols="30" rows="10" style="width:98%">
         </textarea>
+        <mt-cell title=" 商品类型(一级分类) " style="font-size:14px;margin-top:10px;"></mt-cell>
+
+        <select class="select" v-model="categoryPid" placeholder="请选择" @change="getCategorySubList">
+          <option value='' disabled selected style='display:none;'>请选择</option>
+          <option v-for="i in categoryList" :key="i.queue" :value="i.queue">{{i.name}}</option>
+        </select>
+        <mt-cell title=" 商品类型（二级分类） " style="font-size:14px;margin-top:10px;"></mt-cell>
+
+        <select class="select" v-model="pro_info.productType" placeholder="请选择">
+          <option value='' disabled selected style='display:none;'>请选择</option>
+          <option v-for="i in categorySubList" :key="i.queue" :value="i.queue">{{i.name}}</option>
+        </select>
       </form>
       <div class="bt-group">
         <mt-button type="primary" @click="proSubmit" class="btn-submit" :disabled="loading">提审</mt-button>
@@ -83,7 +95,7 @@
   </div>
 </template>
 <script>
-import { reqSellerProductSave, reqProductDetail, reqEbayGoods } from '../../api'
+import { reqSellerProductSave, reqProductDetail, reqEbayGoods,reqCategoryList } from '../../api'
 import { Toast, Indicator } from 'mint-ui'
 export default {
   data() {
@@ -132,8 +144,12 @@ export default {
         productUsd: '',
         productCountry: '',
         carriageFee: '',
-        taxFee: ''
+        taxFee: '',
+        productType:'',
       },
+      categoryPid:'',
+      categoryList:[],
+      categorySubList:[],
       pro_info_bak: {}
     }
   },
@@ -338,7 +354,18 @@ export default {
       for (let i of Object.values(this.ebay.itemsAttr)) {
         i.attrCvalue = (Number.parseFloat(i.price) * this.exchaneRate).toFixed(2)
       }
-    }
+    },
+    getCategoryList() {
+      reqCategoryList({ pid: 0 }).then((res) => {
+        this.categoryList = res.data.data;
+      })
+    },
+    getCategorySubList() {
+      console.log(this)
+      reqCategoryList({ pid: this.categoryPid }).then((res) => {
+        this.categorySubList = res.data.data;
+      })
+    },
   },
   watch: {
     exchaneRate(a) {
@@ -431,6 +458,7 @@ export default {
     }
   },
   mounted() {
+    this.getCategoryList();
     this.pro_info_bak = Object.assign({}, this.pro_info)
     //获取页面高度
     let clientHeight = document.body.clientHeight;
@@ -532,5 +560,19 @@ export default {
   top: 0;
   left: 0;
 }
-
+.select{
+  height:40px;
+  -webkit-appearance:none;
+  appearance:none;
+  border:none;
+  font-size:18px;
+  padding:0px 10px;
+  display:block;
+  width:100%;
+  -webkit-box-sizing:border-box;
+  box-sizing:border-box;
+  background-color: #FFFFFF;
+  color:#333333;
+  border-radius:4px;
+}
 </style>

@@ -20,10 +20,11 @@
             <template v-if="order.orderStatus == '5'">已完成</template>
             <template v-if="order.orderStatus == '6'">退款中</template>
             <template v-if="order.orderStatus == '7'">已退款</template>
-            <template v-if="order.orderStatus == '9'">已删除</template>			
+            <template v-if="order.orderStatus == '9'">已删除</template>
 		</span></li>
 		<li><i>订单编号：</i><span>{{ order.orderNo }}</span></li>
 		<li><i>下单时间：</i><span>{{ formatTime(order.created, 'yy-MM-dd hh:mm:ss')  }}</span></li>
+		<li><i>预计到货时间：</i><span>{{ formatTime(order.arrivalTime,'yy-MM-dd hh:mm:ss') }}</span></li>
 	</ul>
 </mt-cell>
 
@@ -35,10 +36,10 @@
 	</ul>
 </mt-cell>
 
-<div style="margin: 10px 0;">	
+<div style="margin: 10px 0;">
 <!-- <mt-cell title='万邑淘' value='共计xxx件商品'></mt-cell> -->
 <mt-cell v-for="(o, index) in order.productList" :key="index">
-	<div slot="title" class="order-container" :style="{'background': 
+	<div slot="title" class="order-container" :style="{'background':
 		'url(' + o.orderDetail.productIcon + ') left center no-repeat'}">
 		<h3>{{ o.orderDetail.productName }}</h3>
 		<div><span class="price">￥{{ o.orderDetail.productPrice }}</span>
@@ -60,7 +61,7 @@
 	<div>实付金额：<span class="high-light font-b">￥{{ order.orderAmount }}</span></div>
 </mt-cell>
 
-</div>	
+</div>
 </template>
 
 <script>
@@ -99,9 +100,9 @@ export default {
   methods: {
   	goLogi() {
   		this.$router.push({
-  			name: "LogisticsInfo", 
+  			name: "LogisticsInfo",
   			params: {
-  				logistics: this.logistics, 
+  				logistics: this.logistics,
   				orderNo: this.order.orderNo
   			}
   		})
@@ -113,7 +114,7 @@ export default {
   		openid: a.buyerOpenid,
   		orderId: a.orderNo
   	}).then((res) => {
-  		
+
   	})*/
   }
 }

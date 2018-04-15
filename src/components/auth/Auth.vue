@@ -1,5 +1,5 @@
 <template>
-	<div>loginning...</div>
+	<div>logining...</div>
 </template>
 
 <script>
@@ -16,7 +16,7 @@ export default {
 	    let returnUrl = location.protocol + "//" + location.host
 	    			+ (path || '/product/list')
 	    console.log('returnUrl:', returnUrl)
-	    window.location.href = baseUrl + '/sell/wechat/authorize?returnUrl=' + returnUrl 
+	    window.location.href = baseUrl + '/sell/wechat/authorize?returnUrl=' + returnUrl
 	}
 }
 </script>

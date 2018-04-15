@@ -32,11 +32,13 @@
     <i class="iconfont" :class="{'icon-collect': !collected, 'icon-collect-color': collected}"></i><br/>收藏</span>
     </mt-cell>
     <div class="price">
-      ￥{{ selectedPrice || productInfo.price}}
+      <span >￥{{ selectedPrice || productInfo.price}}</span>
+      <div class="sales">累计销量：{{  productInfo?productInfo.productSales:0}}</div>
     </div>
+
     <mt-cell>
       <div slot='title' class='country-wrap' v-if="productInfo.productCountry">
-        <img :src="staticBase + '/resource/flags_24/' + 
+        <img :src="staticBase + '/resource/flags_24/' +
         (productInfo.productCountry || '').toLowerCase() + '.png' ">
         <span>{{ EN_To_CN }}品牌</span>
       </div>
@@ -91,7 +93,7 @@
     <mt-tab-container v-model="selected" class="tab-container">
       <mt-tab-container-item id="1">
         <div class="container1">
-          <p>{{productInfo.productMemo ||'暂无商品介绍'}}</p>
+          <p v-html="productInfo.productMemo?productInfo.productMemo.replace(/\n/g,`<br/>`).replace(/\s/g,'&nbsp;'):'' ||'暂无商品介绍'"></p>
         </div>
       </mt-tab-container-item>
       <mt-tab-container-item id="2">
@@ -483,7 +485,15 @@ $bg-red: #f23030;
     font-size: 23px;
     background-color: #fff;
     color: #0099f7;
-    padding: 0 0 10px 10px;
+    padding: 0 10px 10px 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .sales {
+    font-size: 13px;
+    padding-top: 10px;
+    float: right;
+    color: #999;
   }
 }
 

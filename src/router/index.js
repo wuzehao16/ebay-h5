@@ -26,6 +26,7 @@ const AuthWechat = r => require.ensure([], () => r(require('@/components/auth/Au
 const Shoppingcart = r => require.ensure([], () => r(require('@/components/order/Shoppingcart')), 'Shoppingcart')
 const PcPreviewGoods = r => require.ensure([], () => r(require('@/components/popularize/PreviewGoods')), 'PcPreviewGoods')
 const IndexType = r => require.ensure([], () => r(require('@/components/product/IndexType')), 'IndexType')
+const ProductList1 = r => require.ensure([], () => r(require('@/components/product/list1')), 'ProductList1')
 
 
 Vue.use(Router)
@@ -121,10 +122,15 @@ let router = new Router({
       component: ProductList
     },
     {
+      path: '/product/list1/:id',
+      name: 'ProductList1',
+      component: ProductList1
+    },
+    {
       path: '/product/index/:index',
       name: 'IndexType',
       component: IndexType
-    },    
+    },
     {
       path: '/product/detail/:id',
       name: 'PorductDetail',
@@ -139,7 +145,7 @@ let router = new Router({
       path: '/auth',
       name: 'AuthWechat',
       component: AuthWechat
-    },    
+    },
     {
       path: '/order/shoppingcart',
       name: 'Shoppingcart',
@@ -168,7 +174,7 @@ router.beforeEach((to, from, next) => {
       let returnUrl = location.protocol + "//" + location.host
             + (to.path || '/product/list')
       returnUrl = window.encodeURIComponent(returnUrl)
-      let aa = baseUrl + '/sell/wechat/authorize?returnUrl=' + returnUrl 
+      let aa = baseUrl + '/sell/wechat/authorize?returnUrl=' + returnUrl
       window.location.href = aa
 
     } else if (!user && openid) {//已完成授权但未从后台获取已授权用户的信息
@@ -180,9 +186,9 @@ router.beforeEach((to, from, next) => {
         } else {
           next('/product/list')
         }
-      }).catch((err) => {})    
+      }).catch((err) => {})
     } else {
-      if (user.userCtype && user.userCtype == '2' 
+      if (user.userCtype && user.userCtype == '2'
         && store.state.authPage.includes(to.name)) {
         MessageBox.confirm('分销商才有权限进入，去注册成为分销商?').then(action => {
           next('/user/register')
@@ -196,19 +202,19 @@ router.beforeEach((to, from, next) => {
       } else {
         next()
       }
-    }    
+    }
   }
-/*
-  let user = {
-    id: '4',
-    userWxOpenid: 'oyNDcwRQUAv0Oahba6SUlXLwobgw',
-    userCtype: '1',
-    userPhone: '13877887788',
-    userAddr: 'xxx省uu市fddkjflkj',
-    userWxName: 'Cons.Van'
-  }
-  sessionStorage.setItem('ebay-app', JSON.stringify(user))
-next()*/
+
+//   let user = {
+//     id: '4',
+//     userWxOpenid: 'oyNDcwRQUAv0Oahba6SUlXLwobgw',
+//     userCtype: '1',
+//     userPhone: '13877887788',
+//     userAddr: 'xxx省uu市fddkjflkj',
+//     userWxName: 'Cons.Van'
+//   }
+//   sessionStorage.setItem('ebay-app', JSON.stringify(user))
+// next()
 
 
 /*  let user = JSON.parse( sessionStorage.getItem('ebay-app') )
@@ -247,9 +253,9 @@ router.afterEach((to, from) => {
             jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
           }, res.data.data)
           store.state.wx.config(obj)
-          store.state.isConfiged = true 
+          store.state.isConfiged = true
         }
-      })    
+      })
     }
 })
 

@@ -1,9 +1,9 @@
-import axios from 'axios' 
+import axios from 'axios'
 
 // test
 // axios.defaults.baseURL = 'http://fks3989.tunnel.qydev.com'
 
-export const baseUrl = (process.env.NODE_ENV === 'production') ? 'http://www.wstsoftware.com' : 'http://fks3989.free.ngrok.cc'
+export const baseUrl = (process.env.NODE_ENV === 'production') ? 'http://www.wstsoftware.com' : 'http://localhost:8080'
 
 export const staticBase = (process.env.NODE_ENV === 'production') ? '' : '/static'
 
@@ -65,4 +65,5 @@ export const reqWechatUrl = params => { return axios.get(`/sell/wechat/authorize
 export const reqWechatSignature = params => { return axios.get(`/sell/wechat/signature`, { params: params }) }
 //openid获取信息
 export const reqWechatUserInfo = params => { return axios.get(`/sell/wechat/getUserInfo`, { params: params }) }
-
+//获取分类列表
+export const reqCategoryList = params => { return axios.get(`/sell/seller/category/list?pid=${params.pid}`, params) }
