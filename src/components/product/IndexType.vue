@@ -2,7 +2,7 @@
   <div class="container index-container">
     <section class="left-w" id="wrapper_menu" ref="wrapperMenu">
       <ul>
-        <li v-for="(v, i) in menuList" :class="{'activity_menu': (menuIndex == i)}" @click="chooseMenu(i)" :key="i">
+        <li v-for="(v, i) in menuList" :class="{'activity_menu': (menuIndex == v.id)}" @click="chooseMenu(v.id)" :key="i">
           <img :src="v.imageUrl" style="width:10px;height:10px" alt="">
           <span>{{ v.name }}</span>
         </li>
@@ -12,7 +12,7 @@
       <ul>
         <template v-for="(item,index) in menuList">
           <transition name="slide-fade">
-            <li v-show='menuIndex == index'>
+            <li v-show='menuIndex == item.id'>
               <header class="menu_detail_header">
                 <section class="menu_detail_header_left">
                   <img :src="item.bigImageUrl" class="big-image">

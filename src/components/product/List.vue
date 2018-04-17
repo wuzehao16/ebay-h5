@@ -29,7 +29,7 @@
               <img :src=p.imageUrl alt="">
             </i>
             <br/><span>{{p.name}}</span></li>
-          <li  @click="go_spe_list(0)">
+          <li  @click="go_spe_list('8')">
             <br/><span>其他</span></li>
         </ul>
       </div>
