@@ -11,7 +11,7 @@
         <mt-tab-container-item id="published">
           <mt-loadmore :auto-fill="false" :top-method="getPublishedList" :bottom-method="getPublishedList" :bottom-all-loaded="allLoaded" ref="loadmore">
             <div>
-              <mt-cell class='set-shadow' v-for="d in publishedGoods" :key="d.created">
+              <mt-cell class='set-shadow' v-for="d in publishedGoods" :key="d.id">
                 <div slot="title" class="popularize-list">
                   <div class="avatar" :style="{'background': 'url(' + d.productIcon + ') no-repeat center center'}"></div>
                   <div class="right">
@@ -26,7 +26,7 @@
         </mt-tab-container-item>
         <mt-tab-container-item id="wait_audit">
           <mt-loadmore :auto-fill="false" :top-method="getWaitedList" :bottom-method="getWaitedList" :bottom-all-loaded="allLoaded_2" ref="loadmore2">
-            <mt-cell class='set-shadow' v-for="(d, index) in waitedGoods" :key="d.created">
+            <mt-cell class='set-shadow' v-for="(d, index) in waitedGoods" :key="d.id">
               <div slot="title" class="popularize-list">
                 <div class="avatar" :style="{'background': 'url(' + d.productIcon + ') no-repeat center center'}"></div>
                 <div class="right">
@@ -78,17 +78,16 @@ export default {
     let justAdded = this.$route.params.justAdded
     if (justAdded) {
       this.selected = 'wait_audit'
-      if (this.waitedGoods.length != 0) {
-        this.WaitedAuditPage = 0
-        this.waitedGoods = []
-        this.getWaitedList()
-      }
+      this.tip_flag = false
+      this.WaitedAuditPage = 0
+      this.waitedGoods = []
+      this.getWaitedList()
     }
   },
   methods: {
     goEdit(row) {
       this.$router.push({
-        name: 'AddGoods',
+        name: 'EditGoods',
         params: {
           productId: row.id,
           ebayItemid: row.ebayItemid

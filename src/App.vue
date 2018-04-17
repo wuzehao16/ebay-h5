@@ -201,4 +201,54 @@ h3 {
     color: gray;
   }
 }
+.select-amount {
+  line-height: 26px;
+  .decrease {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+  }
+  .increase {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+  .f {
+    outline: 0;
+    /*line-height: 26px;*/
+    height: 26px;
+    width: 19px;
+    text-align: center;
+    font-size: 24px;
+    border: 1px solid #f5f5f5;
+    background-color: #f5f5f5;
+  }
+  padding: 10px;
+  div {
+    padding: 0 5px;
+  }
+  div:nth-child(odd) {
+    border: 1px solid #cbcbcb;
+  }
+  .disabled {
+    color: #cbcbcb;
+  }
+  div:nth-child(even) {
+    width: 40px;
+    text-align: center;
+    border-width: 1px 0 1px 0;
+    border-color: #cbcbcb;
+    border-style: solid;
+    input {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      border: none;
+      background: transparent;
+      text-align: center;
+      &:focus {
+        outline-style: none;
+      }
+    }
+  }
+}
 </style>
