@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 const PopularizeList = r => require.ensure([], () => r(require('@/components/popularize/List')), 'PopularizeList')
 const AddGoods = r => require.ensure([], () => r(require('@/components/popularize/add')), 'AddGoods')
+const EditGoods = r => require.ensure([], () => r(require('@/components/popularize/edit')), 'EditGoods')
 const Address = r => require.ensure([], () => r(require('@/components/order/address')), 'Address')
 const AddressList = r => require.ensure([], () => r(require('@/components/order/addresslist')), 'AddressList')
 const SettleOrder = r => require.ensure([], () => r(require('@/components/order/settleorder')), 'SettleOrder')
@@ -26,7 +27,7 @@ const AuthWechat = r => require.ensure([], () => r(require('@/components/auth/Au
 const Shoppingcart = r => require.ensure([], () => r(require('@/components/order/Shoppingcart')), 'Shoppingcart')
 const PcPreviewGoods = r => require.ensure([], () => r(require('@/components/popularize/PreviewGoods')), 'PcPreviewGoods')
 const IndexType = r => require.ensure([], () => r(require('@/components/product/IndexType')), 'IndexType')
-const ProductList1 = r => require.ensure([], () => r(require('@/components/product/list1')), 'ProductList1')
+const SpeTypeList = r => require.ensure([], () => r(require('@/components/product/SpeTypeList')), 'SpeTypeList')
 
 
 Vue.use(Router)
@@ -45,6 +46,11 @@ let router = new Router({
       path: '/popularize/list',
       name: 'PopularizeList',
       component: PopularizeList
+    },
+    {
+      path: '/popularize/edit',
+      name: 'EditGoods',
+      component: EditGoods
     },
     {
       path: '/popularize/add',
@@ -122,9 +128,9 @@ let router = new Router({
       component: ProductList
     },
     {
-      path: '/product/list1/:id',
-      name: 'ProductList1',
-      component: ProductList1
+      path: '/product/type/:id',
+      name: 'SpeTypeList',
+      component: SpeTypeList
     },
     {
       path: '/product/index/:index',
@@ -164,6 +170,7 @@ import store from '@/store'
 import {baseUrl} from '../api'
 import { MessageBox } from 'mint-ui'
 router.beforeEach((to, from, next) => {
+
   if (to.name == 'PcPreviewGoods') {
     next()
   } else {
@@ -205,16 +212,16 @@ router.beforeEach((to, from, next) => {
     }
   }
 
-//   let user = {
-//     id: '4',
-//     userWxOpenid: 'oyNDcwRQUAv0Oahba6SUlXLwobgw',
-//     userCtype: '1',
-//     userPhone: '13877887788',
-//     userAddr: 'xxx省uu市fddkjflkj',
-//     userWxName: 'Cons.Van'
-//   }
-//   sessionStorage.setItem('ebay-app', JSON.stringify(user))
-// next()
+ /* let user = {
+    id: '4',
+    userWxOpenid: 'oyNDcwRQUAv0Oahba6SUlXLwobgw',
+    userCtype: '1',
+    userPhone: '13877887788',
+    userAddr: 'xxx省uu市fddkjflkj',
+    userWxName: 'Cons.Van'
+  }
+  sessionStorage.setItem('ebay-app', JSON.stringify(user))
+next()*/
 
 
 /*  let user = JSON.parse( sessionStorage.getItem('ebay-app') )
