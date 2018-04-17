@@ -9,7 +9,7 @@
       </mt-swipe-item>
     </mt-swipe>
     <!-- 分类 -->
-    <mt-cell class="index-type no-bg">
+    <mt-cell class="index-type no-bg" style="z-index: 0;">
       <div slot="title">
         <ul class="list-type">
           <li v-for="p in categoryList" @click="go_spe_list(p.id)" :key="p.id">
