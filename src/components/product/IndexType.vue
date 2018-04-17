@@ -21,7 +21,7 @@
                 </section>
               </header>
               <section v-for="(goods,goodindex) in item.goods" :key="goodindex" class="menu_detail_list">
-                <router-link :to="{name: 'ProductList1', params: { id: goods.id }}" tag="div" class="menu_detail_link">
+                <router-link :to="{name: 'SpeTypeList', params: { id: goods.id }}" tag="div" class="menu_detail_link">
                   <img :src="goods.imageUrl" alt="">
                   <div class="goods_name">
                     {{goods.name}}

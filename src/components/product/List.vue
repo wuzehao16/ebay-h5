@@ -7,18 +7,6 @@
       <mt-swipe-item v-for="i in bannerList" :key="i.id">
         <div :style="{'background-image': 'url(' + i.imageUrl + ')'}" @click="toUrl(i.clickUrl)"></div>
       </mt-swipe-item>
-      <!-- <mt-swipe-item>
-        <div :style="{'background-image': 'url(' + staticBase + '/resource/banner/2.png)'}"></div>
-      </mt-swipe-item>
-      <mt-swipe-item>
-        <div :style="{'background-image': 'url(' + staticBase + '/resource/banner/3.png)'}"></div>
-      </mt-swipe-item>
-      <mt-swipe-item>
-        <div :style="{'background-image': 'url(' + staticBase + '/resource/banner/4.png)'}"></div>
-      </mt-swipe-item>
-      <mt-swipe-item>
-        <div :style="{'background-image': 'url(' + staticBase + '/resource/banner/5.png)'}"></div>
-      </mt-swipe-item> -->
     </mt-swipe>
     <!-- 分类 -->
     <mt-cell class="index-type no-bg">
@@ -29,7 +17,7 @@
               <img :src=p.imageUrl alt="">
             </i>
             <br/><span>{{p.name}}</span></li>
-          <li  @click="go_spe_list('8')">
+          <li @click="go_spe_list('8')">
             <br/><span>其他</span></li>
         </ul>
       </div>
@@ -92,13 +80,13 @@ export default {
       popupVisible: false,
       showSearched: false,
       pro_search_list: [],
-      categoryList:[],
-      bannerList:[]
+      categoryList: [],
+      bannerList: []
     }
   },
   methods: {
     toUrl(url) {
-      window.location=url;
+      window.location = url;
     },
     showSpinner() {
       this.tip_flag = false
@@ -108,9 +96,9 @@ export default {
       })
     },
     async getBannerList() {
-       const res = (await reqBannerList()).data.data;
-       this.categoryList = res.categoryList;
-       this.bannerList = res.bannerList;
+      const res = (await reqBannerList()).data.data;
+      this.categoryList = res.categoryList;
+      this.bannerList = res.bannerList;
     },
     getProductList() {
       this.showSpinner()
@@ -252,13 +240,13 @@ $shadow-color: #ececec;
     li {
       float: left;
       width: 33%;
-      margin-top: 5px;
+      margin-top: 10px;
       text-align: center;
       line-height: 20px;
-      font-size: 16px;
+      font-size: 12px;
       i {
         font-size: 26px;
-        img{
+        img {
           height: 20px;
           width: 20px;
         }

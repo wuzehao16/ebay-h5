@@ -1,13 +1,12 @@
 <template>
   <div class="container">
-    <!-- <div>
+    <div>
       <mt-search v-model="filters.productName"></mt-search>
-    </div> -->
-
-    <!-- :top-method="getProductList"  -->
+    </div>
     <mt-loadmore :auto-fill="false" :bottom-method="getProductList" :bottom-all-loaded="allLoaded" ref="loadmore" class="main-wrapper">
       <div>
-        <!-- <div style="height: 42px;"></div> -->
+        <div style="height: 42px;"></div>
+        <div class="list-0" v-if="main_list_0">该分类下暂无商品</div>
         <mt-cell class='set-shadow' v-for="d in pro_list" :key="d.created">
           <div slot="title" class="goodss-list" @click="goDetail(d.id)">
             <div class="avatar" :style="{'background': 'url(' + d.productIcon + ') no-repeat center center'}"></div>
@@ -21,7 +20,7 @@
         <div style="height: 50px;"></div>
       </div>
     </mt-loadmore>
-    <div class="to-top" @click="goTop">
+    <div class="to-top" @click="goTop" v-if="!main_list_0">
       <i class="iconfont icon-top"></i>
     </div>
     <mt-popup :modal="false" class="popup-search" v-model="popupVisible" position="right">
@@ -59,10 +58,11 @@ export default {
       pro_list: [],
       tip_flag: false,
       tip_text: '',
+      main_list_0: false,
       popupVisible: false,
       showSearched: false,
       pro_search_list: [],
-      id:"",//查询id
+      id: "", //查询id
     }
   },
   methods: {
@@ -85,12 +85,17 @@ export default {
           productName: this.filters.productName
         }
       } else {
-        obj = {...this.filters,productType:this.id}
+        obj = { ...this.filters, productType: this.id }
       }
       reqProductList(obj).then((res) => {
         Indicator.close()
         if (res.data.code == 0) {
           let arr = res.data.data.content
+          if (arr.length == 0) {
+            this.main_list_0 = true
+          } else {
+            this.main_list_0 = false
+          }
           if (arr.length && !this.popupVisible) {
             for (let el of arr) {
               this.pro_list.push(el)
@@ -139,7 +144,7 @@ export default {
   },
   mounted() {
     this.id = this.$route.params.id
-    
+
     this.getProductList()
 
     let _this = this
@@ -206,6 +211,12 @@ $shadow-color: #ececec;
   .mint-searchbar-cancel {
     color: #fff;
   }
+}
+
+.list-0 {
+  text-align: center;
+  margin-top: 30%;
+  color: #888;
 }
 
 .index-type {
