@@ -22,14 +22,14 @@
         <mt-cell :title="ebay.title"></mt-cell>
         <mt-field v-model="pro_info.productNane" placeholder="请输入商品名称" rows='2' type='textarea'></mt-field>
         <mt-cell title=" 商品类型(一级分类) " style="font-size:14px;margin-top:10px;"></mt-cell>
-        <select class="select" v-model="categoryPid" placeholder="请选择" @change="getCategorySubList">
+        <select class="select" v-model="categoryPid" placeholder="请选择">
           <option value='' disabled selected style='display:none;'>请选择</option>
-          <option v-for="i in categoryList" :key="i.queue" :value="i.queue">{{i.name}}</option>
+          <option v-for="i in categoryList" :key="i.queue" :value="i.id">{{i.name}}</option>
         </select>
         <mt-cell title=" 商品类型（二级分类） " style="font-size:14px;"></mt-cell>
         <select class="select" v-model="pro_info.productType" placeholder="请选择">
           <option value='' disabled selected style='display:none;'>请选择</option>
-          <option v-for="i in categorySubList" :key="i.queue" :value="i.queue">{{i.name}}</option>
+          <option v-for="i in categorySubList" :key="i.queue" :value="i.id">{{i.name }}</option>
         </select>
         <mt-cell title="运费" style='margin-top:10px;'>
           <div>
@@ -72,12 +72,12 @@
             </template>
           </div>
         </mt-cell>
-        <template v-if="ebay.optionAttr" v-for="(val, k, index) in ebay.optionAttr">
+        <template v-if="ebay.optionAttr_2" v-for="(v, i) in ebay.optionAttr_2">
           <div class="params-wrap">
-            <mt-cell :title='k'></mt-cell>
-            <mt-field :placeholder=" '请输入' + k + '译文' " v-model='optionAttr.key[k]'></mt-field>
-            <mt-cell :title=" '请输入' + k + '选项的译文'"></mt-cell>
-            <mt-field v-for="(v, i) in val" :key="v" :label="v + '：'" v-model="optionAttr.value[k + '_sube_' + i + '_sney_' + v]" :placeholder=" '请输入' + v + '译文'"></mt-field>
+            <mt-cell :title='v.key'></mt-cell>
+            <mt-field :placeholder=" '请输入' + v.key + '译文' " v-model='v.ckey'></mt-field>
+            <mt-cell :title=" '请在下面输入' + v.key + '选项的译文'"></mt-cell>
+            <mt-field v-for="(m, n) in v.children" :label="m.ckey + '：'" :key='m.ckey' v-model="m.cvalue" :placeholder=" '请输入' + m.ckey + '译文'"></mt-field>
           </div>
         </template>
         <template v-for="(item, index) in ebay.localizedAspects">
@@ -99,6 +99,7 @@
       </div>
     </div>
     <div class="no-product" v-if="show_tip">没有该商品或该商品不能在本平台翻译</div>
+    <!-- <mt-button type='primary' @click='validate' style="position: absolute;right: 0;top : 50%;">hahah</mt-button> -->
   </div>
 </template>
 <script>
@@ -108,7 +109,7 @@ import debounce from 'lodash/debounce'
 export default {
   data() {
     return {
-      testData: {},
+      calTimes: 1,
       amount: 10,
       exchaneRate: 6.66,
       chosenItem: {
@@ -220,9 +221,25 @@ export default {
         Toast('请输入最多两位小数的数字格式的运费')
         return false
       }
+
+      if (this.ebay.optionAttr_2) {
+        let b = this.ebay.optionAttr_2.every((v, i) => {
+          if (v.ckey.match(/^[ ]*$/)) {
+            Toast('请输入' + v.key + '的译文')
+            return false
+          }
+          for (let m of v.children) {
+            if (m.cvalue.match(/^[ ]*$/)) {
+              Toast('请输入' + m.ckey + '的译文')
+              return false
+            }
+          }
+          return true
+        })
+        if (!b) { return false }
+      }
       if (this.ebay.localizedAspects) {
         let a = this.ebay.localizedAspects.every((v, i) => {
-
           if (!v.cname || v.cname.match(/^[ ]*$/)) {
             Toast('请输入  ' + v.name + '  译文')
             return false
@@ -249,7 +266,6 @@ export default {
       if (!this.validate()) {
         return false
       }
-
       this.loading = true
       //把商品规格单属性放进items
       for (let i of this.ebay.localizedAspects) {
@@ -263,31 +279,29 @@ export default {
       }
       //组合商品：把商品选择属性放进items
       if (this.ebay.optionAttr) {
-        let b = Object.entries(this.optionAttr.value)
         let aItems = Object.entries(this.ebay.itemsAttr)
-        for (let j of b) {
-          let ename = j[0].substring(0, j[0].lastIndexOf('_sube_'))
-          let evalue = j[0].substr((j[0].indexOf('_sney_') + 6))
-          let itemid = []
-          for (let i of aItems) {
-            if (i[1][ename] == evalue) {
-              itemid.push(i[0])
+        for (let i of this.ebay.optionAttr_2) {
+          for (let j of i.children) {
+            let itemid = []
+            for (let k of aItems) {
+              if (k[1][i.key] == j.ckey) {
+                console.log(i.key, '..kkk..', j.ckey)
+                itemid.push(k[0])
+              }
             }
+            this.pro_info.items.push({
+              attrCname: i.ckey,
+              attrCvalue: j.cvalue,
+              attrEname: i.key,
+              attrEvalue: j.ckey, //英文原文
+              attrType: '1',
+              itemId: itemid.join('@'),
+              id: this.itemIds[0],
+              productId: this.productId
+            })
+            this.itemIds.splice(0, 1)
           }
-
-          this.pro_info.items.push({
-            attrCname: this.optionAttr.key[ename],
-            attrCvalue: j[1],
-            attrEname: ename,
-            attrEvalue: evalue, //英文原文
-            attrType: '1',
-            itemId: itemid.join('@'),
-            id: this.itemIds[0],
-            productId: this.productId
-          })
-          this.itemIds.splice(0, 1)
         }
-
         //price也要逐个翻译
         for (let i of aItems) {
           this.pro_info.items.push({
@@ -402,6 +416,12 @@ export default {
     },
   },
   watch: {
+    categoryPid(a) {
+      if (this.calTimes++ != 1) {
+        this.pro_info.productType = ''
+      }
+      this.getCategorySubList()
+    },
     amount(a) {
       this.debounce_getCNY()
     },
@@ -456,6 +476,9 @@ export default {
         this.pro_info.taxFee = Number.parseFloat(a.toFixed(2))
       }
     }
+  },
+  deactivated() {
+    this.calTimes = 1
   },
   activated() {
     this.showAll = false
@@ -529,13 +552,12 @@ export default {
 
 
 
-    /*
-        this.testData = {
+    /*    this.ebay = {
           "image": {
             "imageUrl": "https://second-handphones.com/media/catalog/product/6/s/6s_silver_8.jpg"
           },
           "itemType": 1,
-          "description": "klsdjlkjgldjs;flgjd;gfjd;fgjja;sdkfjklhsaklhd",
+          "description": "夺二万事大吉天夺天下大雨",
           "shortDescription": "All associated Touch ID features will not operate as intended, however all other aspects of the handset remain fully operational. Refurbished Pristine - This is an exceptional product showing no signs of use, it has been fully tested and is in excellent working order.",
           "title": "Apple iPhone 6S - 16GB 32GB 64GB 128GB -Gold/Silver/Grey/Rose- UNLOCKED/SIMFREE",
           "itemLocation": {
@@ -1013,7 +1035,7 @@ export default {
               "imageUrl": "https://second-handphones.com/media/catalog/product/6/s/6s_rose_gold_25.jpg",
               "Grade": "Very Good",
               "Storage Capacity": "16GB",
-              "stock": 2,
+              "stock": 0,
               "Colour": "Rose Gold"
             },
             "v1|202085839828|502082036690": {
@@ -1067,7 +1089,7 @@ export default {
               "imageUrl": "https://second-handphones.com/media/catalog/product/6/s/6s_grey_23.jpg",
               "Grade": "Good",
               "Storage Capacity": "64GB",
-              "stock": 4,
+              "stock": 3,
               "Colour": "Space Grey"
             },
             "v1|202085839828|502105061405": {
@@ -1256,7 +1278,7 @@ export default {
               "imageUrl": "https://second-handphones.com/media/catalog/product/6/s/6s_rose_gold_25.jpg",
               "Grade": "Good",
               "Storage Capacity": "16GB",
-              "stock": 4,
+              "stock": 6,
               "Colour": "Rose Gold"
             },
             "v1|202085839828|502119685337": {
@@ -1517,7 +1539,7 @@ export default {
               "imageUrl": "https://second-handphones.com/media/catalog/product/6/s/6s_gold_1.jpg",
               "Grade": "Good",
               "Storage Capacity": "16GB",
-              "stock": 4,
+              "stock": 3,
               "Colour": "Gold"
             },
             "v1|202085839828|502082036659": {
@@ -1706,7 +1728,7 @@ export default {
               "imageUrl": "https://second-handphones.com/media/catalog/product/6/s/6s_silver_8.jpg",
               "Grade": "Grade C",
               "Storage Capacity": "64GB",
-              "stock": 1,
+              "stock": 0,
               "Colour": "Silver"
             },
             "v1|202085839828|502082036741": {
@@ -1733,7 +1755,7 @@ export default {
               "imageUrl": "https://second-handphones.com/media/catalog/product/6/s/6s_silver_8.jpg",
               "Grade": "Good",
               "Storage Capacity": "64GB",
-              "stock": 6,
+              "stock": 5,
               "Colour": "Silver"
             },
             "v1|202085839828|502105061391": {
@@ -2138,7 +2160,7 @@ export default {
               "imageUrl": "https://second-handphones.com/media/catalog/product/6/s/6s_grey_23.jpg",
               "Grade": "Good",
               "Storage Capacity": "16GB",
-              "stock": 3,
+              "stock": 2,
               "Colour": "Space Grey"
             },
             "v1|202085839828|502105061425": {
@@ -2270,18 +2292,111 @@ export default {
               "cvalue": "usb电缆"
             }
           ],
+          "optionAttr_2": [{
+              "key": "Network",
+              "ckey": "网络",
+              "children": [{
+                  "ckey": "O2 UK",
+                  "cvalue": "O2英国"
+                },
+                {
+                  "ckey": "Unlocked",
+                  "cvalue": "解锁"
+                },
+                {
+                  "ckey": "Three UK",
+                  "cvalue": "三个英国"
+                },
+                {
+                  "ckey": "EE UK",
+                  "cvalue": "EE英国"
+                },
+                {
+                  "ckey": "Vodafone UK",
+                  "cvalue": "英国沃达丰(Vodafone)"
+                },
+                {
+                  "ckey": "Factory Unlocked",
+                  "cvalue": "工厂解锁"
+                }
+              ]
+            },
+            {
+              "key": "Grade",
+              "ckey": "年级",
+              "children": [{
+                  "ckey": "Grade C",
+                  "cvalue": "C级"
+                },
+                {
+                  "ckey": "Grade D",
+                  "cvalue": "D级"
+                },
+                {
+                  "ckey": "Pristine",
+                  "cvalue": "原始的"
+                },
+                {
+                  "ckey": "Good",
+                  "cvalue": "好"
+                },
+                {
+                  "ckey": "Very Good",
+                  "cvalue": "很好"
+                }
+              ]
+            },
+            {
+              "key": "Storage Capacity",
+              "ckey": "存储容量",
+              "children": [{
+                  "ckey": "64GB",
+                  "cvalue": "64 gb"
+                },
+                {
+                  "ckey": "16GB",
+                  "cvalue": "16 gb"
+                },
+                {
+                  "ckey": "128GB",
+                  "cvalue": "128 gb"
+                },
+                {
+                  "ckey": "32GB",
+                  "cvalue": "32 gb"
+                }
+              ]
+            },
+            {
+              "key": "Colour",
+              "ckey": "颜色",
+              "children": [{
+                  "ckey": "Space Grey",
+                  "cvalue": "灰色的空间"
+                },
+                {
+                  "ckey": "Silver",
+                  "cvalue": "银"
+                },
+                {
+                  "ckey": "Gold",
+                  "cvalue": "黄金"
+                },
+                {
+                  "ckey": "Rose Gold",
+                  "cvalue": "玫瑰金"
+                },
+                {
+                  "ckey": "Grey",
+                  "cvalue": "灰色"
+                }
+              ]
+            }
+          ],
           "usdRate": "6.28"
-        }
-        console.log(this.testData)
+        }*/
 
-        this.ebay = this.testData
-
-        this.$nextTick(function() {
-          this.pro_info.productNane = this.ebay.ctitle
-          this.itemsAttrSlots[0].values = Object.keys(this.ebay.itemsAttr)
-          this.getCNY()
-        })*/
-
+    // console.log('lala', this.ebay.optionAttr_2)
 
 
 

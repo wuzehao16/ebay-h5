@@ -77,11 +77,16 @@ export default {
   activated() {
     let justAdded = this.$route.params.justAdded
     if (justAdded) {
-      this.selected = 'wait_audit'
       this.tip_flag = false
       this.WaitedAuditPage = 0
       this.waitedGoods = []
-      this.getWaitedList()
+      if (this.selected == 'wait_audit') {
+        this.getWaitedList()
+      } else {
+        this.selected = 'wait_audit'
+      }
+    } else {
+      this.init()
     }
   },
   methods: {
@@ -93,7 +98,6 @@ export default {
           ebayItemid: row.ebayItemid
         }
       })
-
     },
     showSpinner() {
       Indicator.open({
@@ -173,10 +177,11 @@ export default {
     }
   },
   mounted() {
-    this.init()
+    // this.init()
   },
   watch: {
     selected(val) {
+      console.log('selected changed....fn')
       this.init()
     }
   }

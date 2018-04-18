@@ -21,13 +21,23 @@
       <form>
         <mt-cell :title="ebay.title"></mt-cell>
         <mt-field v-model="pro_info.productNane" placeholder="请输入商品名称"></mt-field>
+        <mt-cell title=" 商品类型(一级分类) " style="font-size:14px;margin-top:10px;"></mt-cell>
+        <select class="select" v-model="categoryPid" placeholder="请选择">
+          <option value='' disabled selected style='display:none;'>请选择</option>
+          <option v-for="i in categoryList" :key="i.queue" :value="i.id">{{i.name}}</option>
+        </select>
+        <mt-cell title=" 商品类型（二级分类） " style="font-size:14px;"></mt-cell>
+        <select class="select" v-model="pro_info.productType" placeholder="请选择" style="margin-bottom:10px;">
+          <option value=''>请选择</option>
+          <option v-for="i in categorySubList" :key="i.queue" :value="i.id">{{i.name}}</option>
+        </select>
+
         <mt-cell>
           <div slot="title" v-if='ebay.price'>{{ ebay.price.currency + " : " + ebay.price.value}}</div>
         </mt-cell>
         <mt-field v-model="pro_info.productPrice" placeholder="请输入商品价格" label="￥" style="margin-bottom: 10px;"></mt-field>
         <mt-cell v-if="ebay.itemsAttr" class="params-wrap">
           <div slot="title">
-            <mt-field label="美元USD/人民币CNY" placeholder="请输入美元USD/人民币CNY" type="number" v-model="exchaneRate" class="w50"></mt-field>
             <mt-picker :slots="itemsAttrSlots" @change="changeAttr"></mt-picker>
             <div class="attr-wrap">
               <p v-if="Object.keys(ebay.optionAttr).includes(k) || k == 'price'" v-for="(v, k, i) in chosenItem.value">
@@ -74,18 +84,7 @@
         <mt-cell title=" 商品介绍 " style="font-size:14px;margin-top:10px;"></mt-cell>
         <textarea v-model="pro_info.productMemo" cols="30" rows="10" style="width:98%">
         </textarea>
-        <mt-cell title=" 商品类型(一级分类) " style="font-size:14px;margin-top:10px;"></mt-cell>
 
-        <select class="select" v-model="categoryPid" placeholder="请选择" @change="getCategorySubList">
-          <option value='' disabled selected style='display:none;'>请选择</option>
-          <option v-for="i in categoryList" :key="i.queue" :value="i.queue">{{i.name}}</option>
-        </select>
-        <mt-cell title=" 商品类型（二级分类） " style="font-size:14px;margin-top:10px;"></mt-cell>
-
-        <select class="select" v-model="pro_info.productType" placeholder="请选择">
-          <option value='' disabled selected style='display:none;'>请选择</option>
-          <option v-for="i in categorySubList" :key="i.queue" :value="i.queue">{{i.name}}</option>
-        </select>
       </form>
       <div class="bt-group">
         <mt-button type="primary" @click="proSubmit" class="btn-submit" :disabled="loading">提审</mt-button>
@@ -95,12 +94,11 @@
   </div>
 </template>
 <script>
-import { reqSellerProductSave, reqProductDetail, reqEbayGoods,reqCategoryList } from '../../api'
+import { reqSellerProductSave, reqProductDetail, reqEbayGoods, reqCategoryList, reqCategoryById } from '../../api'
 import { Toast, Indicator } from 'mint-ui'
 export default {
   data() {
     return {
-      exchaneRate: 6.66,
       chosenItem: {
         key: '',
         value: {}
@@ -150,7 +148,8 @@ export default {
       categoryPid:'',
       categoryList:[],
       categorySubList:[],
-      pro_info_bak: {}
+      pro_info_bak: {},
+      calTimes: 1
     }
   },
   directives: {
@@ -231,8 +230,6 @@ export default {
 
       //组合商品：把商品选择属性放进items
       if (this.ebay.optionAttr) {
-
-
         let b = Object.entries(this.optionAttr.value)
         let aItems = Object.entries(this.ebay.itemsAttr)
         for (let j of b) {
@@ -338,9 +335,6 @@ export default {
               }
 
               if (this.ebay.itemsAttr) {
-                if (!this.isEdit) {
-                  this.getCNY()
-                }
                 this.itemsAttrSlots[0].values = Object.keys(this.ebay.itemsAttr)
               }
             }
@@ -349,27 +343,24 @@ export default {
           .catch(err => { Indicator.close() })
       }
     },
-
-    getCNY() {
-      for (let i of Object.values(this.ebay.itemsAttr)) {
-        i.attrCvalue = (Number.parseFloat(i.price) * this.exchaneRate).toFixed(2)
-      }
-    },
     getCategoryList() {
       reqCategoryList({ pid: 0 }).then((res) => {
         this.categoryList = res.data.data;
       })
     },
     getCategorySubList() {
-      console.log(this)
+      console.log('hahah', this.categoryPid)
       reqCategoryList({ pid: this.categoryPid }).then((res) => {
         this.categorySubList = res.data.data;
       })
     },
   },
   watch: {
-    exchaneRate(a) {
-      this.getCNY()
+    categoryPid(a) {
+      if (this.calTimes++ != 1) {
+        this.pro_info.productType = ''
+      }
+      this.getCategorySubList()
     },
     currentValue(a) {
       this.show_tip = false
@@ -405,6 +396,9 @@ export default {
         this.pro_info.taxFee = 0
       }
     }
+  },
+  deactivated() {
+    this.calTimes = 1
   },
   activated() {
     this.showAll = false
@@ -451,9 +445,13 @@ export default {
             }
             this.optionAttr.key[item.attrEname] = item.attrCname
             this.optionAttr.value[item.attrEname + "_sube_" + j + "_sney_" + item.attrEvalue] = item.attrCvalue
-
           }
         }
+        console.log(p.type, typeof p.type)
+        reqCategoryById({productType: p.type}).then(res => {
+          this.pro_info.productType = res.data.data.id
+          this.categoryPid = res.data.data.pid
+        }).catch(err => {})
       })
     }
   },
@@ -565,7 +563,7 @@ export default {
   -webkit-appearance:none;
   appearance:none;
   border:none;
-  font-size:18px;
+  font-size:14px;
   padding:0px 10px;
   display:block;
   width:100%;

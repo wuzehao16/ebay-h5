@@ -68,3 +68,4 @@ export const reqWechatUserInfo = params => { return axios.get(`/sell/wechat/getU
 //获取分类列表
 export const reqCategoryList = params => { return axios.get(`/sell/seller/category/list?pid=${params.pid}`, params) }
 export const reqBannerList = params => { return axios.get(`/sell/seller/banner/list`, params) }
+export const reqCategoryById = params => { return axios.get(`/sell/seller/category/queryById`, {params: params}) }

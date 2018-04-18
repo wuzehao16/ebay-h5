@@ -18,11 +18,14 @@
             </i>
             <br/><span>{{p.name}}</span></li>
           <li @click="go_spe_list('8')">
+            <i>
+              <img :src="staticBase + '/resource/more.png'">
+            </i>
             <br/><span>其他</span></li>
         </ul>
       </div>
     </mt-cell>
-    <!-- :top-method="getProductList"  -->
+   
     <mt-loadmore :auto-fill="false" :bottom-method="getProductList" :bottom-all-loaded="allLoaded" ref="loadmore" class="main-wrapper">
       <div>
         <!-- <div style="height: 42px;"></div> -->
