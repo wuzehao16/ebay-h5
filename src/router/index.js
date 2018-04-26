@@ -161,7 +161,6 @@ let router = new Router({
       path: '*',
       redirect: '/product/list'
     }
-
   ]
 })
 
@@ -211,8 +210,8 @@ router.beforeEach((to, from, next) => {
       }
     }
   }
-
- /* let user = {
+/*
+  let user = {
     id: '4',
     userWxOpenid: 'oyNDcwRQUAv0Oahba6SUlXLwobgw',
     userCtype: '1',

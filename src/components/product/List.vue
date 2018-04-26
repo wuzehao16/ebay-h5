@@ -21,7 +21,7 @@
             <i>
               <img :src="staticBase + '/resource/more.png'">
             </i>
-            <br/><span>其他</span></li>
+            <br/><span>更多</span></li>
         </ul>
       </div>
     </mt-cell>
@@ -242,7 +242,7 @@ $shadow-color: #ececec;
     padding: 0px 0;
     li {
       float: left;
-      width: 33%;
+      width: 25%;
       margin-top: 10px;
       text-align: center;
       line-height: 20px;
