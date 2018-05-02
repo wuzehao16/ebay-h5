@@ -36,7 +36,7 @@
       <div class="sales">累计销量：{{  productInfo?productInfo.productSales:0}}</div>
     </div>
 
-    <mt-cell>
+    <mt-cell >
       <div slot='title' class='country-wrap' v-if="productInfo.productCountry">
         <img :src="staticBase + '/resource/flags_24/' +
         (productInfo.productCountry || '').toLowerCase() + '.png' ">
@@ -47,8 +47,9 @@
         <span>跨境运输</span>
       </div>
     </mt-cell>
-    <mt-cell>
-      <div slot='title' style="color: #888;font-size: 14px;">
+    <div @click="unfoldProductDescription">
+    <mt-cell is-link>
+      <div slot='title' style="color: #888;font-size: 14px; position: relative" >
         <p>
           <i class="iconfont icon-duigou" style="color: #d4237a;"></i>
           <span>保证原产地发货</span>
@@ -58,6 +59,7 @@
         <p>美国转运&nbsp;&nbsp;税率11.9%&nbsp;&nbsp;不支持退换货</p>
       </div>
     </mt-cell>
+    </div>
     <template v-for="(v, k,  i) in option_list">
       <dl>
         <dt>{{ k }}</dt>
@@ -100,7 +102,7 @@
         <div class="detail" id="wareStandard" style="display: block;margin-bottom:50px;">
           <table class="table-border" width="100%">
             <tbody>
-              <tr v-for="(d, index) in productInfo.productAttr" :key="d.id" v-if='d.attrType == "2"'>
+              <tr v-for="d in productInfo.productAttr" :key="d.id" v-if='d.attrType == "2"'>
                 <template>
                   <td>{{d.attrCname}}</td>
                   <td>{{d.attrCvalue}}</td>
@@ -111,7 +113,37 @@
         </div>
       </mt-tab-container-item>
     </mt-tab-container>
-  </div>
+    <!-- 商品说明 -->
+      <transition name="fold">
+        <div class="product-description" v-show="productDescriptionShow">
+            <h3>商品说明</h3>
+            <ul>
+              <li>
+                <div class="listtitle">转运</div>
+                <p>美国转运， 预计需时15~20天</p>
+              </li>
+              <li>
+                <div class="listtitle">税率说明</div>
+                <p>根据国家政策规定，本商品适用于"跨境综合税"， 商品税率11.9%， 请以提交订单的应付总额明细为准。</p>
+              </li>
+              <li>
+                <div class="listtitle">运费说明</div>
+                <p>本商品属于跨境进口商品， 分为国际物流及国内物流，请以提交订单的应付总额明细为准。</p>
+              </li>
+              <li>
+                <div class="listtitle">不支持退货</div>
+                <p>海外商品受国际邮费和关税影响， 不支持退货</p>
+              </li>
+            </ul>
+            <i class="icon-close" @click="closeProductDescription"></i>
+        </div>
+      </transition>
+
+      <!-- 商品说明遮罩 -->
+      <transition name="fade">
+      <div class="description-mask" v-show="productDescriptionShow" @click="closeProductDescription"></div>
+     </transition>
+    </div>
 </template>
 <script>
 import {
@@ -145,8 +177,8 @@ export default {
       pro_in_cart: 0,
       carriageFee: '',
       taxFee: '',
-
-      isoCountry: {}
+      isoCountry: {},
+      productDescriptionShow: false
     }
   },
   beforeRouteEnter(to, from, next) {
@@ -334,6 +366,13 @@ export default {
           this.pro_in_cart += i.productQuantity
         }
       })
+    },
+    unfoldProductDescription() {
+      console.log(1);
+      this.productDescriptionShow = true;
+    },
+    closeProductDescription() {
+      this.productDescriptionShow = false;
     }
   },
   mounted() {
@@ -592,10 +631,72 @@ dl {
   }
 }
 
+// 商品说明
+.product-description {
+  box-sizing: border-box;
+  padding: 10px 20px 10px;
+  position: absolute;
+  // font-size:16px;
+  line-height:14px;
+  left: 0;
+  bottom: 0;
+  z-index: 41;
+  width: 100%;
+  background:#fff;
+  transition: all 0.5s;
+  transform: translate3d(0, 0, 0);
+  height:300px;
+  h3 {
+    color:#3c3c3c;
+  }
+  ul {
+    list-style: none;
+    counter-reset: count;
+    .listtitle {
+      display:  inline-block;
+      font-size: 14px;
+    }
+      li::before {
+        content: "● ";
+        color: $bg-red;
+      }
+      p{
+          font-size:13px;
+          color:#3c3c3c;
+          text-indent:1em;
+        }
+    }
 
 
+  .icon-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+    color: rgba(255,255,255,0.5);
+  }
+}
+.product-description.fold-enter-active, .product-description.fold-leave-active{
+  transform: translate3d(0, 100%, 0)
+}
+.description-mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 40;
+    transition: all 0.5s;
+    opacity: 1;
+    background: rgba(7,17,27,0.6);
+}
 
-
+.description-mask.fade-enter-active, .description-mask.fade-leave-active{
+  opacity: 0;
+  background: rgba(7,17,27,0);
+}
 
 
 
