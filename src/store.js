@@ -9,6 +9,7 @@ const state = {
 	isConfiged: false,
 	isIOS: !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/),
 	count: 1,
+	proListTop: 0,
 	isLogin: false,
 	showFoot: true,
 	cartNeedRefresh: 'no',

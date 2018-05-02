@@ -34,9 +34,9 @@ Vue.use(Router)
 
 let router = new Router({
   mode: 'history',
-  scrollBehavior (to, from, savedPosition) {
+/*  scrollBehavior (to, from, savedPosition) {
     return { x: 0, y: 0 }
-  },
+  },*/
   routes: [
     {
    	  path: '/',
@@ -210,8 +210,8 @@ router.beforeEach((to, from, next) => {
       }
     }
   }
-
-/*  let user = {
+/*
+  let user = {
     id: '4',
     userWxOpenid: 'oyNDcwRQUAv0Oahba6SUlXLwobgw',
     userCtype: '1',

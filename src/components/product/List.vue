@@ -9,7 +9,7 @@
       </mt-swipe-item>
     </mt-swipe>
     <!-- 分类 -->
-    <mt-cell class="index-type no-bg" style="z-index: 0;">
+    <mt-cell class="index-type no-bg" style="z-index: 0;" v-if='categoryList.length'>
       <div slot="title">
         <ul class="list-type">
           <li v-for="p in categoryList" @click="go_spe_list(p.id)" :key="p.id">
@@ -183,6 +183,9 @@ export default {
       _this.popupVisible = false
     })
   },
+  activated() {
+    document.getElementById('app').scrollTop = this.$store.state.proListTop
+  },
   watch: {
     'filters.productName' (val) {
       if (val) {
@@ -195,6 +198,7 @@ export default {
     }
   },
   beforeRouteLeave(to, from, next) {
+    this.$store.state.proListTop = document.getElementById('app').scrollTop
     if (this.popupVisible && to.name != 'PorductDetail') {
       this.popupVisible = false
       next(false)
