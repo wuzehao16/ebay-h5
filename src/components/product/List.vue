@@ -210,7 +210,7 @@ $ebay-blue :#0099f7;
 $shadow-color: #ececec;
 .index-banner {
   height: 46vw;
-  background: pink;
+  // background: pink;
   margin-top: 42px;
   .mint-swipe-item {
     >div {
