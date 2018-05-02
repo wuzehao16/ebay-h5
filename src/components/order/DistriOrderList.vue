@@ -4,9 +4,16 @@
       <mt-tab-item id="all_orders">分销商订单</mt-tab-item>
     </mt-navbar>
     <!-- tab-container -->
+    <div class="filter">
+      <div @click="filter(1)" :class="pa.filter==1?'active':''">待支付</div>
+      <div @click="filter(2)" :class="pa.filter==2?'active':''">已支付</div>
+      <div @click="filter(3)" :class="pa.filter==3?'active':''">待发货</div>
+      <div @click="filter(0)" :class="pa.filter==0?'active':''">全部</div>
+    </div>
     <mt-tab-container v-model="selected" class="order-wrap">
       <div class="no-data" v-if='tip_flag'>{{ tip_text }}</div>
       <!-- 全部订单 -->
+
       <mt-tab-container-item id="all_orders">
         <mt-loadmore :auto-fill="false" :top-method="getAllList" :bottom-method="getAllList" :bottom-all-loaded="allLoaded" ref="loadmore">
           <div v-for="(d, index) in all_list" :key="d.orderNo" class='cell-margin'>
@@ -67,7 +74,8 @@ export default {
       pa: {
         userWxOpenid: '',
         isContainDistributor: 1,
-        size: 10
+        size: 10,
+        filter: 0
       },
 
       tip_flag: false,
@@ -80,6 +88,10 @@ export default {
         text: '加载中...',
         spinnerType: 'fading-circle'
       })
+    },
+    filter(v) {
+      this.pa.filter = v;
+      this.getAllList();
     },
     getAllList(val) {
       this.showSpinner()
@@ -119,7 +131,24 @@ export default {
 .order-flow {
   padding: 10px 0;
 }
-
+.filter{
+  position: absolute;
+  width: 100%;
+  top: 51px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-column-gap: 5px;
+  text-align: center;
+  background: #eee;
+  z-index: 11;
+  padding: 5px 0px;
+  div{
+    background: #fff;
+  }
+  .active{
+    color:#0099f7;
+  }
+}
 .pay-b {
   height: 28px;
   width: 80px;
@@ -153,7 +182,7 @@ export default {
 }
 
 .order-wrap {
-  margin-top: 54px;
+  margin-top: 75px;
   margin-bottom: 100px;
 }
 
