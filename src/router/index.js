@@ -34,9 +34,12 @@ Vue.use(Router)
 
 let router = new Router({
   mode: 'history',
-/*  scrollBehavior (to, from, savedPosition) {
+  scrollBehavior (to, from, savedPosition) {
+    if (to.name == 'PorductDetail') {
+      document.getElementById('app').scrollTop = 0
+    }
     return { x: 0, y: 0 }
-  },*/
+  },
   routes: [
     {
    	  path: '/',
