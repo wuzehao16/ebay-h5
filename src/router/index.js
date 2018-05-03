@@ -212,7 +212,6 @@ router.beforeEach((to, from, next) => {
         next()
       }
     }
-<<<<<<< HEAD
   }
 
 //   let user = {
@@ -241,20 +240,6 @@ router.beforeEach((to, from, next) => {
     next()
   }*/
 
-=======
-  }
-/*
-  let user = {
-    id: '4',
-    userWxOpenid: 'oyNDcwRQUAv0Oahba6SUlXLwobgw',
-    userCtype: '1',
-    userPhone: '13877887788',
-    userAddr: 'xxx省uu市fddkjflkj',
-    userWxName: 'Cons.Van'
-  }
-  sessionStorage.setItem('ebay-app', JSON.stringify(user))
-next()*/
->>>>>>> 897ff2dd4dd04a8d7f56ebcb62916064eac39245
 
 })
 
