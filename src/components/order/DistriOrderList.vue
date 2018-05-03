@@ -134,6 +134,8 @@ export default {
 .filter{
   position: absolute;
   width: 100%;
+  height: 32px;
+  line-height:32px;
   top: 51px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -201,6 +203,17 @@ export default {
   }
 }
 
+.no-data {
+    height: 100px;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+    top:100px;
+    background: #eeeeee;
+    padding-top: 40px;
+    text-align: center;
+    color: #999;
+}
 .goods-list {
   padding: 5px;
   /*     height: 86px;

@@ -3,7 +3,8 @@
     <keep-alive>
       <router-view class="child-view"></router-view>
     </keep-alive>
-    <foot v-if="$store.state.showFoot"></foot>
+      <foot v-if="$store.state.showFoot"></foot>
+
   </div>
 </template>
 <script>
@@ -59,12 +60,12 @@ $ebay-blue :#0099f7;
 .slide-left-enter, .slide-right-leave-active {
   opacity: 0;
   -webkit-transform: translate(30px, 0);
-  transform: translate(30px, 0); 
+  transform: translate(30px, 0);
 }
 .slide-left-leave-active, .slide-right-enter {
   opacity: 0;
   -webkit-transform: translate(-30px, 0);
-  transform: translate(-30px, 0); 
+  transform: translate(-30px, 0);
 }
 .slide-left-enter, .slide-right-leave-active,
 .slide-left-leave-active, .slide-right-enter {
@@ -151,7 +152,7 @@ h3 {
   padding-top: 40px;
   text-align: center;
   color: #999;
-}  
+}
 .no-bg {
   z-index: 101;
   margin-top: -10px;
@@ -182,9 +183,9 @@ h3 {
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
-      word-wrap: break-word;  
-      word-break: break-all;  
-  } 
+      word-wrap: break-word;
+      word-break: break-all;
+  }
   h3 {
     margin-top: -6px;
   }

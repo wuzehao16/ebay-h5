@@ -135,7 +135,7 @@
                 <p>海外商品受国际邮费和关税影响， 不支持退货</p>
               </li>
             </ul>
-            <i class="icon-close" @click="closeProductDescription"></i>
+            <i class="closedes" @click="closeProductDescription">×</i>
         </div>
       </transition>
 
@@ -668,14 +668,17 @@ dl {
     }
 
 
-  .icon-close {
+  .closedes {
     position: absolute;
-    top: 10px;
+    top: 13px;
     right: 10px;
-    width: 32px;
-    height: 32px;
-    font-size: 16px;
-    color: rgba(255,255,255,0.5);
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    font-size: 30px;
+    line-height:40px;
+    color: rgba(0,0,0,.3);
+    // z-index：'12'
   }
 }
 .product-description.fold-enter-active, .product-description.fold-leave-active{

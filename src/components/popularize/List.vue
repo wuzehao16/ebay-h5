@@ -9,8 +9,25 @@
       <mt-tab-container v-model="selected" class="mtc">
         <div class="no-data" v-if='tip_flag'>{{ tip_text }}</div>
         <mt-tab-container-item id="published">
-          <mt-loadmore :auto-fill="false" :top-method="getPublishedList" :bottom-method="getPublishedList" :bottom-all-loaded="allLoaded" ref="loadmore">
-            <div>
+          <mt-search v-model="value" placeholder="搜索" :style="{'top': '50px','z-index':'2'}"></mt-search>
+          <div :style="{'position': 'absolute','top':'100px','left':'0','width':'100%'}">
+            <mt-loadmore :auto-fill="false" :top-method="getPublishedList" :bottom-method="getPublishedList" :bottom-all-loaded="allLoaded" ref="loadmore">
+              <div v-show="result.length!=0">
+                <!-- 已发布商品搜索框 -->
+                <!-- 搜索结果展示 -->
+                <mt-cell  class='set-shadow' v-for="d in result" :key="d.id">
+                  <div slot="title" class="popularize-list">
+                    <div class="avatar" :style="{'background': 'url(' + d.productIcon + ') no-repeat center center'}"></div>
+                    <div class="right">
+                      <div class="title">{{ d.productNane }}</div>
+                      <div class="price">￥{{ d.productPrice }}</div>
+                      <mt-button type="primary" @click="goPreview(d.id)" size="small">分享朋友圈</mt-button>
+                    </div>
+                  </div>
+                </mt-cell>
+              </div>
+              <!-- 搜索框无输入时的默认展示所有 -->
+            <div v-show="value==''">
               <mt-cell class='set-shadow' v-for="d in publishedGoods" :key="d.id">
                 <div slot="title" class="popularize-list">
                   <div class="avatar" :style="{'background': 'url(' + d.productIcon + ') no-repeat center center'}"></div>
@@ -22,12 +39,13 @@
                   </div>
                 </div>
               </mt-cell>
-            </div>
+          </div>
           </mt-loadmore>
+          </div>
         </mt-tab-container-item>
         <mt-tab-container-item id="wait_audit">
           <mt-loadmore :auto-fill="false" :top-method="getWaitedList" :bottom-method="getWaitedList" :bottom-all-loaded="allLoaded_2" ref="loadmore2">
-            <mt-cell class='set-shadow' v-for="(d, index) in waitedGoods" :key="d.id">
+              <mt-cell class='set-shadow' v-for="d in waitedGoods" :key="d.id">
               <div slot="title" class="popularize-list">
                 <div class="avatar" :style="{'background': 'url(' + d.productIcon + ') no-repeat center center'}"></div>
                 <div class="right">
@@ -55,6 +73,20 @@
 <script>
 import { reqSellerProList } from '../../api'
 import { Indicator } from 'mint-ui'
+import { Search } from 'mint-ui'
+import Vue from 'vue'
+import axios from 'axios'
+// require('es6-promise').polyfill()
+// require('isomorphic-fetch')
+Vue.component(Search.name, Search)
+
+// const delay = (function() {
+//   let timer = 0;
+//   return function(callback, ms) {
+//     clearTimeout(timer);
+//     timer = setTimeout(callback, ms);
+//   };
+// })();
 
 export default {
   data() {
@@ -72,7 +104,9 @@ export default {
       publishedGoods: [],
       waitedGoods: [],
       tip_flag: false,
-      tip_text: ''
+      tip_text: '',
+      result: {},
+      value: ''
     }
   },
   activated() {
@@ -176,19 +210,32 @@ export default {
       } else if (this.selected == 'published' && this.publishedGoods.length == 0) {
         this.getPublishedList()
       }
-    }
-  },
-  mounted() {
-    // this.init()
+    },
+   getData(val) {
+     const that=this;
+      axios.get('http://www.wstsoftware.com:8080/sell/seller/product/list',{
+      params: {
+        userWxOpenid: this.userWxOpenid,
+        productNane:val
+      }
+  }).then(function (res) {
+    that.result = res.data.data.content;
+  });
+  }
   },
   watch: {
     selected(val) {
       console.log('selected changed....fn')
       this.init()
-    }
+    },
+    value : function(val) {
+        this.getData(val);
+        if(this.value==''){
+          this.result={};
+        }
+    },
   }
 }
-
 </script>
 <style lang="scss">
 .my-nav {
