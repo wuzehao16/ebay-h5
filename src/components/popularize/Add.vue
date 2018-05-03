@@ -54,7 +54,7 @@
             <div class="f increase" @click="amount++">+</div>
           </div>
         </mt-cell>
-        <mt-field label="汇率（美元USD/人民币CNY）：" placeholder="请输入美元USD/人民币CNY" type="number" :value="ebay.usdRate" class="w50"></mt-field>
+        <mt-field label="汇率（美元USD/人民币CNY）：" placeholder="请输入美元USD/人民币CNY" type="number" :value="ebay.usdRate" class="w50" disabled></mt-field>
         <mt-cell>
           <div slot="title" v-if='ebay.price'>{{ ebay.price.currency + " : " + ebay.price.value}}</div>
         </mt-cell>
@@ -103,13 +103,12 @@
   </div>
 </template>
 <script>
-import { reqSellerProductSave, reqProductDetail, reqEbayGoods, reqCategoryList } from '../../api'
+import { reqSellerProductSave, reqProductDetail, reqEbayGoods, reqCategoryList, reqCategoryById } from '../../api'
 import { Toast, Indicator } from 'mint-ui'
 import debounce from 'lodash/debounce'
 export default {
   data() {
     return {
-      calTimes: 1,
       amount: 10,
       exchaneRate: 6.66,
       chosenItem: {
@@ -154,8 +153,8 @@ export default {
         productMemo: "",
         productUsd: '',
         productCountry: '',
-        carriageFee: '',
-        taxFee: '',
+        carriageFee: 0,
+        taxFee: 0,
         productType: '',
       },
       categoryPid: '',
@@ -285,7 +284,6 @@ export default {
             let itemid = []
             for (let k of aItems) {
               if (k[1][i.key] == j.ckey) {
-                console.log(i.key, '..kkk..', j.ckey)
                 itemid.push(k[0])
               }
             }
@@ -354,9 +352,7 @@ export default {
         Toast("请输入Ebay商品ID")
       } else {
         this.hideKeyboard = true
-        Indicator.open({
-          spinnerType: 'fading-circle'
-        })
+        Indicator.open({ spinnerType: 'fading-circle' })
         let itemId = this.currentValue
         reqEbayGoods({ itemId }).then((res) => {
             if (res.data.errors) {
@@ -369,23 +365,73 @@ export default {
               this.pro_info.productIcon = this.ebay.image.imageUrl
               this.pro_info.productCountry = this.ebay.itemLocation.country
               this.pro_info.productUsd = this.ebay.price.value
-
               let imgArr = []
               imgArr.push(this.pro_info.productIcon)
               if (this.ebay.additionalImages) {
                 for (let i of this.ebay.additionalImages) {
                   imgArr.push(i.imageUrl)
                 }
+              }
+              if (this.ebay.itemsAttr) {
+                for (let m of Object.values(this.ebay.itemsAttr)) {
+                  imgArr.push(m.imageUrl)
+                }
+              }
+              imgArr = [...new Set(imgArr)]
+              if (imgArr.length > 1) {
                 this.pro_info.productPic = imgArr.join("@")
               } else {
                 this.pro_info.productPic = imgArr.join("")
               }
-
               if (this.ebay.itemsAttr) {
-                if (!this.isEdit) {
-                  this.getCNY()
-                }
+                this.getCNY()
                 this.itemsAttrSlots[0].values = Object.keys(this.ebay.itemsAttr)
+              }
+
+              if (this.productId) {
+                reqProductDetail({ productId: this.productId }).then((res) => {
+                  let p = res.data.data
+                  this.isEdit = true
+                  p.carriageFee ? this.carriageFeeType = '不包邮' : this.carriageFeeType = '包邮'
+                  p.taxFee ? this.taxFeeType = '不包税' : this.taxFeeType = '包税'
+
+                  this.pro_info.productNane = p.name
+                  this.pro_info.productPic = (p.pic ? p.pic.join('@') : '')
+                  this.pro_info.productIcon = p.icon
+                  this.pro_info.productMemo = p.productMemo
+                  this.pro_info.productType = p.type
+                  this.$nextTick(function() {
+                    this.$set(this.pro_info, 'carriageFee', p.carriageFee)
+                    this.$set(this.pro_info, 'taxFee', p.taxFee)
+                  })
+                  //商品分类
+                  reqCategoryById({ productType: p.type }).then(res => {
+                    this.categoryPid = res.data.data.pid
+                  }).catch(err => {})
+
+                  for (let m of p.productAttr) {
+                    //3.商品规格  set
+                    if (m.attrType == '2') {
+                      for (let i of this.ebay.localizedAspects) {
+                        if (i.name == m.attrEname) {
+                          i.cname = m.attrCname
+                          i.cvalue = m.attrCvalue
+                        }
+                      }
+                    } else if (m.attrType == '1' && m.attrEname != 'price' && this.ebay.optionAttr) { //2.选择属性  set
+                      for (let c of this.ebay.optionAttr_2) {
+                        if (c.key == m.attrEname) {
+                          c.ckey = m.attrCname
+                          for (let j of c.children) {
+                            if (j.ckey == m.attrEvalue) {
+                              j.cvalue = m.attrCvalue
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                })
               }
             }
             Indicator.close()
@@ -417,9 +463,6 @@ export default {
   },
   watch: {
     categoryPid(a) {
-      if (this.calTimes++ != 1) {
-        this.pro_info.productType = ''
-      }
       this.getCategorySubList()
     },
     amount(a) {
@@ -478,57 +521,19 @@ export default {
     }
   },
   deactivated() {
-    this.calTimes = 1
+    this.categoryPid = ''
+    this.carriageFeeType = '包邮'
+    this.taxFeeType = '包税'
   },
   activated() {
     this.showAll = false
     this.currentValue = ''
-    this.else_key = []
-    this.else_value = []
     this.pro_info = Object.assign({}, this.pro_info_bak)
 
     this.productId = this.$route.params.productId
     if (this.productId) {
       this.currentValue = this.$route.params.ebayItemid
       this.getEbayGoods()
-      reqProductDetail({ productId: this.productId }).then((res) => {
-        let p = res.data.data
-        this.isEdit = true
-        this.pro_info = {
-          auditStatus: '0', //待审核
-          productStatus: '下架',
-          userWxOpenid: JSON.parse(sessionStorage.getItem('ebay-app')).userWxOpenid,
-          productNane: p.name,
-          productPic: (p.pic ? p.pic.join('@') : ''),
-          productPrice: p.price,
-          productIcon: p.icon,
-          items: [],
-          productMemo: p.productMemo,
-          productUsd: p.productUsd,
-          carriageFee: p.carriageFee,
-          taxFee: p.taxFee
-        }
-        p.carriageFee ? this.carriageFeeType = '不包邮' : this.carriageFeeType = '包邮'
-        p.taxFee ? this.taxFeeType = '不包税' : this.taxFeeType = '包税'
-
-        let j = 0
-        for (let [i, item] of new Map(p.productAttr.map((item, i) => [i, item]))) {
-          this.itemIds.push(item.id)
-          if (item.attrType == '2') {
-            this.else_key.push(item.attrCname)
-            this.else_value.push(item.attrCvalue)
-          } else if (item.attrType == '1') {
-            if (this.optionAttr.key[item.attrEname]) {
-              j++
-            } else {
-              j = 0
-            }
-            this.optionAttr.key[item.attrEname] = item.attrCname
-            this.optionAttr.value[item.attrEname + "_sube_" + j + "_sney_" + item.attrEvalue] = item.attrCvalue
-
-          }
-        }
-      })
     }
   },
   mounted() {

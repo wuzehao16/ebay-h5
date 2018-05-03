@@ -56,6 +56,11 @@ let router = new Router({
       component: EditGoods
     },
     {
+      path: '/popularize/edit/:productId/:ebayItemid',
+      name: 'AddGoods',
+      component: AddGoods
+    },
+    {
       path: '/popularize/add',
       name: 'AddGoods',
       component: AddGoods
@@ -213,8 +218,8 @@ router.beforeEach((to, from, next) => {
       }
     }
   }
-/*
-  let user = {
+
+/*  let user = {
     id: '4',
     userWxOpenid: 'oyNDcwRQUAv0Oahba6SUlXLwobgw',
     userCtype: '1',

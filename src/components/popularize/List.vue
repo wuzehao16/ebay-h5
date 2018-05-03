@@ -18,6 +18,7 @@
                     <div class="title">{{ d.productNane }}</div>
                     <div class="price">￥{{ d.productPrice }}</div>
                     <mt-button type="primary" @click="goPreview(d.id)" size="small">分享朋友圈</mt-button>
+                     <mt-button type="primary" @click="goEdit(d)" size="small">编辑</mt-button>
                   </div>
                 </div>
               </mt-cell>
@@ -92,7 +93,8 @@ export default {
   methods: {
     goEdit(row) {
       this.$router.push({
-        name: 'EditGoods',
+        // name: 'EditGoods',
+        name: 'AddGoods',
         params: {
           productId: row.id,
           ebayItemid: row.ebayItemid
