@@ -55,6 +55,7 @@ export default {
         auditStatus: '1',
         productName: ''
       },
+      filters_bak: {},
       pro_list: [],
       tip_flag: false,
       tip_text: '',
@@ -91,11 +92,14 @@ export default {
         Indicator.close()
         if (res.data.code == 0) {
           let arr = res.data.data.content
-          if (arr.length == 0) {
+
+          //搜索框blur
+          if (!this.popupVisible && arr.length == 0 && this.filters.page == 0) {
             this.main_list_0 = true
           } else {
             this.main_list_0 = false
           }
+          //搜索框focus
           if (arr.length && !this.popupVisible) {
             for (let el of arr) {
               this.pro_list.push(el)
@@ -142,11 +146,15 @@ export default {
       this.getProductList()
     }, 500)
   },
-  mounted() {
+  deactivated() {
+    this.main_list_0 = false
+    this.filters = Object.assign({}, this.filters_bak)
+    this.pro_list = []
+  },
+  activated() {
+    this.filters_bak = Object.assign({}, this.filters)
     this.id = this.$route.params.id
-
     this.getProductList()
-
     let _this = this
     let el = document.getElementsByClassName("mint-searchbar-core")[0]
     let el2 = document.getElementsByClassName("mint-searchbar-cancel")[0]
@@ -186,17 +194,6 @@ export default {
 <style lang="scss">
 $ebay-blue :#0099f7;
 $shadow-color: #ececec;
-.index-banner {
-  height: 46vw;
-  background: pink;
-  margin-top: 42px;
-  .mint-swipe-item {
-    >div {
-      background-size: cover;
-      height: 100%;
-    }
-  }
-}
 
 .mint-searchbar {
   background-color: $ebay-blue;
@@ -217,24 +214,6 @@ $shadow-color: #ececec;
   text-align: center;
   margin-top: 30%;
   color: #888;
-}
-
-.index-type {
-  padding: 26px 0;
-  .list-type {
-    list-style-type: none;
-    padding: 0px 0;
-    li {
-      float: left;
-      width: 33%;
-      text-align: center;
-      line-height: 20px;
-      font-size: 16px;
-      i {
-        font-size: 26px;
-      }
-    }
-  }
 }
 
 .popup-search {
