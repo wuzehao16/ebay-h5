@@ -6,16 +6,17 @@
 		<i class="iconfont icon-calendar" style="font-size: 26px;"></i>
 	</div>
 </mt-cell>
-<mt-loadmore :auto-fill="false" :bottom-method="getList" 
+<mt-loadmore :auto-fill="false" :bottom-method="getList"
 	:bottom-all-loaded="allLoaded" ref="loadmore" class="client-more">
 	<div class="client-wrap">
-		<mt-cell :value="formatTime(c.created)" v-for="c in cList" :key="c.userWxOpenid">
+		<mt-cell :value="formatTime(c.created)" v-for="c in cList" :key="c.userWxOpenid" style="{'position':'relative'}">
 			<div slot="title" class="client-container">
-				<p>{{ c.userWxName }}</p>
-				<div class="img-box" :style="{'background': 'url(' + c.userWxPicture + ') no-repeat center center,url(' + require('../../assets/test.png') + ')'}">			
+				<p style="{'margin-right':'20px'}">{{ c.userWxName }}</p>
+        <p class="profit">分销商利润</p>
+				<div class="img-box" :style="{'background': 'url(' + c.userWxPicture + ') no-repeat center center,url(' + require('../../assets/test.png') + ')'}">
 				</div>
 			</div>
-		</mt-cell> 
+		</mt-cell>
 	</div>
 </mt-loadmore>
     <div class="no-data" v-if="no_data_tip">您该月没有客户</div>
@@ -64,13 +65,13 @@ export default {
   	handleConfirm (val) {
 		this.filters.page = 0
 		this.cList = []
-		this.chosenDate = val		
+		this.chosenDate = val
 		this.getList(val)
   	},
   	formatTime(val) {
   		let d = ''
   		if (val) {
-			d =	util.formatDate.format(new Date(val), 'MM月dd日 hh:mm') 
+			d =	util.formatDate.format(new Date(val), 'MM月dd日 hh:mm')
   		}
   		return d
   	},
@@ -99,15 +100,15 @@ export default {
 			Indicator.close()
 			if (this.$refs.loadmore.bottomStatus == 'loading') {
 				this.$refs.loadmore.onBottomLoaded()
-			}			
+			}
 	 	})
-  	}  	
+  	}
   },
   mounted() {
   	this.filters.userWxOpenid = JSON.parse( sessionStorage.getItem('ebay-app') ).userWxOpenid
   	this.getList()
   }
-}	
+}
 </script>
 
 <style lang="scss">
@@ -125,7 +126,17 @@ export default {
     background: #eeeeee;
     padding-top: 40px;
     text-align: center;
-    color: #999;  
+    color: #999;
+}
+.client-wrap {
+  .profit {
+    display:inline-block;
+    font-size:16px;
+    color:#777;
+    text-align:right;
+    margin-left:auto;
+    margin-right:10px;
+  }
 }
 .time-title {
 	height: 48px;
@@ -156,8 +167,8 @@ export default {
 	    display: -webkit-box;
 	    -webkit-line-clamp: 1;
 	    -webkit-box-orient: vertical;
-	    word-wrap: break-word;	
-	    word-break: break-all;	
+	    word-wrap: break-word;
+	    word-break: break-all;
 	}
 	.img-box {
 		background-size: cover!important;
@@ -166,7 +177,7 @@ export default {
 	    position: absolute;
 	    left: 10px;
 	    top: 16px;
-	    border-radius: 50%;		
+	    border-radius: 50%;
 	}
 }
 

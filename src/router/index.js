@@ -56,6 +56,11 @@ let router = new Router({
       component: EditGoods
     },
     {
+      path: '/popularize/edit/:productId/:ebayItemid',
+      name: 'AddGoods',
+      component: AddGoods
+    },
+    {
       path: '/popularize/add',
       name: 'AddGoods',
       component: AddGoods

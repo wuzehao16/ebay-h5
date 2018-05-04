@@ -6,9 +6,8 @@
     <!-- tab-container -->
     <div class="filter">
       <div @click="filter(1)" :class="pa.filter==1?'active':''">待支付</div>
-      <div @click="filter(2)" :class="pa.filter==2?'active':''">已支付</div>
       <div @click="filter(3)" :class="pa.filter==3?'active':''">待发货</div>
-      <div @click="filter(0)" :class="pa.filter==0?'active':''">全部</div>
+      <div @click="filter('')" :class="pa.filter==''?'active':''">全部</div>
     </div>
     <mt-tab-container v-model="selected" class="order-wrap">
       <div class="no-data" v-if='tip_flag'>{{ tip_text }}</div>
@@ -35,7 +34,7 @@
               </div>
             </mt-cell>
             <template v-for='i in d.orderDetailList'>
-              <mt-cell style="padding-bottom: 10px;">
+              <mt-cell :style="{'padding-bottom':'10px'}">
                 <div slot="title" class="goods-list">
                   <div class="avatar" :style="{'background': 'url(' + i.productIcon + ') no-repeat center center'}"></div>
                   <div class="right">
@@ -90,6 +89,7 @@ export default {
       })
     },
     filter(v) {
+      this.all_list = [];
       this.pa.filter = v;
       this.getAllList();
     },
@@ -138,7 +138,7 @@ export default {
   line-height:32px;
   top: 51px;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   grid-column-gap: 5px;
   text-align: center;
   background: #eee;
