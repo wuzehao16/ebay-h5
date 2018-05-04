@@ -92,7 +92,6 @@ export default {
         Indicator.close()
         if (res.data.code == 0) {
           let arr = res.data.data.content
-
           //搜索框blur
           if (!this.popupVisible && arr.length == 0 && this.filters.page == 0) {
             this.main_list_0 = true
@@ -104,6 +103,7 @@ export default {
             for (let el of arr) {
               this.pro_list.push(el)
             }
+            console.log('prolist',this.pro_list);
             this.filters.page++
           } else {
             this.pro_search_list = arr

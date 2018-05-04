@@ -9,11 +9,11 @@
       <mt-tab-container v-model="selected" class="mtc">
         <div class="no-data" v-if='tip_flag'>{{ tip_text }}</div>
         <mt-tab-container-item id="published">
+          <!-- 已发布商品搜索框 -->
           <mt-search v-model="value" placeholder="搜索" :style="{'top': '50px','z-index':'2'}"></mt-search>
           <div :style="{'position': 'absolute','top':'100px','left':'0','width':'100%'}">
             <mt-loadmore :auto-fill="false" :top-method="getPublishedList" :bottom-method="getPublishedList" :bottom-all-loaded="allLoaded" ref="loadmore">
               <div v-show="result.length!=0">
-                <!-- 已发布商品搜索框 -->
                 <!-- 搜索结果展示 -->
                 <mt-cell  class='set-shadow' v-for="d in result" :key="d.id">
                   <div slot="title" class="popularize-list">

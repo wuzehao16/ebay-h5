@@ -10,7 +10,7 @@
     </section>
     <section class="right-w" ref="menuGoodList">
       <ul>
-        <template v-for="(item,index) in menuList">
+        <template v-for="item in menuList">
           <transition name="slide-fade">
             <li v-show='menuIndex == item.id'>
               <header class="menu_detail_header">
@@ -21,12 +21,14 @@
                 </section>
               </header>
               <section v-for="(goods,goodindex) in item.goods" :key="goodindex" class="menu_detail_list">
-                <router-link :to="{name: 'SpeTypeList', params: { id: goods.id }}" tag="div" class="menu_detail_link">
-                  <img :src="goods.imageUrl" alt="">
-                  <div class="goods_name">
-                    {{goods.name}}
-                  </div>
-                </router-link>
+                <keep-alive>
+                  <router-link :to="{name: 'SpeTypeList', params: { id: goods.id }}" tag="div" class="menu_detail_link">
+                    <img :src="goods.imageUrl" alt="">
+                    <div class="goods_name">
+                      {{goods.name}}
+                    </div>
+                  </router-link>
+                </keep-alive>
               </section>
             </li>
           </transition>
@@ -48,7 +50,6 @@ export default {
     this.menuList = (await reqCategoryList({ pid: 0 })).data.data;
     var arr = [];
     var i = 0;
-    console.log(this.menuList)
     for (const item of this.menuList) {
       arr[i++] = {
         ...this.menuList[i],
