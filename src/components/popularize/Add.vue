@@ -99,7 +99,6 @@
       </div>
     </div>
     <div class="no-product" v-if="show_tip">没有该商品或该商品不能在本平台翻译</div>
-    <!-- <mt-button type='primary' @click='validate' style="position: absolute;right: 0;top : 50%;">hahah</mt-button> -->
   </div>
 </template>
 <script>
@@ -267,15 +266,18 @@ export default {
       }
       this.loading = true
       //把商品规格单属性放进items
-      for (let i of this.ebay.localizedAspects) {
-        this.pro_info.items.push({
-          attrCname: i.cname,
-          attrCvalue: i.cvalue,
-          attrType: '2',
-          attrEname: i.name,
-          attrEvalue: i.value
-        })
+      if(this.ebay.localizedAspects){
+        for (let i of this.ebay.localizedAspects) {
+          this.pro_info.items.push({
+            attrCname: i.cname,
+            attrCvalue: i.cvalue,
+            attrType: '2',
+            attrEname: i.name,
+            attrEvalue: i.value
+          })
+        }
       }
+
       //组合商品：把商品选择属性放进items
       if (this.ebay.optionAttr) {
         let aItems = Object.entries(this.ebay.itemsAttr)
@@ -645,6 +647,7 @@ export default {
   -webkit-appearance: none;
   appearance: none;
   border: none;
+  z-index: 10;
   font-size: 14px;
   padding: 0px 10px;
   display: block;
