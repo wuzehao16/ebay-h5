@@ -229,23 +229,6 @@ router.beforeEach((to, from, next) => {
 //   }
 //   sessionStorage.setItem('ebay-app', JSON.stringify(user))
 // next()
-
-
-/*  let user = JSON.parse( sessionStorage.getItem('ebay-app') )
-
-  if (user.userCtype && user.userCtype == '2'
-     && store.state.authPage.includes(to.name)) {
-    MessageBox.confirm('分销商才有权限进入，去注册成为分销商?').then(action => {
-      next('/user/register')
-    }).catch(err => {
-      next(false)
-    })
-：
-  } else {
-    next()
-  }*/
-
-
 })
 
 router.afterEach((to, from) => {
