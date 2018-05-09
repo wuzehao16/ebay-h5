@@ -59,14 +59,20 @@ export default {
     this.menuList = arr;
   },
   mounted() {
-    this.menuIndex = this.$route.params.index
   },
   methods: {
     chooseMenu(index) {
       this.menuIndex = index;
+      this.$router.push({
+        name: 'IndexType',
+        params: {
+          index: index
+        }
+      })
     }
   },
   activated() {
+    this.menuIndex = this.$route.params.index
   }
 }
 
