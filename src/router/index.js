@@ -221,7 +221,7 @@ router.beforeEach((to, from, next) => {
 
 //   let user = {
 //     id: '4',
-//     userWxOpenid: 'oyNDcwUS3PZjM6pZvWvf5p8fHPNE',
+//     userWxOpenid: 'oyNDcwRlUVJ6JakWZlhjAnNQzTuo',
 //     userCtype: '1',
 //     userPhone: '13877887788',
 //     userAddr: 'xxx省uu市fddkjflkj',
