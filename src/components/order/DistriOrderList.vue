@@ -21,13 +21,13 @@
                 <div>
                   <label>状态：</label><span style="color: #ef4f4f;">
                 <template v-if="d.orderStatus == '1'">待支付</template>
-                <template v-if="d.orderStatus == '2'">已取消</template>
+                <!-- <template v-if="d.orderStatus == '2'">已取消</template> -->
                 <template v-if="d.orderStatus == '3'">已支付</template>
-                <template v-if="d.orderStatus == '4'">已发货</template>
+                <!-- <template v-if="d.orderStatus == '4'">已发货</template> -->
                 <template v-if="d.orderStatus == '5'">已完成</template>
-                <template v-if="d.orderStatus == '6'">退款中</template>
-                <template v-if="d.orderStatus == '7'">已退款</template>
-                <template v-if="d.orderStatus == '9'">已删除</template>
+                <!-- <template v-if="d.orderStatus == '6'">退款中</template> -->
+                <!-- <template v-if="d.orderStatus == '7'">已退款</template> -->
+                <!-- <template v-if="d.orderStatus == '9'">已删除</template> -->
               </span></div>
                 <div>
                   <label>总价：</label><span>￥{{d.orderAmount}}</span></div>
@@ -59,16 +59,9 @@
     </div>
   </div>
 </template>
-<script src="../../../dist/vconsole.min.js"></script>
-  <script>
-    var vConsole = new VConsole();
-    vConsole.setOption('maxLogNumber', 5000);
-    console.debug('打印啊')
-  </script>
 <script>
 import { reqDistriOrderList, reqBuyerOrderCancel } from '../../api'
 import { Indicator, MessageBox, Toast } from 'mint-ui'
-// import Vconsole from 'vconsole'
 
 export default {
   data() {
@@ -81,7 +74,7 @@ export default {
         userWxOpenid: '',
         isContainDistributor: 1,
         size: 10,
-        filter: 0
+        filter: ''
       },
 
       tip_flag: false,
@@ -104,13 +97,12 @@ export default {
       this.showSpinner()
       let obj = Object.assign({}, this.pa, { page: this.all_page })
       // alert(JSON.stringify(obj))
-      console.debug('this.all_list',this.all_list);
       reqDistriOrderList(obj).then((res) => {
         if (res.data.code == 0) {
           for (let i of res.data.data) {
             this.all_list.push(i)
           }
-          this.all_page++
+          // this.all_page++
         }
         if (this.all_list.length == 0) {
           this.tip_text = '您还没有分销商订单'
