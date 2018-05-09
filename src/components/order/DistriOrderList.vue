@@ -30,7 +30,13 @@
                 <!-- <template v-if="d.orderStatus == '9'">已删除</template> -->
               </span></div>
                 <div>
-                  <label>总价：</label><span>￥{{d.orderAmount}}</span></div>
+                  <div class="order-des-price" :style="{'display':'inline-block'}">
+                  <label>总价：</label><span>￥{{d.orderAmount}}</span>
+                  </div>
+                  <div class="order-des-info" :style="{'display':'inline-block','float':'right'}">
+                    <label>下单人：</label><span>{{d.buyerName}}</span>
+                  </div>
+                  </div>
               </div>
             </mt-cell>
             <template v-for='i in d.orderDetailList'>
