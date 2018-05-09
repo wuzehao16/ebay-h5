@@ -465,6 +465,8 @@ export default {
   },
   watch: {
     categoryPid(a) {
+      this.pro_info.productType = ''
+      this.categorySubList = []
       this.getCategorySubList()
     },
     amount(a) {
