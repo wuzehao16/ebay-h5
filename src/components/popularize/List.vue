@@ -9,43 +9,35 @@
       <mt-tab-container v-model="selected" class="mtc">
         <div class="no-data" v-if='tip_flag'>{{ tip_text }}</div>
         <mt-tab-container-item id="published">
-          <!-- 已发布商品搜索框 -->
-          <mt-search v-model="value" placeholder="搜索" :style="{'top': '50px','z-index':'2'}"></mt-search>
-          <div :style="{'position': 'absolute','top':'100px','left':'0','width':'100%'}">
-            <mt-loadmore :auto-fill="false" :top-method="getPublishedList" :bottom-method="getPublishedList" :bottom-all-loaded="allLoaded" ref="loadmore">
-              <div v-show="result.length!=0">
-                <!-- 搜索结果展示 -->
-                <mt-cell  class='set-shadow' v-for="d in result" :key="d.id">
-                  <div slot="title" class="popularize-list">
-                    <div class="avatar" :style="{'background': 'url(' + d.productIcon + ') no-repeat center center'}"></div>
-                    <div class="right">
-                      <div class="title">{{ d.productNane }}</div>
-                      <div class="price">￥{{ d.productPrice }}</div>
-                      <mt-button type="primary" @click="goPreview(d.id)" size="small">分享朋友圈</mt-button>
-                    </div>
-                  </div>
-                </mt-cell>
-              </div>
-              <!-- 搜索框无输入时的默认展示所有 -->
-            <div v-show="value==''">
-              <mt-cell class='set-shadow' v-for="d in publishedGoods" :key="d.id">
+        <mt-search id='published-search' v-model="value" placeholder="搜索" :style="{'top': '52px','z-index':'2'}"></mt-search>
+          <mt-loadmore v-show="result.length!==0 || publishedGoods.length!==0" :style="{'margin-top':'40px'}" :auto-fill="false" :top-method="getPublishedList" :bottom-method="getPublishedList" :bottom-all-loaded="allLoaded" ref="loadmore">
+            <div>
+              <mt-cell v-if="result.length!==0" class='set-shadow' v-for="d in result" :key="d.id">
                 <div slot="title" class="popularize-list">
                   <div class="avatar" :style="{'background': 'url(' + d.productIcon + ') no-repeat center center'}"></div>
                   <div class="right">
                     <div class="title">{{ d.productNane }}</div>
                     <div class="price">￥{{ d.productPrice }}</div>
                     <mt-button type="primary" @click="goPreview(d.id)" size="small">分享朋友圈</mt-button>
-                     <mt-button type="primary" @click="goEdit(d)" size="small">编辑</mt-button>
                   </div>
                 </div>
               </mt-cell>
-          </div>
+              <mt-cell v-show="value==''" class='set-shadow' v-for="d in publishedGoods" :key="d.id">
+                <div slot="title" class="popularize-list">
+                  <div class="avatar" :style="{'background': 'url(' + d.productIcon + ') no-repeat center center'}"></div>
+                  <div class="right">
+                    <div class="title">{{ d.productNane }}</div>
+                    <div class="price">￥{{ d.productPrice }}</div>
+                    <mt-button type="primary" @click="goPreview(d.id)" size="small">分享朋友圈</mt-button>
+                  </div>
+                </div>
+              </mt-cell>
+            </div>
           </mt-loadmore>
-          </div>
         </mt-tab-container-item>
         <mt-tab-container-item id="wait_audit">
           <mt-loadmore :auto-fill="false" :top-method="getWaitedList" :bottom-method="getWaitedList" :bottom-all-loaded="allLoaded_2" ref="loadmore2">
-              <mt-cell class='set-shadow' v-for="d in waitedGoods" :key="d.id">
+            <mt-cell class='set-shadow' v-for="(d, index) in waitedGoods" :key="d.id">
               <div slot="title" class="popularize-list">
                 <div class="avatar" :style="{'background': 'url(' + d.productIcon + ') no-repeat center center'}"></div>
                 <div class="right">
@@ -72,21 +64,10 @@
 </template>
 <script>
 import { reqSellerProList } from '../../api'
-import { Indicator } from 'mint-ui'
-import { Search } from 'mint-ui'
+import { Indicator,Search } from 'mint-ui'
 import Vue from 'vue'
 import axios from 'axios'
-// require('es6-promise').polyfill()
-// require('isomorphic-fetch')
 Vue.component(Search.name, Search)
-
-// const delay = (function() {
-//   let timer = 0;
-//   return function(callback, ms) {
-//     clearTimeout(timer);
-//     timer = setTimeout(callback, ms);
-//   };
-// })();
 
 export default {
   data() {
@@ -105,8 +86,8 @@ export default {
       waitedGoods: [],
       tip_flag: false,
       tip_text: '',
-      result: {},
-      value: ''
+      value:'',
+      result:{}
     }
   },
   activated() {
@@ -127,8 +108,7 @@ export default {
   methods: {
     goEdit(row) {
       this.$router.push({
-        // name: 'EditGoods',
-        name: 'AddGoods',
+        name: 'EditGoods',
         params: {
           productId: row.id,
           ebayItemid: row.ebayItemid
@@ -211,17 +191,21 @@ export default {
         this.getPublishedList()
       }
     },
-   getData(val) {
+    getData(val) {
      const that=this;
       axios.get('http://www.wstsoftware.com:8080/sell/seller/product/list',{
       params: {
         userWxOpenid: this.userWxOpenid,
         productNane:val
       }
-  }).then(function (res) {
-    that.result = res.data.data.content;
-  });
-  }
+    }).then(function (res) {
+      that.result = res.data.data.content;
+    });
+    },
+  },
+
+  mounted() {
+    // this.init()
   },
   watch: {
     selected(val) {
@@ -229,13 +213,17 @@ export default {
       this.init()
     },
     value : function(val) {
-        this.getData(val);
-        if(this.value==''){
+      if(val==''){
+          console.log('result.length',this.result.length);
           this.result={};
-        }
+          console.log('result.length2',this.result);
+          return;
+      }
+        this.getData(val);
     },
   }
 }
+
 </script>
 <style lang="scss">
 .my-nav {

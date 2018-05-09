@@ -59,9 +59,16 @@
     </div>
   </div>
 </template>
+<script src="../../../dist/vconsole.min.js"></script>
+  <script>
+    var vConsole = new VConsole();
+    vConsole.setOption('maxLogNumber', 5000);
+    console.debug('打印啊')
+  </script>
 <script>
 import { reqDistriOrderList, reqBuyerOrderCancel } from '../../api'
 import { Indicator, MessageBox, Toast } from 'mint-ui'
+// import Vconsole from 'vconsole'
 
 export default {
   data() {
@@ -97,6 +104,7 @@ export default {
       this.showSpinner()
       let obj = Object.assign({}, this.pa, { page: this.all_page })
       // alert(JSON.stringify(obj))
+      console.debug('this.all_list',this.all_list);
       reqDistriOrderList(obj).then((res) => {
         if (res.data.code == 0) {
           for (let i of res.data.data) {
@@ -125,7 +133,6 @@ export default {
     this.all_list = []
   }
 }
-
 </script>
 <style lang="scss">
 .order-flow {
@@ -138,6 +145,7 @@ export default {
   line-height:32px;
   top: 51px;
   display: grid;
+  grid-template-rows: 32px;
   grid-template-columns: 1fr 1fr 1fr;
   grid-column-gap: 5px;
   text-align: center;
