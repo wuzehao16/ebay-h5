@@ -58,14 +58,15 @@ export default {
     }
     this.menuList = arr;
   },
-  mounted() {},
+  mounted() {
+    this.menuIndex = this.$route.params.index
+  },
   methods: {
     chooseMenu(index) {
       this.menuIndex = index;
     }
   },
   activated() {
-    this.menuIndex = this.$route.params.index
   }
 }
 
