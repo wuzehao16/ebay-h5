@@ -195,7 +195,7 @@ export default {
      const that=this;
       axios.get('http://www.wstsoftware.com:8080/sell/seller/product/list',{
       params: {
-        userWxOpenid: this.userWxOpenid,
+        userWxOpenid: this.reqListObj.userWxOpenid,
         productNane:val
       }
     }).then(function (res) {
