@@ -3,9 +3,10 @@
     <div>
       <mt-search v-model="filters.productName"></mt-search>
     </div>
-    <mt-swipe :auto="0" class="index-banner">
+    <mt-swipe :auto="2000" class="index-banner">
       <mt-swipe-item v-for="i in bannerList" :key="i.id">
-        <div :style="{'background-image': 'url(' + i.imageUrl + ')'}" @click="toUrl(i.clickUrl)"></div>
+        <!-- <div :style="{'background-image': 'url(' + i.imageUrl + ')'}" @click="toUrl(i.clickUrl)"></div> -->
+        <div :style="{'background-image': 'url(' + i.imageUrl + ')'}"></div>
       </mt-swipe-item>
     </mt-swipe>
     <!-- 分类 -->
@@ -88,9 +89,9 @@ export default {
     }
   },
   methods: {
-    toUrl(url) {
-      window.location = url;
-    },
+    // toUrl(url) {
+    //   window.location = url;
+    // },
     showSpinner() {
       this.tip_flag = false
       Indicator.open({
