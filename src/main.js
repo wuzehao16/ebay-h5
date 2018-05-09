@@ -9,7 +9,9 @@ import 'mint-ui/lib/style.css'
 import '@/assets/fonts/iconfont.css'
 import wx from 'weixin-js-sdk'
 import util from './api/util'
+// require('./api/vconsole.js')
 import Vconsole from 'vconsole'
+
 Vue.use(Mint)
 
 Vue.config.productionTip = false
