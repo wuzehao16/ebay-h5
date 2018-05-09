@@ -25,7 +25,7 @@
         </ul>
       </div>
     </mt-cell>
-   
+
     <mt-loadmore :auto-fill="false" :bottom-method="getProductList" :bottom-all-loaded="allLoaded" ref="loadmore" class="main-wrapper">
       <div>
         <!-- <div style="height: 42px;"></div> -->

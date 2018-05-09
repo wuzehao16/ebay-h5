@@ -60,6 +60,7 @@ export default {
   },
   mounted() {
     this.menuIndex = this.$route.params.index
+    console.log('this.menuIndex',this.menuIndex);
   },
   methods: {
     chooseMenu(index) {

@@ -240,7 +240,7 @@ router.beforeEach((to, from, next) => {
     }).catch(err => {
       next(false)
     })
-
+：
   } else {
     next()
   }*/
