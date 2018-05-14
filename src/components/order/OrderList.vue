@@ -86,7 +86,7 @@
       <!-- 待收货 -->
       <mt-tab-container-item id="to_receive">
         <mt-loadmore :auto-fill="false" :top-method="getToReceiveList" :bottom-method="getToReceiveList" :bottom-all-loaded="allLoaded_3" ref="loadmore3">
-          <div v-for="d in to_receive_list" :key="d.orderNo" class='cell-margin'>
+          <div v-for="d in to_receive_list" :key="d.orderNo" class='cell-margin' @click="goDetail(d)">
             <mt-cell>
               <div slot="title" class="order-des">
                 <div>

@@ -7,9 +7,9 @@
       </mt-navbar>
       <!-- tab-container -->
       <mt-tab-container v-model="selected" class="mtc">
-        <div class="no-data" v-if='tip_flag'>{{ tip_text }}</div>
         <mt-tab-container-item id="published">
-        <mt-search id='published-search' v-model="value" placeholder="搜索" :style="{'top': '52px','z-index':'2'}"></mt-search>
+        <mt-search id='published-search' v-model="value" placeholder="搜索" :style="{'top': '50px','z-index':'2'}"></mt-search>
+        <div class="no-data" v-if='tip_flag' :style="{'margin-top':'40px'}">{{ tip_text }}</div>
           <mt-loadmore v-show="result.length!==0 || publishedGoods.length!==0" :style="{'margin-top':'40px'}" :auto-fill="false" :top-method="getPublishedList" :bottom-method="getPublishedList" :bottom-all-loaded="allLoaded" ref="loadmore">
             <div>
               <mt-cell v-if="result.length!==0" class='set-shadow' v-for="d in result" :key="d.id">
@@ -36,6 +36,7 @@
           </mt-loadmore>
         </mt-tab-container-item>
         <mt-tab-container-item id="wait_audit">
+          <div class="no-data" v-if='tip_flag'>{{ tip_text }}</div>
           <mt-loadmore :auto-fill="false" :top-method="getWaitedList" :bottom-method="getWaitedList" :bottom-all-loaded="allLoaded_2" ref="loadmore2">
             <mt-cell class='set-shadow' v-for="(d, index) in waitedGoods" :key="d.id">
               <div slot="title" class="popularize-list">
