@@ -15,7 +15,7 @@
 
       <mt-tab-container-item id="all_orders">
         <mt-loadmore :auto-fill="false" :top-method="getAllList" :bottom-method="getAllList" :bottom-all-loaded="allLoaded" ref="loadmore">
-          <div v-for="(d, index) in all_list" :key="d.orderNo" class='cell-margin'>
+          <div v-for="(d, index) in all_list" :key="d.orderNo" class='cell-margin'  @click="goDetail(d)">
             <mt-cell>
               <div slot="title" class="order-des">
                 <div>
@@ -88,6 +88,15 @@ export default {
     }
   },
   methods: {
+    goDetail(order) {
+      console.log('order',order)
+      this.$router.push({
+        name: 'OrderDetail',
+        params: {
+          order: order
+        }
+      })
+    },
     showSpinner() {
       Indicator.open({
         text: '加载中...',

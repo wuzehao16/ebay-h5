@@ -38,12 +38,21 @@
 
 <div style="margin: 10px 0;">
 <!-- <mt-cell title='万邑淘' value='共计xxx件商品'></mt-cell> -->
-<mt-cell v-for="(o, index) in order.productList" :key="index">
+<mt-cell v-if='order.productList'  v-for="(o, index) in order.productList" :key="index">
 	<div slot="title" class="order-container" :style="{'background':
 		'url(' + o.orderDetail.productIcon + ') left center no-repeat'}">
 		<h3>{{ o.orderDetail.productName }}</h3>
 		<div><span class="price">￥{{ o.orderDetail.productPrice }}</span>
 		<span class="amount">x{{ o.orderDetail.productQuantity }}</span></div>
+	</div>
+</mt-cell>
+
+<mt-cell v-if='order.orderDetailList'  v-for="(o, index) in order.orderDetailList" :key="index">
+	<div slot="title" class="order-container" :style="{'background':
+		'url(' + o.productIcon + ') left center no-repeat'}">
+		<h3>{{ o.productName }}</h3>
+		<div><span class="price">￥{{ o.productPrice }}</span>
+		<span class="amount">x{{ o.productQuantity }}</span></div>
 	</div>
 </mt-cell>
 </div>
@@ -74,10 +83,11 @@ export default {
   	}
   },
   beforeRouteEnter (to, from, next) {
-  	if (from.name == 'OrderList') {
+    console.log('from.name',from.name)
+  	if (from.name == 'OrderList' || from.name == 'DistriOrderList') {
   		next(vm => {
 		  	vm.order = to.params.order
-		  	console.log(vm.order)
+		  	console.log('vm.order',vm.order)
 		  	//   '17091924161'
 		  	reqLogistics({logisticsNo: vm.order.logisticsNo}).then((res) => {
 		  		let r = res.data.data
@@ -109,13 +119,13 @@ export default {
   	}
   },
   mounted() {
-/*  	let a = this.$route.params.order
+  	let a = this.$route.params.order
   	reqBuyerOrderDetail({
   		openid: a.buyerOpenid,
   		orderId: a.orderNo
   	}).then((res) => {
 
-  	})*/
+  	})
   }
 }
 </script>

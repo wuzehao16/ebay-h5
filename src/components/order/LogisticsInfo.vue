@@ -1,5 +1,5 @@
 <template>
-<div class="container">	
+<div class="container">
 
 <mt-cell class="logi-title">
 	<div slot="title">
@@ -38,7 +38,7 @@ export default {
   	}
   },
   activated() {
-  	console.log(this.$route)
+  	console.log('this.$route',this.$route)
   	this.orderNo = this.$route.params.orderNo
   	this.logistics = this.$route.params.logistics
   }
@@ -69,7 +69,7 @@ $red: red;
 	    background: $red;
 	    border: 1px solid $red;
 	    background-clip: content-box;
-	    padding: 2px;		
+	    padding: 2px;
 	}
 	.logi-info {
 		margin: 10px 0 10px 20px;
