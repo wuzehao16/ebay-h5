@@ -34,6 +34,7 @@
               </mt-cell>
             </div>
           </mt-loadmore>
+          <div class="no-result" v-if='publishedGoods.length!=0 && result.length==0' :style="{'margin-top':'40px','text-align':'center','color':'#999'}">您没有该关键词相关的已发布商品</div>
         </mt-tab-container-item>
         <mt-tab-container-item id="wait_audit">
           <div class="no-data" v-if='tip_flag'>{{ tip_text }}</div>
@@ -215,9 +216,9 @@ export default {
     },
     value : function(val) {
       if(val==''){
-          console.log('result.length',this.result.length);
+          // console.log('result.length',this.result.length);
           this.result={};
-          console.log('result.length2',this.result);
+          // console.log('result.length2',this.result);
           return;
       }
         this.getData(val);
