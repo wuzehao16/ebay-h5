@@ -12,6 +12,7 @@
     <mt-tab-container v-model="selected" class="order-wrap">
       <div class="no-data" v-if='tip_flag'>{{ tip_text }}</div>
       <!-- 全部订单 -->
+
       <mt-tab-container-item id="all_orders">
         <mt-loadmore :auto-fill="false" :top-method="getAllList" :bottom-method="getAllList" :bottom-all-loaded="allLoaded" ref="loadmore">
           <div v-for="(d, index) in all_list" :key="d.orderNo" class='cell-margin'  @click="goDetail(d)">
@@ -30,12 +31,12 @@
               </span></div>
                 <div>
                   <div class="order-des-price" :style="{'display':'inline-block'}">
-                    <label>总价：</label><span>￥{{d.orderAmount}}</span>
+                  <label>总价：</label><span>￥{{d.orderAmount}}</span>
                   </div>
                   <div class="order-des-info" :style="{'display':'inline-block','float':'right'}">
                     <label>下单人：</label><span>{{d.buyerName}}</span>
                   </div>
-                </div>
+                  </div>
               </div>
             </mt-cell>
             <template v-for='i in d.orderDetailList'>
@@ -57,7 +58,6 @@
             </template>
           </div>
         </mt-loadmore>
-        <div class="loaded-all" v-if="tip_flag2">已加载完所有数据</div>
       </mt-tab-container-item>
     </mt-tab-container>
     <div class="to-top" @click="goTop">
@@ -85,7 +85,6 @@ export default {
 
       tip_flag: false,
       tip_text: '',
-      tip_flag2: false,
     }
   },
   methods: {
@@ -105,9 +104,9 @@ export default {
       })
     },
     filter(v) {
-      this.pa.filter = v
-      this.init()
-      this.getAllList()
+      this.all_list = [];
+      this.pa.filter = v;
+      this.getAllList();
     },
     getAllList(val) {
       this.showSpinner()
@@ -118,13 +117,11 @@ export default {
           for (let i of res.data.data) {
             this.all_list.push(i)
           }
-          this.all_page++
+          // this.all_page++
         }
         if (this.all_list.length == 0) {
           this.tip_text = '您还没有分销商订单'
           this.tip_flag = true
-        } else if (res.data.data.length == 0 && this.all_list.length > 3) {
-          this.tip_flag2 = true
         }
         this.$refs.loadmore.onTopLoaded()
         if (this.$refs.loadmore.bottomStatus == 'loading') {
@@ -132,34 +129,27 @@ export default {
         }
         Indicator.close()
       })
-    },
-    init() {
-      this.tip_flag = false
-      this.tip_flag2 = false
-      this.all_page = 0
-      this.all_list = []
     }
   },
   activated() {
     this.pa.userWxOpenid = JSON.parse(sessionStorage.getItem('ebay-app')).userWxOpenid
-    this.getAllList()
+ 	this.getAllList()
   },
   deactivated() {
-    this.init()
+    this.all_page = 0
+    this.all_list = []
   }
 }
-
 </script>
 <style lang="scss">
 .order-flow {
   padding: 10px 0;
 }
-
-.filter {
+.filter{
   position: absolute;
   width: 100%;
   height: 32px;
-  line-height: 32px;
+  line-height:32px;
   top: 51px;
   display: grid;
   grid-template-rows: 32px;
@@ -169,14 +159,13 @@ export default {
   background: #eee;
   z-index: 11;
   padding: 5px 0px;
-  div {
+  div{
     background: #fff;
   }
-  .active {
-    color: #0099f7;
+  .active{
+    color:#0099f7;
   }
 }
-
 .pay-b {
   height: 28px;
   width: 80px;
@@ -230,24 +219,16 @@ export default {
 }
 
 .no-data {
-  height: 100px;
-  position: fixed;
-  width: 100%;
-  z-index: 1000;
-  top: 100px;
-  background: #eeeeee;
-  padding-top: 40px;
-  text-align: center;
-  color: #999;
+    height: 100px;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+    top:100px;
+    background: #eeeeee;
+    padding-top: 40px;
+    text-align: center;
+    color: #999;
 }
-
-.loaded-all {
-  margin-bottom: 50px;
-  background: #eeeeee;
-  text-align: center;
-  color: #999;
-}
-
 .goods-list {
   padding: 5px;
   /*     height: 86px;
