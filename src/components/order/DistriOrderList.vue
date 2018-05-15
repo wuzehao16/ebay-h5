@@ -107,7 +107,6 @@ export default {
     filter(v) {
       this.pa.filter = v
       this.init();
-      // console.log('page1',this.all_page)
       this.getAllList()
     },
     getAllList(val) {
@@ -132,7 +131,6 @@ export default {
         if (this.$refs.loadmore.bottomStatus == 'loading') {
           this.$refs.loadmore.onBottomLoaded()
         }
-        // console.log('page3',this.all_page)
         Indicator.close()
       })
     },
