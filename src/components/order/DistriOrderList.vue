@@ -117,7 +117,7 @@ export default {
           for (let i of res.data.data) {
             this.all_list.push(i)
           }
-          // this.all_page++
+          this.all_page++
         }
         if (this.all_list.length == 0) {
           this.tip_text = '您还没有分销商订单'
@@ -132,8 +132,8 @@ export default {
     }
   },
   activated() {
-    this.pa.userWxOpenid = JSON.parse(sessionStorage.getItem('ebay-app')).userWxOpenid
- 	this.getAllList()
+    this.pa.userWxOpenid = JSON.parse(sessionStorage.getItem('ebay-app')).userWxOpenid;
+ 	  this.getAllList();
   },
   deactivated() {
     this.all_page = 0
