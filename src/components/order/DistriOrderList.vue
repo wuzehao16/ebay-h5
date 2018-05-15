@@ -14,7 +14,7 @@
       <!-- 全部订单 -->
       <mt-tab-container-item id="all_orders">
         <mt-loadmore :auto-fill="false" :top-method="getAllList" :bottom-method="getAllList" :bottom-all-loaded="allLoaded" ref="loadmore">
-          <div v-for="(d, index) in all_list" :key="d.orderNo" class='cell-margin'>
+          <div v-for="(d, index) in all_list" :key="d.orderNo" class='cell-margin'  @click="goDetail(d)">
             <mt-cell>
               <div slot="title" class="order-des">
                 <div>
@@ -89,6 +89,15 @@ export default {
     }
   },
   methods: {
+    goDetail(order) {
+      console.log('order',order)
+      this.$router.push({
+        name: 'OrderDetail',
+        params: {
+          order: order
+        }
+      })
+    },
     showSpinner() {
       Indicator.open({
         text: '加载中...',
@@ -98,12 +107,13 @@ export default {
     filter(v) {
       this.pa.filter = v
       this.init();
-      // console.log('page',this.all_page)
+      // console.log('page1',this.all_page)
       this.getAllList()
     },
     getAllList(val) {
       this.showSpinner()
-      let obj = Object.assign({}, this.pa, { page: this.all_page })
+      let obj = Object.assign({}, this.pa, { page: this.all_page });
+      console.log('page2',this.all_page)
       // alert(JSON.stringify(obj))
       reqDistriOrderList(obj).then((res) => {
         if (res.data.code == 0) {
@@ -122,6 +132,7 @@ export default {
         if (this.$refs.loadmore.bottomStatus == 'loading') {
           this.$refs.loadmore.onBottomLoaded()
         }
+        // console.log('page3',this.all_page)
         Indicator.close()
       })
     },
