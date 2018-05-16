@@ -14,7 +14,7 @@
       <!-- 全部订单 -->
       <mt-tab-container-item id="all_orders">
         <mt-loadmore :auto-fill="false" :top-method="getAllList" :bottom-method="getAllList" :bottom-all-loaded="allLoaded" ref="loadmore">
-          <div v-for="(d, index) in all_list" :key="d.orderNo" class='cell-margin'  @click="goDetail(d)">
+          <div v-for="(d, index) in all_list" :key="d.orderNo" class='cell-margin' @click="goDetail(d)">
             <mt-cell>
               <div slot="title" class="order-des">
                 <div>
@@ -90,7 +90,6 @@ export default {
   },
   methods: {
     goDetail(order) {
-      console.log('order',order)
       this.$router.push({
         name: 'OrderDetail',
         params: {
@@ -106,26 +105,25 @@ export default {
     },
     filter(v) {
       this.pa.filter = v
-      this.init();
+      this.init()
       this.getAllList()
     },
     getAllList(val) {
       this.showSpinner()
       let obj = Object.assign({}, this.pa, { page: this.all_page });
-      console.log('page2',this.all_page)
-      // alert(JSON.stringify(obj))
       reqDistriOrderList(obj).then((res) => {
         if (res.data.code == 0) {
           for (let i of res.data.data) {
             this.all_list.push(i)
           }
-          this.all_page++
-        }
-        if (this.all_list.length == 0) {
-          this.tip_text = '您还没有分销商订单'
-          this.tip_flag = true
-        } else if (res.data.data.length == 0 && this.all_list.length > 3) {
-          this.tip_flag2 = true
+          this.all_page += 1
+          if (this.all_list.length == 0) {
+            this.tip_text = '您还没有分销商订单'
+            this.tip_flag = true
+          } else
+          if (res.data.data.length == 0 && this.all_list.length > 3) {
+            this.tip_flag2 = true
+          }
         }
         this.$refs.loadmore.onTopLoaded()
         if (this.$refs.loadmore.bottomStatus == 'loading') {
