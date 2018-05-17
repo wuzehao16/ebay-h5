@@ -1,10 +1,10 @@
 <template>
 <div class="container">
 
-<div class="header" :style="{'background': 'url(' + require('../../assets/back.jpg') + 
+<div class="header" :style="{'background': 'url(' + require('../../assets/back.jpg') +
 		') no-repeat','background-size': 'cover'}">
 <template v-if="user.userWxPicture">
-	<div :style="{'background': 'url(' + user.userWxPicture + 
+	<div :style="{'background': 'url(' + user.userWxPicture +
 		') no-repeat,url(' + require('../../assets/test.png') + ') no-repeat'}" class="head-pic"></div>
 	<div class="head-r">
 		<h3>你好，{{ user.userWxName }}</h3>
@@ -34,7 +34,12 @@
 	 v-if="user.userCtype && user.userCtype == '1'">
 	<i slot="icon" class="iconfont icon-client" style="color:#009688;"></i>
 </mt-cell>
-<!-- 
+
+<footer>
+  <p>如有任何问题，请联系客服，添加微信：winitao</p>
+</footer>
+
+<!--
 <template v-if="user.userCtype == '1'">
 	<mt-cell is-link title="我的钱包" to="/user/wallet" style="z-index: 100;">
 		<i slot="icon" class="iconfont icon-wallet" style="color: #ff9800;"></i>
@@ -56,7 +61,7 @@
 	</mt-cell>
 	<mt-cell title="我要推广" is-link to="/popularize/list">
 		<i slot="icon" class="iconfont icon-popularize" style="color:#4caf50;font-size: 10px;margin-left: -3px;"></i>
-	</mt-cell>	
+	</mt-cell>
 </template> -->
 <!-- <mt-cell title="我要下单" is-link to="/product/list">
 	<i slot="icon" class="iconfont icon-go-buy" style="color:#2196f3;"></i>
@@ -82,7 +87,7 @@ export default {
   			}
   		})
   	}
-  }, 
+  },
   activated() {
   	this.user = JSON.parse(sessionStorage.getItem('ebay-app'))
   },
@@ -158,5 +163,16 @@ export default {
 			font-size: 14px;
 		}
 	}
-}	
+}
+footer {
+  width: 100%;
+  position:fixed;
+  bottom: 80px;
+  text-align: center;
+  p{
+    font-size:  12px;
+    line-height:  16px;
+    color:  rgb(192, 191, 191);
+  }
+}
 </style>

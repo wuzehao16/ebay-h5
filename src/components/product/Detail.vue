@@ -368,7 +368,6 @@ export default {
       })
     },
     unfoldProductDescription() {
-      console.log(1);
       this.productDescriptionShow = true;
     },
     closeProductDescription() {
