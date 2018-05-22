@@ -30,18 +30,18 @@
       <mt-cell title="商品金额">
         <div class="red-color">￥{{ total.price }}</div>
       </mt-cell>
-      <mt-cell title="运费">
+      <mt-cell title="运费" label="包含于商品金额">
         <div class="red-color">￥{{ total.carriageFee }}</div>
       </mt-cell>
-      <mt-cell title="税费">
+      <mt-cell title="税费" label="包含于商品金额">
         <div class="red-color">￥{{ total.taxFee }}</div>
       </mt-cell>
       <mt-cell title="预计到货时间">
         <div class="red-color">{{ formatTime((new Date().getTime() + 15*24*60*60*1000), 'yyyy-MM-dd') }}</div>
       </mt-cell>      
-      <mt-cell>
+<!--       <mt-cell>
         <div>实付金额：<span class="red-color">￥{{ total.money }}</span></div>
-      </mt-cell>
+      </mt-cell> -->
       <div class='to-wechat'>
         <mt-button size="large" @click="submitOrder" :disabled="payStatus">微信支付</mt-button>
       </div>
@@ -139,7 +139,6 @@ export default {
       Object.assign(this.order_info, this.receiver_info, {
         openid: this.ebay_app.userWxOpenid
       })
-      //一个订单多商品保存接口未完善，所以该类情况下先不保存，以重新创建订单处理
       if (this.order_info.orderId && this.order_info.items.length == 1) { //已建订单
         reqBuyerOrderEdit(this.order_info).then((res) => {
           if (res.data.code == 0) {
@@ -159,8 +158,7 @@ export default {
             let r = res.data.data
             this.pay_info.orderGroupNo = r.orderGroupNo
             this.order_info.orderId = r.orderGroupNo
-            //一个订单多商品保存接口未完善，所以该类情况下先不保存，以重新创建订单处理
-            // this.order_info.orderMasterId = r.orderMasterId
+
             //如已下单商存在于购物车中，则去掉
             let orderIdArr = r.orderId.split(',')
             let j = 0
@@ -190,19 +188,21 @@ export default {
     total() {
       let c = 0,
         t = 0,
-        p = 0,
-        m = 0
+        p = 0
       if (this.order_info.items) {
         for (let i of this.order_info.items) {
           let carriage = i.carriageFee || 0
           let tax = i.taxFee || 0
           p += i.productPrice * i.productQuantity
-          c += carriage
-          t += tax
+          c += carriage * i.productQuantity
+          t += tax * i.productQuantity
         }
       }
-      m = c + t + p
-      return { carriageFee: c, taxFee: t, price: p, money: m }
+      return { 
+        carriageFee: c.toFixed(2), 
+        taxFee: t.toFixed(2), 
+        price: p.toFixed(2) 
+      }
     }
   },
   activated() {
@@ -258,7 +258,6 @@ export default {
             this.receiver_info.cneePhone = cnee.cneePhone
             this.receiver_info.cneeAddress = cnee.cneeAddress
           }
-
         }
       })
     }

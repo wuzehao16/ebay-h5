@@ -128,12 +128,6 @@ export default {
       currentValue: '',
       showAll: false,
       show_tip: false,
-      else_key: [], //单属性
-      else_value: [],
-      optionAttr: {
-        key: {}, //选择属性
-        value: {},
-      },
       itemIds: [],
 
       isEdit: false,
@@ -265,6 +259,8 @@ export default {
         return false
       }
       this.loading = true
+
+      this.pro_info.items = []
       //把商品规格单属性放进items
       if(this.ebay.localizedAspects){
         for (let i of this.ebay.localizedAspects) {
@@ -533,7 +529,7 @@ export default {
     this.showAll = false
     this.currentValue = ''
     this.pro_info = Object.assign({}, this.pro_info_bak)
-
+    this.ebay = {}
     this.productId = this.$route.params.productId
     if (this.productId) {
       this.currentValue = this.$route.params.ebayItemid
