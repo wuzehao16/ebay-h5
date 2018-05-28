@@ -34,15 +34,14 @@ Vue.use(Router)
 
 let router = new Router({
   mode: 'history',
-  scrollBehavior (to, from, savedPosition) {
+  scrollBehavior(to, from, savedPosition) {
     if (to.name == 'PorductDetail') {
       document.getElementById('app').scrollTop = 0
     }
     return { x: 0, y: 0 }
   },
-  routes: [
-    {
-   	  path: '/',
+  routes: [{
+      path: '/',
       redirect: '/product/list',
     },
     {
@@ -172,27 +171,27 @@ let router = new Router({
   ]
 })
 
-import {reqWechatUserInfo, reqWechatSignature} from '../api'
+import { reqWechatUserInfo, reqWechatSignature } from '../api'
 import store from '@/store'
-import {baseUrl} from '../api'
+import { baseUrl } from '../api'
 import { MessageBox } from 'mint-ui'
 router.beforeEach((to, from, next) => {
 
   if (to.name == 'PcPreviewGoods') {
     next()
   } else {
-    let user = JSON.parse( sessionStorage.getItem('ebay-app') )
+    let user = JSON.parse(sessionStorage.getItem('ebay-app'))
     let openid = to.query.wxOpenid
 
-    if (!user && !openid) {//未申请授权
-      let returnUrl = location.protocol + "//" + location.host
-            + (to.path || '/product/list')
+    if (!user && !openid) { //未申请授权
+      let returnUrl = location.protocol + "//" + location.host +
+        (to.path || '/product/list')
       returnUrl = window.encodeURIComponent(returnUrl)
       let aa = baseUrl + '/sell/wechat/authorize?returnUrl=' + returnUrl
       window.location.href = aa
 
-    } else if (!user && openid) {//已完成授权但未从后台获取已授权用户的信息
-      reqWechatUserInfo({openid}).then((res) => {
+    } else if (!user && openid) { //已完成授权但未从后台获取已授权用户的信息
+      reqWechatUserInfo({ openid }).then((res) => {
         if (res.data.code == 0) {
           let obj = res.data.data
           sessionStorage.setItem('ebay-app', JSON.stringify(obj))
@@ -202,8 +201,8 @@ router.beforeEach((to, from, next) => {
         }
       }).catch((err) => {})
     } else {
-      if (user.userCtype && user.userCtype == '2'
-        && store.state.authPage.includes(to.name)) {
+      if (user.userCtype && user.userCtype == '2' &&
+        store.state.authPage.includes(to.name)) {
         MessageBox.confirm('分销商才有权限进入，去注册成为分销商?').then(action => {
           next('/user/register')
         }).catch(err => {
@@ -219,41 +218,42 @@ router.beforeEach((to, from, next) => {
     }
   }
 
-//   let user = {
-//     id: '4',
-//     userWxOpenid: 'oyNDcwRlUVJ6JakWZlhjAnNQzTuo',
-//     userCtype: '1',
-//     userPhone: '13877887788',
-//     userAddr: 'xxx省uu市fddkjflkj',
-//     userWxName: 'Cons.Van'
-//   }
-//   sessionStorage.setItem('ebay-app', JSON.stringify(user))
-// next()
+  /*  let user = {
+      id: '4',
+      userWxOpenid: 'oyNDcwRlUVJ6JakWZlhjAnNQzTuo',
+      userCtype: '1',
+      userPhone: '13877887788',
+      userAddr: 'xxx省uu市fddkjflkj',
+      userWxName: 'Cons.Van'
+    }
+    sessionStorage.setItem('ebay-app', JSON.stringify(user))
+  next()*/
 })
 
 router.afterEach((to, from) => {
   //特定页面不显示底部
-    if ([ 'AddressList', 'Address', 'OrderDetail', 'PcPreviewGoods',
-       'PorductDetail', 'SettleOrder', 'Withdraw', 'Register', 'LogisticsInfo' ].includes(to.name)) {
-        store.state.showFoot = false
-    } else {
-        store.state.showFoot = true
-    }
+  if (['AddressList', 'Address', 'OrderDetail', 'PcPreviewGoods',
+      'PorductDetail', 'SettleOrder', 'Withdraw', 'Register', 'LogisticsInfo'
+    ].includes(to.name)) {
+    store.state.showFoot = false
+  } else {
+    store.state.showFoot = true
+  }
 
-    //微信分享： IOS第一次加签，之后不变
-    //如是非IOS, 每进需要分享的页面重新加签
-    if (!store.state.isConfiged && store.state.isIOS ) {
-      reqWechatSignature({url: document.location.href}).then((res) => {
-        if (res.data.code == 0) {
-          let obj = Object.assign({
-            debug: false,//true会有弹框
-            jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
-          }, res.data.data)
-          store.state.wx.config(obj)
-          store.state.isConfiged = true
-        }
-      })
-    }
+  //微信分享： IOS第一次加签，之后不变
+  //如是非IOS, 每进需要分享的页面重新加签
+  if (!store.state.isConfiged && store.state.isIOS) {
+    reqWechatSignature({ url: document.location.href }).then((res) => {
+      if (res.data.code == 0) {
+        let obj = Object.assign({
+          debug: false, //true会有弹框
+          jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
+        }, res.data.data)
+        store.state.wx.config(obj)
+        store.state.isConfiged = true
+      }
+    })
+  }
 })
 
 export default router
