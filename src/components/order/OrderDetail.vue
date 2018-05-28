@@ -37,7 +37,6 @@
 </mt-cell>
 
 <div style="margin: 10px 0;">
-<!-- <mt-cell title='万邑淘' value='共计xxx件商品'></mt-cell> -->
 <mt-cell v-if='order.productList'  v-for="(o, index) in order.productList" :key="index">
 	<div slot="title" class="order-container" :style="{'background':
 		'url(' + o.orderDetail.productIcon + ') left center no-repeat'}">
@@ -46,23 +45,14 @@
 		<span class="amount">x{{ o.orderDetail.productQuantity }}</span></div>
 	</div>
 </mt-cell>
-
-<mt-cell v-if='order.orderDetailList'  v-for="(o, index) in order.orderDetailList" :key="index">
-	<div slot="title" class="order-container" :style="{'background':
-		'url(' + o.productIcon + ') left center no-repeat'}">
-		<h3>{{ o.productName }}</h3>
-		<div><span class="price">￥{{ o.productPrice }}</span>
-		<span class="amount">x{{ o.productQuantity }}</span></div>
-	</div>
-</mt-cell>
 </div>
 
 <mt-cell>
 	<ul slot='title' class="wrap-one just-spe">
 		<li><i>商品金额：</i>
 			<span class="high-light">￥{{ goodsMoney }}</span></li>
-		<li><i>税费：</i><span class="high-light">￥{{ order.carriageFee }}</span></li>
-		<li><i>运费：</i><span class="high-light">￥{{ order.taxFee }}</span></li>
+		<li><i>税费（包含于商品金额）：</i><span class="high-light">￥{{ taxFee }}</span></li>
+		<li><i>运费（包含于商品金额）：</i><span class="high-light">￥{{ cFee }}</span></li>
 	</ul>
 </mt-cell>
 
@@ -83,11 +73,11 @@ export default {
   	}
   },
   beforeRouteEnter (to, from, next) {
-    console.log('from.name',from.name)
   	if (from.name == 'OrderList' || from.name == 'DistriOrderList') {
-  		next(vm => {
+	    next(vm => {  
 		  	vm.order = to.params.order
-		  	console.log('vm.order',vm.order)
+		    console.log('vm.order',vm.order)
+            console.log('2:', vm.order.orderDetailList)
 		  	//   '17091924161'
 		  	reqLogistics({logisticsNo: vm.order.logisticsNo}).then((res) => {
 		  		let r = res.data.data
@@ -104,8 +94,25 @@ export default {
   },
   computed: {
   	goodsMoney() {
-  		return (this.order.orderAmount - this.order.carriageFee - this.order.taxFee).toFixed(2)
-  	}
+  		// return (this.order.orderAmount - this.order.carriageFee - this.order.taxFee).toFixed(2)
+        return this.order.orderAmount
+  	},
+    taxFee() {
+        let a = this.order.productList
+        if (a) {
+            return a[0].taxFee * a[0].orderDetail.productQuantity
+        } else {
+            return 0
+        }
+    },
+    cFee() {
+        let a = this.order.productList
+        if (a) {
+            return a[0].carriageFee * a[0].orderDetail.productQuantity
+        } else {
+            return 0
+        }       
+    }
   },
   methods: {
   	goLogi() {
@@ -118,14 +125,11 @@ export default {
   		})
   	}
   },
-  mounted() {
+  activated() {
   	let a = this.$route.params.order
-  	reqBuyerOrderDetail({
-  		openid: a.buyerOpenid,
-  		orderId: a.orderNo
-  	}).then((res) => {
-
-  	})
+    if (!a) {
+        this.$router.push('/order/list')
+    }
   }
 }
 </script>

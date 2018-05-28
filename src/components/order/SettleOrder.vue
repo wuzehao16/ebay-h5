@@ -206,7 +206,6 @@ export default {
     }
   },
   activated() {
-    console.log('test commit gitlab')
     this.order_info = JSON.parse(sessionStorage.getItem('order_info'))
     if (!this.order_info) {
       this.$router.push('/product/list')
