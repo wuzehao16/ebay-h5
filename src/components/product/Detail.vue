@@ -74,8 +74,8 @@
       </dl>
     </template>
     <div class="fee-wrap">
-      <mt-cell title="运费" label="已包含于商品金额" :value="carriageFee"></mt-cell>
-      <mt-cell title="税费" label="已包含于商品金额" :value="taxFee"></mt-cell>
+      <mt-cell title="包含运费"  :value="carriageFee"></mt-cell>
+      <mt-cell title="包含税费"  :value="taxFee"></mt-cell>
     </div>
     <dl>
       <dt class="number-title">数量</dt>

@@ -218,16 +218,16 @@ router.beforeEach((to, from, next) => {
     }
   }
 
-  /*  let user = {
-      id: '4',
-      userWxOpenid: 'oyNDcwRlUVJ6JakWZlhjAnNQzTuo',
-      userCtype: '1',
-      userPhone: '13877887788',
-      userAddr: 'xxx省uu市fddkjflkj',
-      userWxName: 'Cons.Van'
-    }
-    sessionStorage.setItem('ebay-app', JSON.stringify(user))
-  next()*/
+  //   let user = {
+  //     id: '4',
+  //     userWxOpenid: 'oyNDcwRlUVJ6JakWZlhjAnNQzTuo',
+  //     userCtype: '1',
+  //     userPhone: '13877887788',
+  //     userAddr: 'xxx省uu市fddkjflkj',
+  //     userWxName: 'Cons.Van'
+  //   }
+  //   sessionStorage.setItem('ebay-app', JSON.stringify(user))
+  // next()
 })
 
 router.afterEach((to, from) => {

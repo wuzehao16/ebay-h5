@@ -14,7 +14,7 @@
       </mt-cell>
       <div class="buying-goods">
         <mt-cell v-for="(order, index) in order_info.items" :key="index" style="margin-bottom: 10px;">
-          <div slot="title" class="order-container" :style="{'background': 
+          <div slot="title" class="order-container" :style="{'background':
 		'url(' + order.productIcon + ') left center no-repeat'}">
             <h3>{{ order.productName }}</h3>
             <small class="small-desc" v-if="order.productAttr">
@@ -27,18 +27,18 @@
           </div>
         </mt-cell>
       </div>
-      <mt-cell title="商品金额">
+      <mt-cell title="商品总价">
         <div class="red-color">￥{{ total.price }}</div>
       </mt-cell>
-      <mt-cell title="运费" label="包含于商品金额">
+      <mt-cell title="包含运费">
         <div class="red-color">￥{{ total.carriageFee }}</div>
       </mt-cell>
-      <mt-cell title="税费" label="包含于商品金额">
+      <mt-cell title="包含税费">
         <div class="red-color">￥{{ total.taxFee }}</div>
       </mt-cell>
       <mt-cell title="预计到货时间">
         <div class="red-color">{{ formatTime((new Date().getTime() + 15*24*60*60*1000), 'yyyy-MM-dd') }}</div>
-      </mt-cell>      
+      </mt-cell>
 <!--       <mt-cell>
         <div>实付金额：<span class="red-color">￥{{ total.money }}</span></div>
       </mt-cell> -->
@@ -198,10 +198,10 @@ export default {
           t += tax * i.productQuantity
         }
       }
-      return { 
-        carriageFee: c.toFixed(2), 
-        taxFee: t.toFixed(2), 
-        price: p.toFixed(2) 
+      return {
+        carriageFee: c.toFixed(2),
+        taxFee: t.toFixed(2),
+        price: p.toFixed(2)
       }
     }
   },
