@@ -44,8 +44,8 @@
       <ul slot='title' class="wrap-one just-spe">
         <li><i>商品总价：</i>
           <span class="high-light">￥{{ goodsMoney }}</span></li>
-        <li><i>包含税费：</i><span class="high-light">￥{{ taxFee }}</span></li>
-        <li><i>包含运费：</i><span class="high-light">￥{{ cFee }}</span></li>
+        <li><i>含税费：</i><span class="high-light">￥{{ taxFee }}</span></li>
+        <li><i>含运费：</i><span class="high-light">￥{{ cFee }}</span></li>
       </ul>
     </mt-cell>
     <mt-cell>

@@ -30,10 +30,10 @@
       <mt-cell title="商品总价">
         <div class="red-color">￥{{ total.price }}</div>
       </mt-cell>
-      <mt-cell title="包含运费">
+      <mt-cell title="含运费">
         <div class="red-color">￥{{ total.carriageFee }}</div>
       </mt-cell>
-      <mt-cell title="包含税费">
+      <mt-cell title="含税费">
         <div class="red-color">￥{{ total.taxFee }}</div>
       </mt-cell>
       <mt-cell title="预计到货时间">
