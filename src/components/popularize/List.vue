@@ -110,7 +110,8 @@ export default {
   methods: {
     goEdit(row) {
       this.$router.push({
-        name: 'EditGoods',
+        //跟新增共用一个组件
+        name: 'AddGoods',
         params: {
           productId: row.id,
           ebayItemid: row.ebayItemid

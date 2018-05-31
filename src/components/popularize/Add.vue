@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container"> 
     <div class="search">
       <div class="mint-searchbar">
         <div class="mint-searchbar-inner">
@@ -108,7 +108,7 @@ import debounce from 'lodash/debounce'
 export default {
   data() {
     return {
-      amount: 10,
+      amount: 100,
       exchaneRate: 6.66,
       chosenItem: {
         key: '',
@@ -316,6 +316,7 @@ export default {
       this.pro_info.productPrice = Number.parseFloat(this.sellPrice)
       this.isEdit ? this.pro_info.productId = this.productId : ''
       this.pro_info.productUsd = Number.parseFloat(this.pro_info.productUsd)
+      this.pro_info.addPrice = this.amount
       Indicator.open({
         spinnerType: 'fading-circle'
       })
@@ -392,7 +393,7 @@ export default {
                   this.isEdit = true
                   p.carriageFee ? this.carriageFeeType = '不包邮' : this.carriageFeeType = '包邮'
                   p.taxFee ? this.taxFeeType = '不包税' : this.taxFeeType = '包税'
-
+                  p.addPrice ? this.amount = p.addPrice : ''
                   this.pro_info.productNane = p.name
                   this.pro_info.productPic = (p.pic ? p.pic.join('@') : '')
                   this.pro_info.productIcon = p.icon
@@ -524,6 +525,7 @@ export default {
     this.categoryPid = ''
     this.carriageFeeType = '包邮'
     this.taxFeeType = '包税'
+    this.amount = 100
   },
   activated() {
     this.showAll = false
