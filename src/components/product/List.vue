@@ -156,6 +156,7 @@ export default {
     },
     goDetail(val) {
       this.$router.push({
+        path:'/product/detail',
         name: 'PorductDetail',
         params: {
           id: val

@@ -7,7 +7,8 @@ Vue.use(Vuex)
 const state = {
 	wx: wx,
 	isConfiged: false,
-	isIOS: !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/),
+	// isIOS: !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/),
+	isIOS: !!navigator.userAgent.match(/iPhone|iPad|iPod/i),
 	count: 1,
 	proListTop: 0,
 	isLogin: false,
