@@ -4,23 +4,23 @@
 <mt-field label="收货人" v-model="addForm.cneeName" placeholder="请输入收货人姓名" ></mt-field>
 <mt-field label="手机号" v-model="addForm.cneePhone" placeholder="请输入收货人手机号码" type="tel"></mt-field>
 <mt-field label="身份证号" v-model="addForm.cneeIdcard" placeholder="请输入收货人身份证号" type="tel"></mt-field>
-<mt-field label="省" placeholder="请选择省份" class="input-address" 
+<mt-field label="省" placeholder="请选择省份" class="input-address"
   v-model="addressProvince" >
   <div @click="popupVisible = true"></div>
 </mt-field>
-<mt-field label="市" placeholder="请选择市" class="input-address" 
+<mt-field label="市" placeholder="请选择市" class="input-address"
   v-model="addressCity" >
   <div @click="touchCity"></div>
 </mt-field>
-<mt-field label="区/县" placeholder="请选择区/县" class="input-address" 
+<mt-field label="区/县" placeholder="请选择区/县" class="input-address"
   v-model="addressXian" >
   <div @click="touchXian"></div>
 </mt-field>
-<mt-field label="乡镇/街道" placeholder="请选择乡镇/街道" class="input-address" 
+<mt-field label="乡镇/街道" placeholder="请选择乡镇/街道" class="input-address"
   v-model="addressStreet">
   <div @click="touchStreet"></div>
 </mt-field>
-<mt-field label="详细地址" v-model="addressDetail" placeholder="请输入详细地址" 
+<mt-field label="详细地址" v-model="addressDetail" placeholder="请输入详细地址"
   rows="3" type="textarea" class="address-details"></mt-field>
 
 <div class="address-info">详细地址需填写楼栋层或房间号信息</div>
@@ -28,7 +28,7 @@
 <div style="margin: 10px;">
   <mt-button type="primary" size="large" style="margin-bottom: 8px;" @click="addressSubmit">确认</mt-button>
   <mt-button type="default" size="large" style="margin-bottom: 8px;" @click="setDefault" v-if="isEdit">设为默认地址</mt-button>
-  <mt-button type="danger" size="large" @click="deleteSubmit" v-if="isEdit">删除地址</mt-button>  
+  <mt-button type="danger" size="large" @click="deleteSubmit" v-if="isEdit">删除地址</mt-button>
 </div>
 <!-- 省 -->
 <mt-popup class="popup-width"
@@ -167,7 +167,7 @@ export default {
       }
       Indicator.open({
         spinnerType: 'fading-circle'
-      })      
+      })
       reqAddressDelete(obj).then(res => {
         Indicator.close()
         if (res.data.code == 0) {
@@ -183,7 +183,7 @@ export default {
                    needRefresh: true
                 }
             })
-          }, 2000)  
+          }, 2000)
         } else {
           Toast(res.data.msg)
         }
@@ -205,12 +205,12 @@ export default {
         })
         return false
       }
-      if ( !/(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}(\d|x|X)$)/.test(this.addForm.cneeIdcard) ){
+      if ( !/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[012])(0[1-9]|[12]\d|3[01])\d{3}(\d|[xX])$/.test(this.addForm.cneeIdcard) ){
         Toast({
           message: "请输入正确身份证号码",
           position: "top"
         })
-        return false    
+        return false
       }
       if (!this.addressProvince ||!this.addressCity ||!this.addressXian||!this.addressStreet||this.addressProvince.match(/^[ ]*$/)||this.addressCity.match(/^[ ]*$/)||this.addressXian.match(/^[ ]*$/)||this.addressStreet.match(/^[ ]*$/)) {
         Toast({
@@ -248,7 +248,7 @@ export default {
         this.addressDetail;
       Indicator.open({
         spinnerType: 'fading-circle'
-      })           
+      })
       reqAddressCreate(this.addForm).then(res => {
         Indicator.close()
         if (res.data.code == 0) {
@@ -352,7 +352,7 @@ export default {
     this.addressCity = ""
     this.addressXian = ""
     this.addressStreet = ""
-    this.addressDetail = ""    
+    this.addressDetail = ""
   },
   mounted() {
     this.addForm_bak = Object.assign({}, this.addForm)
