@@ -380,35 +380,6 @@ export default {
     reqIsoCountryJson().then((res) => {
       this.isoCountry = res.data
     })
-    wx.ready(function(){
-      wx.onMenuShareTimeline({
-          title: title, // 分享标题
-          link: link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-          imgUrl: imgUrl, // 分享图标
-          success: function () {
-              // 用户确认分享后执行的回调函数
-          },
-          cancel: function () {
-              // 用户取消分享后执行的回调函数
-          }
-      })
-      wx.onMenuShareAppMessage({
-          title: title, // 分享标题
-          desc: desc, // 分享描述
-          link: link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-          imgUrl: imgUrl, // 分享图标
-          type: '', // 分享类型,music、video或link，不填默认为link
-          dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
-          success: function () {
-              // 用户确认分享后执行的回调函数
-              alert(1)
-          },
-          cancel: function () {
-              // 用户取消分享后执行的回调函数
-              // console.log("cancel")
-          }
-      })
-    })
   },
   activated() {
     this.selectedAttr = []
@@ -445,7 +416,7 @@ export default {
         let shareUrl = location.protocol + "//" + location.host +
           '/product/detail/' + productId;
           // alert(shareUrl)
-        // this.wxShare(this.productInfo.name, this.productInfo.productMemo, shareUrl, this.productInfo.icon)
+        this.wxShare(this.productInfo.name, this.productInfo.productMemo, shareUrl, this.productInfo.icon)
       }).catch(err => {
         // this.$router.push('/product/list')
         console.log(err)

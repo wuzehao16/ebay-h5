@@ -31,14 +31,14 @@
       <div>
         <!-- <div style="height: 42px;"></div> -->
         <mt-cell class='set-shadow' v-for="d in pro_list" :key="d.created">
-          <div slot="title" class="goodss-list" @click="goDetail(d.id)">
+          <a slot="title" class="goodss-list"  :href="'detail/' + d.id">
             <div class="avatar" :style="{'background': 'url(' + d.productIcon + ') no-repeat center center'}"></div>
             <div class="right">
               <div class="title">{{ d.productNane }}</div>
               <div class="price">￥{{ d.productPrice }}</div>
               <mt-button type="primary" size="small">立即购买</mt-button>
             </div>
-          </div>
+          </a>
         </mt-cell>
         <div style="height: 50px;"></div>
       </div>
@@ -50,14 +50,14 @@
       <div class="no-data" v-if='tip_flag' style="background:none;">{{ tip_text }}</div>
       <div v-if="showSearched" style="margin-bottom: 50px;">
         <mt-cell class='set-shadow' v-for="d in pro_search_list" :key="d.created">
-          <div slot="title" class="goodss-list" @click="goDetail(d.id)">
+          <a slot="title" class="goodss-list"  :href="'detail/' + d.id">
             <div class="avatar" :style="{'background': 'url(' + d.productIcon + ') no-repeat center center'}"></div>
             <div class="right">
               <div class="title">{{ d.productNane }}</div>
               <div class="price">￥{{ d.productPrice }}</div>
               <mt-button type="primary" size="small">立即购买</mt-button>
             </div>
-          </div>
+          </a>
         </mt-cell>
       </div>
     </mt-popup>
@@ -317,6 +317,7 @@ $shadow-color: #ececec;
   padding: 5px;
   height: 110px; // width: 110px;
   line-height: 26px;
+  color:#000;
   display: flex;
   .avatar {
     flex: 0 0 100px;
