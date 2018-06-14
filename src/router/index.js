@@ -182,7 +182,6 @@ router.beforeEach((to, from, next) => {
   } else {
     let user = JSON.parse(sessionStorage.getItem('ebay-app'))
     let openid = to.query.wxOpenid
-
     if (!user && !openid) { //未申请授权
       let returnUrl = location.protocol + "//" + location.host +
         (to.path || '/product/list')
@@ -195,7 +194,7 @@ router.beforeEach((to, from, next) => {
         if (res.data.code == 0) {
           let obj = res.data.data
           sessionStorage.setItem('ebay-app', JSON.stringify(obj))
-          next(to.name)
+          next(to.path)
         } else {
           next('/product/list')
         }
@@ -242,18 +241,18 @@ router.afterEach((to, from) => {
 
   //微信分享： IOS第一次加签，之后不变
   //如是非IOS, 每进需要分享的页面重新加签
-  if (!store.state.isConfiged && store.state.isIOS) {
-    reqWechatSignature({ url: document.location.href }).then((res) => {
-      if (res.data.code == 0) {
-        let obj = Object.assign({
-          debug: false, //true会有弹框
-          jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
-        }, res.data.data)
-        store.state.wx.config(obj)
-        store.state.isConfiged = true
-      }
-    })
-  }
+  // if (!store.state.isConfiged && store.state.isIOS) {
+  //   reqWechatSignature({ url: document.location.href }).then((res) => {
+  //     if (res.data.code == 0) {
+  //       let obj = Object.assign({
+  //         debug: false, //true会有弹框
+  //         jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
+  //       }, res.data.data)
+  //       store.state.wx.config(obj)
+  //       store.state.isConfiged = true
+  //     }
+  //   })
+  // }
 })
 
 export default router

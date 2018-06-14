@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 // test
-// axios.defaults.baseURL = 'http://fks3989.tunnel.qydev.com'
+// axios.defaults.baseURL = 'hhttp://ccasdf.picp.net:12096'
 
 export const baseUrl = (process.env.NODE_ENV === 'production') ? 'http://www.wstsoftware.com' : 'http://localhost:8080'
 

@@ -181,28 +181,36 @@ export default {
       productDescriptionShow: false
     }
   },
+  // beforeRouteEnter(to, from, next) {
+  //   let user = JSON.parse(sessionStorage.getItem('ebay-app'))
+  //   let openid = to.query.wxOpenid
+  //   if (!user && !openid) {
+  //     let returnUrl = location.protocol + '//' + location.host + to.path
+  //     reqWechatUrl({ returnUrl }).then((res) => {
+  //       if (res.data.code == 0) {
+  //         location.href = res.data.data
+  //       } else {
+  //         next('/product/list')
+  //       }
+  //     }).catch((err) => { next('/product/list') })
+  //   } else if (!user && openid) {
+  //     reqWechatUserInfo({ openid }).then((res) => {
+  //       if (res.data.code == 0) {
+  //         let obj = res.data.data
+  //         sessionStorage.setItem('ebay-app', JSON.stringify(obj))
+  //         next()
+  //       } else {
+  //         next('/product/list')
+  //       }
+  //     }).catch((err) => {})
+  //   } else {
+  //     next()
+  //   }
+  // },
   beforeRouteEnter(to, from, next) {
-    let user = JSON.parse(sessionStorage.getItem('ebay-app'))
-    let openid = to.query.wxOpenid
-    if (!user && !openid) {
-      let returnUrl = location.protocol + '//' + location.host + to.path
-      reqWechatUrl({ returnUrl }).then((res) => {
-        if (res.data.code == 0) {
-          location.href = res.data.data
-        } else {
-          next('/product/list')
-        }
-      }).catch((err) => { next('/product/list') })
-    } else if (!user && openid) {
-      reqWechatUserInfo({ openid }).then((res) => {
-        if (res.data.code == 0) {
-          let obj = res.data.data
-          sessionStorage.setItem('ebay-app', JSON.stringify(obj))
-          next()
-        } else {
-          next('/product/list')
-        }
-      }).catch((err) => {})
+    if (to.path !== location.pathname) {
+      // 此处不可使用location.replace
+      location.assign(to.fullPath)
     } else {
       next()
     }
@@ -380,8 +388,6 @@ export default {
     reqIsoCountryJson().then((res) => {
       this.isoCountry = res.data
     })
-  },
-  activated() {
     this.selectedAttr = []
     this.option_list = {}
     this.ebayItemid = null
@@ -415,7 +421,6 @@ export default {
         // }
         let shareUrl = location.protocol + "//" + location.host +
           '/product/detail/' + productId;
-          // alert(shareUrl)
         this.wxShare(this.productInfo.name, this.productInfo.productMemo, shareUrl, this.productInfo.icon)
       }).catch(err => {
         // this.$router.push('/product/list')
@@ -431,6 +436,57 @@ export default {
       this.$store.commit('resetCartAmountFlag')
       this.getCartAmount()
     }
+  },
+  activated() {
+  //   this.selectedAttr = []
+  //   this.option_list = {}
+  //   this.ebayItemid = null
+  //   if (this.$route.query.pc_preview) {
+  //     this.isPreview = true
+  //   } else {
+  //     this.isPreview = false
+  //   }
+  //
+  //   if (this.$route.params.id || this.isPreview) {
+  //     let productId = this.$route.params.id || this.$route.query.pc_preview
+  //     reqProductDetail({ productId }).then((res) => {
+  //       this.productInfo = res.data.data
+  //
+  //       this.getOptions()
+  //
+  //       if (this.productInfo.carriageFee) {
+  //         this.carriageFee = '￥' + this.productInfo.carriageFee
+  //       } else {
+  //         this.carriageFee = '包邮'
+  //       }
+  //       if (this.productInfo.taxFee) {
+  //         this.taxFee = '￥' + this.productInfo.taxFee
+  //       } else {
+  //         this.taxFee = '包税'
+  //       }
+  //
+  //       //微信分享
+  //       if (!this.isIOS()) {
+  //         this.wxConfig()
+  //       }
+  //       let shareUrl = location.protocol + "//" + location.host +
+  //         '/product/detail/' + productId;
+  //         // alert(shareUrl)
+  //       this.wxShare(this.productInfo.name, this.productInfo.productMemo, shareUrl, this.productInfo.icon)
+  //     }).catch(err => {
+  //       // this.$router.push('/product/list')
+  //       console.log(err)
+  //     })
+  //   } else {
+  //     this.$router.push('/product/list')
+  //   }
+  //   if (this.$route.params.isPreview) {
+  //     this.isPreview = this.$route.params.isPreview
+  //   }
+  //   if (this.$store.state.cartAmount == 'changed') {
+  //     this.$store.commit('resetCartAmountFlag')
+  //     this.getCartAmount()
+  //   }
   }
 }
 
