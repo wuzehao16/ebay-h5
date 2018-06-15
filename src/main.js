@@ -40,8 +40,6 @@ import {reqWechatSignature} from './api'
 
 Vue.prototype.wxConfig = function () {
 	let url = document.location.href
-  // alert(url)
-  // url = encodeURIComponent(url)
 	reqWechatSignature({url}).then((res) => {
 		if (res.data.code == 0) {
       let obj = Object.assign({

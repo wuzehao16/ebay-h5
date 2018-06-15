@@ -194,7 +194,7 @@ router.beforeEach((to, from, next) => {
         if (res.data.code == 0) {
           let obj = res.data.data
           sessionStorage.setItem('ebay-app', JSON.stringify(obj))
-          next(to.path)
+          location.assign(to.path)
         } else {
           next('/product/list')
         }
