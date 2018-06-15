@@ -186,9 +186,8 @@ router.beforeEach((to, from, next) => {
       let returnUrl = location.protocol + "//" + location.host +
         (to.path || '/product/list')
       returnUrl = window.encodeURIComponent(returnUrl)
-      let aa = baseUrl + '/sell/wechat/authorize?returnUrl=' + returnUrl
-      window.location.href = aa
-
+      let url = baseUrl + '/sell/wechat/authorize?returnUrl=' + returnUrl
+      location.assign(url)
     } else if (!user && openid) { //已完成授权但未从后台获取已授权用户的信息
       reqWechatUserInfo({ openid }).then((res) => {
         if (res.data.code == 0) {
@@ -201,7 +200,7 @@ router.beforeEach((to, from, next) => {
       }).catch((err) => {})
     } else {
       if (user.userCtype && user.userCtype == '2' &&
-        store.state.authPage.includes(to.name)) {
+        store.state.authPage.some(el => el == to.name)) {
         MessageBox.confirm('分销商才有权限进入，去注册成为分销商?').then(action => {
           next('/user/register')
         }).catch(err => {
@@ -233,7 +232,7 @@ router.afterEach((to, from) => {
   //特定页面不显示底部
   if (['AddressList', 'Address', 'OrderDetail', 'PcPreviewGoods',
       'PorductDetail', 'SettleOrder', 'Withdraw', 'Register', 'LogisticsInfo'
-    ].includes(to.name)) {
+    ].some(el => el == to.name)) {
     store.state.showFoot = false
   } else {
     store.state.showFoot = true

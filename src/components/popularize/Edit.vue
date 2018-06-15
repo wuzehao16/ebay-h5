@@ -40,7 +40,7 @@
           <div slot="title">
             <mt-picker :slots="itemsAttrSlots" @change="changeAttr"></mt-picker>
             <div class="attr-wrap">
-              <p v-if="Object.keys(ebay.optionAttr).includes(k) || k == 'price'" v-for="(v, k, i) in chosenItem.value">
+              <p v-if="Object.keys(ebay.optionAttr).some(el => el == k) || k == 'price'" v-for="(v, k, i) in chosenItem.value">
                 {{ k }}:&nbsp;&nbsp;{{ v }}
               </p>
             </div>

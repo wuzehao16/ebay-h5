@@ -3,12 +3,12 @@
     <div>
       <mt-cell-swipe v-for="c in cart_list" :key="Math.random()" :right="[{
 	content: '删除',
-	style: {background:'red', color: '#fff', display: 'flex', 'align-items': 'center'}, 
+	style: {background:'red', color: '#fff', display: 'flex', 'align-items': 'center'},
 	handler: () => deletePro(c)
 	}]" class="cart-cell">
         <div slot="title" class='shop-cart'>
           <div class="check-box">
-            <mt-checklist v-model="checked_pro" :options="Array.of(getFlag(c))">
+            <mt-checklist v-model="checked_pro" :options="Array(getFlag(c))">
             </mt-checklist>
           </div>
           <div slot="title" class="shop-cart-list" :style="{'background': 'url(' + c.productIcon + ') no-repeat left center'}">
@@ -89,7 +89,7 @@ export default {
         sumPrice = 0
 
       for (let i of this.cart_list) {
-        if (this.checked_pro.includes(this.getFlag(i))) {
+        if (this.checked_pro.some(el => el == this.getFlag(i))) {
           sumAmount += i.productQuantity
           sumPrice += i.productPrice * i.productQuantity
         }
@@ -121,14 +121,14 @@ export default {
     },
     increase(c) {
       c.productQuantity++
-        if ( !this.checked_pro.includes(this.getFlag(c)) ) {
+        if ( !this.checked_pro.some(el => el == this.getFlag(c)) ) {
           this.checked_pro.push(this.getFlag(c))
         }
     },
     goSettle() {
       let items = []
       for (let i of this.cart_list) {
-        if (this.checked_pro.includes(this.getFlag(i))) {
+        if (this.checked_pro.some(el => el == this.getFlag(i))) {
           i.carriageFee = i.carriage
           items.push(i)
         }

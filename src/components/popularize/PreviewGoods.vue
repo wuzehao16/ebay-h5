@@ -35,7 +35,7 @@
     </div>
     <mt-cell>
       <div slot='title' class='country-wrap' v-if="productInfo.productCountry">
-        <img :src="staticBase + '/resource/flags_24/' + 
+        <img :src="staticBase + '/resource/flags_24/' +
         (productInfo.productCountry || '').toLowerCase() + '.png' ">
         <span>{{ EN_To_CN }}品牌</span>
       </div>
@@ -172,7 +172,7 @@ export default {
             if (n && n.key && n.key != m[0]) {
               let jArr = j.itemid.split('@')
               let nArr = n.itemid.split('@')
-              let n_flag = jArr.some(x =>  nArr.includes(x))
+              let n_flag = jArr.some(x =>  nArr.some(el => el == x))
               flag = flag && n_flag
             }
           }
@@ -251,7 +251,7 @@ export default {
     }
 
     if (this.$route.params.id || this.isPreview) {
-      let productId = this.$route.params.id || this.$route.query.pc_preview 
+      let productId = this.$route.params.id || this.$route.query.pc_preview
       reqProductDetail({ productId }).then((res) => {
         this.productInfo = res.data.data
 

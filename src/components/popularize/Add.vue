@@ -1,5 +1,5 @@
 <template>
-  <div class="container"> 
+  <div class="container">
     <div class="search">
       <div class="mint-searchbar">
         <div class="mint-searchbar-inner">

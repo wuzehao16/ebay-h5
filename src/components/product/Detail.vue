@@ -250,7 +250,7 @@ export default {
             if (n && n.key && n.key != m[0]) {
               let jArr = j.itemid.split('@')
               let nArr = n.itemid.split('@')
-              let n_flag = jArr.some(x => nArr.includes(x))
+              let n_flag = jArr.some(x => nArr.some(el => el ==x))
               flag = flag && n_flag
             }
           }
