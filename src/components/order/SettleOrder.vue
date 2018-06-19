@@ -89,6 +89,7 @@ export default {
       })
     },
     onBridgeReady(payResponse) {
+      console.log(this.order_info)
       let _this = this
       WeixinJSBridge.invoke(
         'getBrandWCPayRequest', {
@@ -218,6 +219,7 @@ export default {
       this.receiver_info.cneeName = a.cneeName
       this.receiver_info.cneePhone = a.cneePhone
       this.receiver_info.cneeAddress = a.cneeAddress
+      this.receiver_info.cneeIdcard = a.cneeIdcard
     }
   },
   deactivated() {
@@ -257,6 +259,7 @@ export default {
             this.receiver_info.cneeName = cnee.cneeName
             this.receiver_info.cneePhone = cnee.cneePhone
             this.receiver_info.cneeAddress = cnee.cneeAddress
+            this.receiver_info.cneeIdcard = cnee.cneeIdcard
           }
         }
       })
