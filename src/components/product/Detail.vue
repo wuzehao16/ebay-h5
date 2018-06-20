@@ -40,7 +40,7 @@
       <div slot='title' class='country-wrap' v-if="productInfo.productCountry">
         <img :src="staticBase + '/resource/flags_24/' +
         (productInfo.productCountry || '').toLowerCase() + '.png' ">
-        <span>{{ EN_To_CN }}品牌</span>
+        <span>来自{{ EN_To_CN }}</span>
       </div>
       <div class='country-wrap'>
         <i class="iconfont icon-plane"></i>
