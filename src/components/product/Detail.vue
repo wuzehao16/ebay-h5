@@ -2,7 +2,7 @@
   <div class="container">
     <mt-swipe :auto="5000" :speed="0" class="pre-banner" style="background: #fff;">
       <mt-swipe-item v-for="(url,index) in productInfo.pic" :key="index">
-        <div :style="{'background-image': 'url(' + url + ')'}" class="wrapper">
+        <div :style="{'background-image': 'url(' + url + ')'}" class="wrapper" @click="showBigImg">
           <span v-if="productInfo.pic && productInfo.pic.length> 0" class="page-nub">
       <span class="num1">{{index+1}}</span>
           <span class="bg">/</span>
@@ -11,6 +11,23 @@
         </div>
       </mt-swipe-item>
     </mt-swipe>
+    <!-- 全屏swiper -->
+    <div class="full-banner-container" v-show="showImg">
+      <mt-swipe :auto="0" :speed="0" :showIndicators='false' class="full-banner" style="background: #fff;">
+        <mt-swipe-item v-for="(url,index) in productInfo.pic" :key="index">
+          <div class="close" @click="showBigImg">
+            x
+          </div>
+          <div :style="{'background-image': 'url(' + url + ')'}" class="wrapper" @click="showBigImg">
+            <span v-if="productInfo.pic && productInfo.pic.length> 0" class="page-nub">
+        <span class="num1">{{index+1}}</span>
+            <span class="bg">/</span>
+            <span class="num2">{{productInfo.pic.length}}</span>
+            </span>
+          </div>
+        </mt-swipe-item>
+      </mt-swipe>
+    </div>
     <mt-tabbar :fixed="true" class="addCart">
       <template v-if="!isPreview && productInfo.auditStatus == '1' ">
         <div class="cart">
@@ -159,6 +176,7 @@ import { Toast } from 'mint-ui'
 export default {
   data() {
     return {
+      showImg:false,
       staticBase: staticBase,
       productInfo: {},
       active: 'tab-container1',
@@ -222,6 +240,9 @@ export default {
     }
   },
   methods: {
+    showBigImg() {
+      this.showImg = !this.showImg;
+    },
     setSelected(i, c) {
       if (c.click_unabled) {
         return
@@ -254,10 +275,9 @@ export default {
               flag = flag && n_flag
             }
           }
-          j.click_unabled = !flag
+          // j.click_unabled = !flag
         }
       }
-
       for (let j of this.definite_itemid) {
         if (str.split(j.itemId).length - 1 == len) {
           //console.log('haha1', j.itemId, j.attrEvalue) //此为选中的itemid及其价格
@@ -279,14 +299,14 @@ export default {
               key: i.attrCname,
               value: i.attrCvalue,
               itemid: i.itemId,
-              click_unabled: false
+              click_unabled: !this.productInfo.productAttr.some(item => item.itemId==i.itemId&&(item.attrCname>0))
             }]
           } else if (i.attrType == '1' && i.attrCname == h && i.attrEname != 'price') {
             this.option_list[i.attrCname].push({
               key: i.attrCname,
               value: i.attrCvalue,
               itemid: i.itemId,
-              click_unabled: false
+              click_unabled: !this.productInfo.productAttr.some(item => item.itemId==i.itemId&&(item.attrCname>0))
             })
           }
           h = i.attrCname
@@ -294,6 +314,7 @@ export default {
             this.definite_itemid.push(i)
           }
         }
+        console.log(this.option_list)
       }
     },
     checkOption() {
@@ -516,8 +537,43 @@ $bg-red: #f23030;
 .mint-swipe-indicator.is-active {
   background: red;
 }
-
+.full-banner-container{
+  top: 0;
+  left:0;
+  height: 100%;
+  width:100%;
+  background-color: #000;
+  position: absolute;
+  z-index: 100;
+  .close{
+    width: 44px;
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+    font-size: 18px;
+    position: absolute;
+    top:0;
+    right:0;
+    color:#fff;
+  }
+}
+.full-banner {
+  .mint-swipe-item:nth-child(odd) {
+    background: #000;
+  }
+  .mint-swipe-item:nth-child(even) {
+    background: #000;
+  }
+  .wrapper {
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100%;
+  }
+}
 .pre-banner {
+
   .mint-swipe-item:nth-child(odd) {
     background: #fff;
   }
@@ -532,7 +588,10 @@ $bg-red: #f23030;
     background-position: center;
   }
 }
-
+.mint-swipe.pre-banner {
+  height: 200px;
+  background: red;
+}
 .unable {
   background: #e2e1e1;
   color: #fff;
@@ -617,10 +676,7 @@ $bg-red: #f23030;
   color: #fff;
 }
 
-.mint-swipe {
-  height: 200px;
-  background: red;
-}
+
 
 .mint-cell-value {
   padding: 10px;
