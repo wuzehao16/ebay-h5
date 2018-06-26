@@ -1,8 +1,8 @@
 <template>
   <div class="container">
-    <mt-swipe :auto="5000" :speed="0" class="pre-banner" style="background: #fff;">
-      <mt-swipe-item v-for="(url,index) in productInfo.pic" :key="index">
-        <div :style="{'background-image': 'url(' + url + ')'}" class="wrapper" @click="showBigImg">
+    <mt-swipe :auto="5000" :speed="0" class="pre-banner" style="background: #fff;" v-if="!showImg" :defaultIndex="index">
+      <mt-swipe-item v-for="(url,index) in productInfo.pic" :key="index" >
+        <div :style="{'background-image': 'url(' + url + ')'}" class="wrapper" @click="showBigImg(index)">
           <span v-if="productInfo.pic && productInfo.pic.length> 0" class="page-nub">
       <span class="num1">{{index+1}}</span>
           <span class="bg">/</span>
@@ -12,13 +12,13 @@
       </mt-swipe-item>
     </mt-swipe>
     <!-- 全屏swiper -->
-    <div class="full-banner-container" v-show="showImg">
-      <mt-swipe :auto="0" :speed="0" :showIndicators='false' class="full-banner" style="background: #fff;">
+    <div class="full-banner-container" v-if="showImg">
+      <mt-swipe :auto="0" :speed="0" :showIndicators='false' :defaultIndex="index" class="full-banner" style="background: #fff;">
         <mt-swipe-item v-for="(url,index) in productInfo.pic" :key="index">
-          <div class="close" @click="showBigImg">
+          <div class="close" @click="showBigImg(index)">
             x
           </div>
-          <div :style="{'background-image': 'url(' + url + ')'}" class="wrapper" @click="showBigImg">
+          <div :style="{'background-image': 'url(' + url + ')'}" class="wrapper" @click="showBigImg(index)">
             <span v-if="productInfo.pic && productInfo.pic.length> 0" class="page-nub">
         <span class="num1">{{index+1}}</span>
             <span class="bg">/</span>
@@ -196,7 +196,8 @@ export default {
       carriageFee: '',
       taxFee: '',
       isoCountry: {},
-      productDescriptionShow: false
+      productDescriptionShow: false,
+      index:0
     }
   },
   // beforeRouteEnter(to, from, next) {
@@ -240,7 +241,8 @@ export default {
     }
   },
   methods: {
-    showBigImg() {
+    showBigImg(index) {
+      this.index = index;
       this.showImg = !this.showImg;
     },
     setSelected(i, c) {

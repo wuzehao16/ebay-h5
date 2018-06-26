@@ -1,4 +1,4 @@
-import axios from 'axios' 
+import axios from 'axios'
 
 // test
 // axios.defaults.baseURL = 'http://fks3989.tunnel.qydev.com'
@@ -52,4 +52,3 @@ export const reqWechatUrl = params => { return axios.get(`/sell/wechat/authorize
 export const reqWechatSignature = params => { return axios.get(`/sell/wechat/signature`, { params: params }) }
 //openid获取信息
 export const reqWechatUserInfo = params => { return axios.get(`/sell/wechat/getUserInfo`, { params: params }) }
-
