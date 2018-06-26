@@ -3,6 +3,8 @@ import Router from 'vue-router'
 
 const PopularizeList = r => require.ensure([], () => r(require('@/components/popularize/List')), 'PopularizeList')
 const AddGoods = r => require.ensure([], () => r(require('@/components/popularize/add')), 'AddGoods')
+const SelfSelectGoods = r => require.ensure([], () => r(require('@/components/popularize/SelfSelectGoods')), 'SelfSelectGoods')
+const SelectAddMode = r => require.ensure([], () => r(require('@/components/popularize/SelectAddMode')), 'SelectAddMode')
 const EditGoods = r => require.ensure([], () => r(require('@/components/popularize/edit')), 'EditGoods')
 const Address = r => require.ensure([], () => r(require('@/components/order/address')), 'Address')
 const AddressList = r => require.ensure([], () => r(require('@/components/order/addresslist')), 'AddressList')
@@ -58,6 +60,16 @@ let router = new Router({
       path: '/popularize/edit/:productId/:ebayItemid',
       name: 'AddGoods',
       component: AddGoods
+    },
+    {
+      path: '/popularize/select',
+      name: 'SelectAddMode',
+      component: SelectAddMode
+    },
+    {
+      path: '/popularize/self',
+      name: 'SelfSelectGoods',
+      component: SelfSelectGoods
     },
     {
       path: '/popularize/add',
@@ -177,55 +189,55 @@ import { baseUrl } from '../api'
 import { MessageBox } from 'mint-ui'
 router.beforeEach((to, from, next) => {
 
-  if (to.name == 'PcPreviewGoods') {
-    next()
-  } else {
-    let user = JSON.parse(sessionStorage.getItem('ebay-app'))
-    let openid = to.query.wxOpenid
-    if (!user && !openid) { //未申请授权
-      let returnUrl = location.protocol + "//" + location.host +
-        (to.path || '/product/list')
-      returnUrl = window.encodeURIComponent(returnUrl)
-      let url = baseUrl + '/sell/wechat/authorize?returnUrl=' + returnUrl
-      location.assign(url)
-    } else if (!user && openid) { //已完成授权但未从后台获取已授权用户的信息
-      reqWechatUserInfo({ openid }).then((res) => {
-        if (res.data.code == 0) {
-          let obj = res.data.data
-          sessionStorage.setItem('ebay-app', JSON.stringify(obj))
-          location.assign(to.path)
-        } else {
-          next('/product/list')
-        }
-      }).catch((err) => {})
-    } else {
-      if (user.userCtype && user.userCtype == '2' &&
-        store.state.authPage.some(el => el == to.name)) {
-        MessageBox.confirm('分销商才有权限进入，去注册成为分销商?').then(action => {
-          next('/user/register')
-        }).catch(err => {
-          if (from.name) {
-            next(false)
-          } else {
-            next('/product/list')
-          }
-        })
-      } else {
-        next()
-      }
-    }
-  }
-
-  //   let user = {
-  //     id: '4',
-  //     userWxOpenid: 'oyNDcwRlUVJ6JakWZlhjAnNQzTuo',
-  //     userCtype: '1',
-  //     userPhone: '13877887788',
-  //     userAddr: 'xxx省uu市fddkjflkj',
-  //     userWxName: 'Cons.Van'
+  // if (to.name == 'PcPreviewGoods') {
+  //   next()
+  // } else {
+  //   let user = JSON.parse(sessionStorage.getItem('ebay-app'))
+  //   let openid = to.query.wxOpenid
+  //   if (!user && !openid) { //未申请授权
+  //     let returnUrl = location.protocol + "//" + location.host +
+  //       (to.path || '/product/list')
+  //     returnUrl = window.encodeURIComponent(returnUrl)
+  //     let url = baseUrl + '/sell/wechat/authorize?returnUrl=' + returnUrl
+  //     location.assign(url)
+  //   } else if (!user && openid) { //已完成授权但未从后台获取已授权用户的信息
+  //     reqWechatUserInfo({ openid }).then((res) => {
+  //       if (res.data.code == 0) {
+  //         let obj = res.data.data
+  //         sessionStorage.setItem('ebay-app', JSON.stringify(obj))
+  //         location.assign(to.path)
+  //       } else {
+  //         next('/product/list')
+  //       }
+  //     }).catch((err) => {})
+  //   } else {
+  //     if (user.userCtype && user.userCtype == '2' &&
+  //       store.state.authPage.some(el => el == to.name)) {
+  //       MessageBox.confirm('分销商才有权限进入，去注册成为分销商?').then(action => {
+  //         next('/user/register')
+  //       }).catch(err => {
+  //         if (from.name) {
+  //           next(false)
+  //         } else {
+  //           next('/product/list')
+  //         }
+  //       })
+  //     } else {
+  //       next()
+  //     }
   //   }
-  //   sessionStorage.setItem('ebay-app', JSON.stringify(user))
-  // next()
+  // }
+
+    let user = {
+      id: '4',
+      userWxOpenid: 'oyNDcwRlUVJ6JakWZlhjAnNQzTuo',
+      userCtype: '1',
+      userPhone: '13877887788',
+      userAddr: 'xxx省uu市fddkjflkj',
+      userWxName: 'Cons.Van'
+    }
+    sessionStorage.setItem('ebay-app', JSON.stringify(user))
+  next()
 })
 
 router.afterEach((to, from) => {

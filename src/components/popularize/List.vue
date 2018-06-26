@@ -177,7 +177,7 @@ export default {
       })
     },
     addNew() {
-      this.$router.push("/popularize/add")
+      this.$router.push("/popularize/select")
     },
     goPreview(val) {
       this.$router.push({
